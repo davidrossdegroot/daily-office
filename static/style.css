@@ -358,6 +358,21 @@ body {
     font-size: 0.9rem;
 }
 
+.attribution {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+}
+
+.attribution a {
+    color: var(--color-accent);
+    text-decoration: none;
+}
+
+.attribution a:hover {
+    text-decoration: underline;
+}
+
 /* ===================================
    PRINT STYLES
    =================================== */
