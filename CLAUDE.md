@@ -55,6 +55,23 @@ This is a **static site generator** that converts liturgical CSV data into beaut
 - **Print-optimized** styling using `@media print`
 - No server or database required
 
+### Deployment
+
+The site is deployed to a Hetzner VPS and served via nginx:
+
+- **Domain**: `ancadailyoffice.app`
+- **DNS**: Managed through Squarespace (A record → `178.156.168.116`)
+- **Server**: Hetzner VPS running Ubuntu with nginx
+- **SSH Access**: `ssh -i ~/.ssh/hetzner_id_ed25519 root@178.156.168.116`
+- **Deployment**: Automated via GitHub Actions workflow
+- **SSL**: Let's Encrypt certificates via certbot
+
+#### GitHub Actions Workflow
+The site automatically deploys on push to main:
+1. Build process generates static HTML from CSV data
+2. Files are transferred to the server
+3. nginx serves the static files from the build directory
+
 ### Directory Structure
 ```
 daily-office/
@@ -101,6 +118,26 @@ open build/all.html
 ### Install Dependencies
 ```bash
 pip install -r requirements.txt
+```
+
+### Server Management
+
+```bash
+# SSH into production server
+ssh -i ~/.ssh/hetzner_id_ed25519 root@178.156.168.116
+
+# Check nginx status
+sudo systemctl status nginx
+
+# Reload nginx configuration
+sudo nginx -t && sudo systemctl reload nginx
+
+# View nginx logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
+
+# Renew SSL certificate
+sudo certbot renew
 ```
 
 ## Development Workflow
