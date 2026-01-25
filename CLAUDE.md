@@ -59,10 +59,10 @@ This is a **static site generator** that converts liturgical CSV data into beaut
 
 The site is deployed to a Hetzner VPS and served via nginx:
 
-- **Domain**: `ancadailyoffice.app`
+- **Domain**: `acnadailyofficesummaries.app`
 - **DNS**: Managed through Squarespace (A record pointing to the production server)
 - **Server**: Hetzner VPS running Ubuntu with nginx
-- **SSH Access**: `ssh -i ~/.ssh/hetzner_id_ed25519 deploy@ancadailyoffice.app`
+- **SSH Access**: `ssh -i ~/.ssh/hetzner_id_ed25519 deploy@acnadailyofficesummaries.app`
 - **Deployment**: Automated via GitHub Actions workflow
 - **SSL**: Let's Encrypt certificates via certbot
 
