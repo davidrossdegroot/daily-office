@@ -37,13 +37,12 @@ jobs:
       - name: Deploy to Hetzner
         run: |
           rsync -avz --delete \
-            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/id_ed25519" \
             build/ \
-            root@178.156.168.116:/var/www/daily-office/
+            deploy@178.156.168.116:/var/www/daily-office/
 
       - name: Fix permissions
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@178.156.168.116 \
-            "chown -R www-data:www-data /var/www/daily-office && \
-             chmod -R 755 /var/www/daily-office && \
-             chmod -R 644 /var/www/daily-office/*.html /var/www/daily-office/static/*"
+          ssh -i ~/.ssh/id_ed25519 deploy@178.156.168.116 \
+            "find /var/www/daily-office -type d -exec chmod 775 {} + && \
+             find /var/www/daily-office -type f -exec chmod 664 {} +"
