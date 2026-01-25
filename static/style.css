@@ -816,11 +816,6 @@ body.day-page {
         margin-bottom: 1.5rem;
     }
 
-    .button.primary {
-        padding: 1rem 2rem;
-        font-size: 0.9rem;
-    }
-
     .calendar-day {
         min-height: 90px;
         padding: 0.5rem;
