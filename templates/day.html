@@ -20,9 +20,18 @@
 
     <main class="daily-office">
         <header class="page-header">
-            <div class="liturgical-color" style="background-color: {{ color_map[day['Liturgical Color']] }};"></div>
             <h1>{{ day.day_of_week }}, {{ day.date_formatted }}</h1>
             <h2 class="observance">{{ day.Observance }}</h2>
+
+            <div class="liturgical-banner">
+                <span class="liturgical-label">Liturgical Color</span>
+                <div class="liturgical-seal">
+                    <div class="seal-ornament left" aria-hidden="true">✦</div>
+                    <div class="color-swatch" style="background-color: {{ color_map[day['Liturgical Color']] }};" aria-label="{{ day['Liturgical Color'] }} - liturgical color for this day"></div>
+                    <div class="seal-ornament right" aria-hidden="true">✦</div>
+                </div>
+                <span class="color-name">{{ day['Liturgical Color'] }}</span>
+            </div>
         </header>
 
         <section class="office-section morning-prayer">
