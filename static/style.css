@@ -372,6 +372,9 @@ body.day-page {
     top: 2rem;
     left: 2rem;
     z-index: 10;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .nav-link-print {

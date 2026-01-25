@@ -178,6 +178,16 @@ def generate_all_page(env, days, output_dir):
         f.write(html)
 
 
+def generate_about_page(env, output_dir):
+    """Generate the about page."""
+    template = env.get_template('about.html')
+    html = template.render()
+
+    output_path = output_dir / 'about.html'
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html)
+
+
 def copy_static_files(output_dir):
     """Copy static CSS files to build directory."""
     static_dir = Path(__file__).parent / 'static'
@@ -225,6 +235,10 @@ def main():
     print("Generating print-all page...")
     generate_all_page(env, days, output_dir)
 
+    # Generate about page
+    print("Generating about page...")
+    generate_about_page(env, output_dir)
+
     # Copy static files
     print("Copying static files...")
     copy_static_files(output_dir)
@@ -233,6 +247,7 @@ def main():
     print(f"✓ Generated {len(days)} day pages")
     print(f"✓ Generated index page")
     print(f"✓ Generated print-all page")
+    print(f"✓ Generated about page")
     print(f"\nOutput directory: {output_dir}")
     print(f"\nTo view:")
     print(f"  open {output_dir}/index.html")
