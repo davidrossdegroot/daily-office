@@ -123,6 +123,120 @@ The CSS includes special print styles that:
 - Optimize spacing to fit content on one page
 - Add page breaks between days in the all-days view
 
+## Key Features
+
+### Calendar View (index.html)
+- **Sunday-first layout**: Weeks start on Sunday, following traditional liturgical calendars
+- **Calendar grid**: Organized by month with weeks displayed in rows
+- **Liturgical colors**: Visual color bar at top of each day cell
+- **Empty cells**: Days before/after the month are shown as empty
+- **Hover effects**: Days highlight on hover for better UX
+- The `organize_into_calendar_weeks()` function in `generate.py` handles the Sunday-first layout
+
+### Individual Day Pages (day.html)
+Each day page includes:
+- **Morning Prayer**: Opening sentence, antiphon, psalms, two lessons
+- **Evening Prayer**: Opening sentence, psalms, two lessons
+- **Collects**: Seasonal collect and optional special collect
+- **Navigation**: Previous/next day links, back to calendar
+- **Print optimization**: Designed to fit on a single 8.5x11" page
+
+### Print-All Page (all.html)
+- Contains all 365 days in sequence
+- Page breaks between each day (`page-break-after: always`)
+- Allows printing entire year in one operation
+- Optimized for creating a physical prayer book
+
+## Design System
+
+### Color Palette
+```css
+--color-text: #2c3e50          /* Main text */
+--color-text-light: #7f8c8d    /* Secondary text */
+--color-border: #e0e0e0         /* Borders and dividers */
+--color-background: #ffffff     /* Page background */
+--color-accent: #3498db         /* Links and highlights */
+```
+
+### Typography
+- **Screen**: System font stack (San Francisco, Segoe UI, Roboto)
+- **Print**: Serif fonts (Georgia, Times New Roman) for better readability
+- **Font sizes**: 10-11pt for print, 16px base for screen
+
+### Liturgical Colors
+```python
+COLOR_MAP = {
+    'White': '#FFFFFF',
+    'Green': '#228B22',
+    'Purple': '#663399',
+    'Pink': '#FFC0CB',
+    'Red': '#DC143C'
+}
+```
+
+### Responsive Design
+- Desktop: Full calendar grid (7 columns)
+- Mobile: Smaller day cells, condensed text
+- Breakpoint: 768px
+
+## Template Structure
+
+### Templates Use Jinja2
+All templates support:
+- `{{ variable }}` - Variable interpolation
+- `{% if condition %}` - Conditionals
+- `{% for item in list %}` - Loops
+- `{{ dict['key'] }}` - Dictionary access
+
+### Common Template Variables
+- `day` - Individual day object with all CSV fields
+- `days` - List of all days
+- `months` - Dictionary of months with organized weeks
+- `color_map` - Liturgical color hex values
+- `prev_day` / `next_day` - Adjacent days for navigation
+
+## Attribution
+
+All pages include footer attribution to:
+> "Lectionary and collects from [The Book of Common Prayer (2019)](https://bcp2019.anglicanchurch.net/index.php), Anglican Church in North America"
+
+This attribution is required and should not be removed.
+
+## Assets
+
+### Favicon
+- Location: `static/favicon.svg`
+- Design: 📖 open book emoji in SVG format
+- Linked in all HTML templates with: `<link rel="icon" href="static/favicon.svg" type="image/svg+xml">`
+
+## Common Modifications
+
+### Adding a New Page
+1. Create template in `templates/`
+2. Add generation function in `generate.py`
+3. Call function in `main()`
+4. Run `python generate.py`
+
+### Changing Colors/Fonts
+Edit `static/style.css`:
+- `:root` variables for global colors
+- `body` for base typography
+- `@media print` for print-specific styles
+
+### Modifying Calendar Layout
+The calendar is organized in `generate_index_page()`:
+- `organize_into_calendar_weeks()` creates Sunday-first weeks
+- Template uses nested loops: `{% for week in weeks %}` → `{% for day in week %}`
+- CSS grid handles 7-column layout
+
+### Updating Page Structure
+Day pages follow this hierarchy:
+1. `<header>` - Date, observance, liturgical color
+2. `<section class="office-section morning-prayer">` - Morning Prayer content
+3. `<section class="office-section evening-prayer">` - Evening Prayer content
+4. `<section class="collects">` - Prayer collects
+5. `<footer>` - Attribution and metadata
+
 ## Data Handling
 
 When working with this data:
@@ -131,4 +245,5 @@ When working with this data:
 - Keep scripture reference format consistent
 - Respect the 60-day psalm cycle pattern
 - Maintain proper attribution in collect texts
-- Handle empty cells gracefully (displayed as "—" or hidden)
+- Handle empty cells gracefully (displayed as None or hidden in templates)
+- Date parsing supports both abbreviated (Jan, Feb) and full (January, February) month names

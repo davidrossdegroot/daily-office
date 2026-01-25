@@ -1,0 +1,48 @@
+name: Build and Deploy to Hetzner
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build site
+        run: |
+          python generate.py
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.HETZNER_SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Hetzner
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_ed25519" \
+            build/ \
+            deploy@${{ secrets.HETZNER_SERVER_IP }}:/var/www/daily-office/
+
+      - name: Fix permissions
+        run: |
+          ssh -i ~/.ssh/id_ed25519 deploy@${{ secrets.HETZNER_SERVER_IP }} \
+            "find /var/www/daily-office -type d -exec chmod 775 {} + && \
+             find /var/www/daily-office -type f -exec chmod 664 {} +"
