@@ -255,15 +255,6 @@ body.day-page {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.3);
 }
 
-.liturgical-year {
-    font-family: var(--font-liturgical);
-    font-size: 1.5rem;
-    font-style: italic;
-    color: rgba(212, 175, 55, 0.9);
-    margin-bottom: 3rem;
-    letter-spacing: 0.05em;
-}
-
 .sacred-verse {
     font-family: var(--font-liturgical);
     font-size: 1.4rem;
