@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Office - 2026 Calendar</title>
+    <title>ACNA Daily Office - 2026 Calendar</title>
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body class="index-page">
     <header class="index-header">
-        <h1>Daily Office</h1>
+        <h1>ACNA Daily Office</h1>
         <p class="subtitle">Liturgical Year 2026</p>
         <div class="print-all-button">
             <a href="all.html" class="button primary">📖 Print All Days</a>
@@ -16,19 +16,36 @@
     </header>
 
     <main class="calendar">
-        {% for month_name, month_days in months.items() %}
+        {% for month_name, month_data in months.items() %}
         <section class="month">
             <h2>{{ month_name }}</h2>
-            <div class="days-grid">
-                {% for day in month_days %}
-                <a href="{{ day.date_slug }}.html" class="day-card color-{{ day['Liturgical Color']|lower }}">
-                    <div class="day-number">{{ day.Date }}</div>
-                    <div class="day-info">
-                        <span class="day-name">{{ day.day_of_week[:3] }}</span>
-                        <span class="observance">{{ day.Observance }}</span>
-                    </div>
-                    <div class="liturgical-indicator" style="background-color: {{ color_map[day['Liturgical Color']] }};"></div>
-                </a>
+            <div class="calendar-grid">
+                <!-- Day of week headers -->
+                <div class="calendar-header">
+                    <div class="weekday-header">Sun</div>
+                    <div class="weekday-header">Mon</div>
+                    <div class="weekday-header">Tue</div>
+                    <div class="weekday-header">Wed</div>
+                    <div class="weekday-header">Thu</div>
+                    <div class="weekday-header">Fri</div>
+                    <div class="weekday-header">Sat</div>
+                </div>
+
+                <!-- Calendar weeks -->
+                {% for week in month_data.weeks %}
+                <div class="calendar-week">
+                    {% for day in week %}
+                        {% if day %}
+                        <a href="{{ day.date_slug }}.html" class="calendar-day has-data color-{{ day['Liturgical Color']|lower }}">
+                            <div class="day-number">{{ day.date_obj.day }}</div>
+                            <div class="observance">{{ day.Observance }}</div>
+                            <div class="liturgical-indicator" style="background-color: {{ color_map[day['Liturgical Color']] }};"></div>
+                        </a>
+                        {% else %}
+                        <div class="calendar-day empty"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
                 {% endfor %}
             </div>
         </section>

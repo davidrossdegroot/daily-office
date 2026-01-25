@@ -210,64 +210,103 @@ body {
 .month h2 {
     font-size: 2rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: var(--color-text);
+    text-align: center;
 }
 
-.days-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
-}
-
-.day-card {
+.calendar-grid {
     background: white;
-    padding: 1rem;
     border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.weekday-header {
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.calendar-week:last-child {
+    border-bottom: none;
+}
+
+.calendar-day {
+    min-height: 120px;
+    padding: 0.75rem;
+    border-right: 1px solid var(--color-border);
+    position: relative;
+    background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-day:nth-child(7) {
+    border-right: none;
+}
+
+.calendar-day.empty {
+    background: #f8f9fa;
+}
+
+.calendar-day.has-data {
     text-decoration: none;
     color: var(--color-text);
-    border: 2px solid var(--color-border);
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative;
-    overflow: hidden;
+    transition: background-color 0.2s, transform 0.1s;
+    cursor: pointer;
 }
 
-.day-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+.calendar-day.has-data:hover {
+    background-color: #f0f7ff;
+    transform: scale(1.02);
 }
 
 .liturgical-indicator {
     position: absolute;
     top: 0;
-    right: 0;
-    width: 4px;
-    height: 100%;
+    left: 0;
+    width: 100%;
+    height: 3px;
 }
 
-.day-number {
-    font-size: 1.5rem;
+.calendar-day .day-number {
+    font-size: 1.3rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
+    color: var(--color-text);
 }
 
-.day-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.day-name {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-text-light);
-    text-transform: uppercase;
-}
-
-.observance {
-    font-size: 0.9rem;
+.calendar-day .observance {
+    font-size: 0.8rem;
     color: var(--color-text);
     line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Sunday styling */
+.calendar-day:nth-child(7n+1).has-data .day-number {
+    color: #764ba2;
 }
 
 /* ===================================
@@ -452,7 +491,26 @@ body {
         padding: 0.75rem 1rem;
     }
 
-    .days-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    .calendar-day {
+        min-height: 90px;
+        padding: 0.5rem;
+    }
+
+    .calendar-day .day-number {
+        font-size: 1.1rem;
+    }
+
+    .calendar-day .observance {
+        font-size: 0.7rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .weekday-header {
+        padding: 0.75rem 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .month h2 {
+        font-size: 1.5rem;
     }
 }
