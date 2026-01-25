@@ -62,7 +62,7 @@ The site is deployed to a Hetzner VPS and served via nginx:
 - **Domain**: `ancadailyoffice.app`
 - **DNS**: Managed through Squarespace (A record pointing to the production server)
 - **Server**: Hetzner VPS running Ubuntu with nginx
-- **SSH Access**: `ssh -i ~/.ssh/hetzner_id_ed25519 root@ancadailyoffice.app`
+- **SSH Access**: `ssh -i ~/.ssh/hetzner_id_ed25519 deploy@ancadailyoffice.app`
 - **Deployment**: Automated via GitHub Actions workflow
 - **SSL**: Let's Encrypt certificates via certbot
 
@@ -124,7 +124,7 @@ pip install -r requirements.txt
 
 ```bash
 # SSH into production server
-ssh -i ~/.ssh/hetzner_id_ed25519 root@178.156.168.116
+ssh -i ~/.ssh/hetzner_id_ed25519 root@$HETZNER_SERVER_IP
 
 # Check nginx status
 sudo systemctl status nginx
