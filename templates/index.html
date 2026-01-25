@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Office - 2026 Calendar</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body class="index-page">
+    <header class="index-header">
+        <h1>Daily Office</h1>
+        <p class="subtitle">Liturgical Year 2026</p>
+        <div class="print-all-button">
+            <a href="all.html" class="button primary">📖 Print All Days</a>
+        </div>
+    </header>
+
+    <main class="calendar">
+        {% for month_name, month_days in months.items() %}
+        <section class="month">
+            <h2>{{ month_name }}</h2>
+            <div class="days-grid">
+                {% for day in month_days %}
+                <a href="{{ day.date_slug }}.html" class="day-card color-{{ day['Liturgical Color']|lower }}">
+                    <div class="day-number">{{ day.Date }}</div>
+                    <div class="day-info">
+                        <span class="day-name">{{ day.day_of_week[:3] }}</span>
+                        <span class="observance">{{ day.Observance }}</span>
+                    </div>
+                    <div class="liturgical-indicator" style="background-color: {{ color_map[day['Liturgical Color']] }};"></div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+    </main>
+
+    <footer class="index-footer">
+        <p>Daily Office Calendar - {{ days|length }} days</p>
+        <div class="legend">
+            <h3>Liturgical Colors</h3>
+            <div class="color-legend">
+                <span class="legend-item"><span class="color-dot" style="background-color: {{ color_map.White }};"></span> White</span>
+                <span class="legend-item"><span class="color-dot" style="background-color: {{ color_map.Green }};"></span> Green</span>
+                <span class="legend-item"><span class="color-dot" style="background-color: {{ color_map.Purple }};"></span> Purple</span>
+                <span class="legend-item"><span class="color-dot" style="background-color: {{ color_map.Pink }};"></span> Pink</span>
+                <span class="legend-item"><span class="color-dot" style="background-color: {{ color_map.Red }};"></span> Red</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

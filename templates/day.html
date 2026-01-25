@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Office - {{ day.date_formatted }}</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body class="day-page">
+    <nav class="navigation no-print">
+        <a href="index.html">← Calendar</a>
+        {% if prev_day %}
+        <a href="{{ prev_day.date_slug }}.html">← {{ prev_day.Date }}</a>
+        {% endif %}
+        {% if next_day %}
+        <a href="{{ next_day.date_slug }}.html">{{ next_day.Date }} →</a>
+        {% endif %}
+    </nav>
+
+    <main class="daily-office">
+        <header class="page-header">
+            <div class="liturgical-color" style="background-color: {{ color_map[day['Liturgical Color']] }};"></div>
+            <h1>{{ day.day_of_week }}, {{ day.date_formatted }}</h1>
+            <h2 class="observance">{{ day.Observance }}</h2>
+        </header>
+
+        <section class="office-section morning-prayer">
+            <h3>Morning Prayer</h3>
+
+            {% if day['MP Opening Sentence of Scripture'] %}
+            <div class="opening-sentence">
+                <h4>Opening Sentence</h4>
+                <p class="scripture">{{ day['MP Opening Sentence of Scripture'] }}</p>
+            </div>
+            {% endif %}
+
+            {% if day.Antiphon %}
+            <div class="antiphon">
+                <h4>Antiphon</h4>
+                <p>{{ day.Antiphon }}</p>
+            </div>
+            {% endif %}
+
+            <div class="readings">
+                <div class="reading">
+                    <h4>Psalms</h4>
+                    <p class="psalm-ref">{{ day['Psalms (MP, 60-day)'] }}</p>
+                </div>
+
+                {% if day['MP First Lesson'] %}
+                <div class="reading">
+                    <h4>First Lesson</h4>
+                    <p class="lesson-ref">{{ day['MP First Lesson'] }}</p>
+                </div>
+                {% endif %}
+
+                {% if day['MP Second Lesson'] %}
+                <div class="reading">
+                    <h4>Second Lesson</h4>
+                    <p class="lesson-ref">{{ day['MP Second Lesson'] }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="office-section evening-prayer">
+            <h3>Evening Prayer</h3>
+
+            {% if day['EP Opening Sentence of Scripture'] %}
+            <div class="opening-sentence">
+                <h4>Opening Sentence</h4>
+                <p class="scripture">{{ day['EP Opening Sentence of Scripture'] }}</p>
+            </div>
+            {% endif %}
+
+            <div class="readings">
+                <div class="reading">
+                    <h4>Psalms</h4>
+                    <p class="psalm-ref">{{ day['Psalms (EP, 60-day)'] }}</p>
+                </div>
+
+                {% if day['EP First Lesson'] %}
+                <div class="reading">
+                    <h4>First Lesson</h4>
+                    <p class="lesson-ref">{{ day['EP First Lesson'] }}</p>
+                </div>
+                {% endif %}
+
+                {% if day['EP Second Lesson'] %}
+                <div class="reading">
+                    <h4>Second Lesson</h4>
+                    <p class="lesson-ref">{{ day['EP Second Lesson'] }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="collects">
+            <h3>Collects</h3>
+
+            {% if day['Seasonal Collect'] %}
+            <div class="collect seasonal">
+                <h4>Seasonal Collect</h4>
+                <p>{{ day['Seasonal Collect'] }}</p>
+            </div>
+            {% endif %}
+
+            {% if day['Special Collect'] %}
+            <div class="collect special">
+                <h4>Special Collect</h4>
+                <p>{{ day['Special Collect'] }}</p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="page-footer no-print">
+        <p>Daily Office for {{ day.date_formatted }}</p>
+    </footer>
+</body>
+</html>
