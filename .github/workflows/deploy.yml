@@ -1,0 +1,49 @@
+name: Build and Deploy to Hetzner
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build site
+        run: |
+          python generate.py
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 178.156.168.116 >> ~/.ssh/known_hosts
+
+      - name: Deploy to Hetzner
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" \
+            build/ \
+            root@178.156.168.116:/var/www/daily-office/
+
+      - name: Fix permissions
+        run: |
+          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no root@178.156.168.116 \
+            "chown -R www-data:www-data /var/www/daily-office && \
+             chmod -R 755 /var/www/daily-office && \
+             chmod -R 644 /var/www/daily-office/*.html /var/www/daily-office/static/*"
