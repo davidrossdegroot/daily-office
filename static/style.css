@@ -158,6 +158,18 @@ body.day-page {
     letter-spacing: 0.05em;
 }
 
+/* Legacy support: allow templates using .liturgical-color to
+   render using the same visual language as the new liturgical
+   color seal/banner components. */
+.liturgical-color {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background-color: rgba(255, 255, 255, 0.9);
+}
 .page-header h1 {
     font-size: 1.8rem;
     font-weight: 600;
