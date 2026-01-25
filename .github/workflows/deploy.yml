@@ -32,17 +32,17 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.HETZNER_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H 178.156.168.116 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.HETZNER_SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Deploy to Hetzner
         run: |
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/id_ed25519" \
             build/ \
-            deploy@178.156.168.116:/var/www/daily-office/
+            deploy@${{ secrets.HETZNER_SERVER_IP }}:/var/www/daily-office/
 
       - name: Fix permissions
         run: |
-          ssh -i ~/.ssh/id_ed25519 deploy@178.156.168.116 \
+          ssh -i ~/.ssh/id_ed25519 deploy@${{ secrets.HETZNER_SERVER_IP }} \
             "find /var/www/daily-office -type d -exec chmod 775 {} + && \
              find /var/www/daily-office -type f -exec chmod 664 {} +"
