@@ -245,9 +245,9 @@ body.day-page {
 .index-header {
     position: relative;
     text-align: center;
-    padding: 8rem 2rem;
-    min-height: 100vh; /* Fallback for older browsers */
-    min-height: 100dvh; /* Dynamic viewport height for modern browsers */
+    padding: 2rem;
+    min-height: 80vh; /* Fallback for older browsers */
+    min-height: 80dvh; /* Dynamic viewport height for modern browsers */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -310,7 +310,6 @@ body.day-page {
 .sacred-symbol {
     font-size: 3rem;
     color: var(--color-sacred);
-    margin-bottom: 2rem;
     opacity: 0.9;
     text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
 }
