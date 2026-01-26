@@ -831,23 +831,46 @@ body.day-page {
         margin-bottom: 1.5rem;
     }
 
+    .calendar {
+        padding: 1rem 0.5rem;
+    }
+
+    .calendar-grid {
+        /* Ensure grid doesn't overflow on mobile */
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .calendar-header {
+        /* Match the week grid columns for proper alignment */
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .calendar-week {
+        /* Use minmax to prevent columns from becoming too narrow */
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
     .calendar-day {
-        min-height: 90px;
-        padding: 0.5rem;
+        /* Consistent minimum height; allow expansion if needed */
+        min-height: 85px;
+        padding: 0.4rem 0.3rem;
     }
 
     .calendar-day .day-number {
-        font-size: 1.1rem;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
     }
 
     .calendar-day .observance {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
+        line-height: 1.2;
         -webkit-line-clamp: 2;
     }
 
     .weekday-header {
-        padding: 0.75rem 0.25rem;
-        font-size: 0.75rem;
+        padding: 0.6rem 0.2rem;
+        font-size: 0.7rem;
     }
 
     .month h2 {
