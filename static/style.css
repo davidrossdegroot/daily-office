@@ -21,10 +21,10 @@
     --color-sacred: #d4af37;
     --color-mystery: #1a1a2e;
     --color-twilight: #16213e;
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-serif: Georgia, "Times New Roman", Times, serif;
-    --font-sacred: 'Cinzel', serif;
-    --font-liturgical: 'Crimson Text', serif;
+    --font-sacred: 'Cormorant Garamond', Georgia, serif;
+    --font-liturgical: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
@@ -171,6 +171,7 @@ body.day-page {
     background-color: rgba(255, 255, 255, 0.9);
 }
 .page-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.8rem;
     font-weight: 600;
     margin-top: 0.5rem;
@@ -178,6 +179,7 @@ body.day-page {
 }
 
 .page-header h2.observance {
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.2rem;
     font-weight: 400;
     color: var(--color-text-light);
@@ -199,6 +201,7 @@ body.day-page {
 }
 
 .office-section h3 {
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -324,8 +327,8 @@ body.day-page {
 }
 
 .index-header h1 {
-    font-family: var(--font-sacred);
-    font-size: 4.5rem;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3.5rem;
     font-weight: 600;
     margin-bottom: 1rem;
     letter-spacing: 0.1em;
@@ -335,7 +338,7 @@ body.day-page {
 }
 
 .sacred-verse {
-    font-family: var(--font-liturgical);
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.4rem;
     font-style: italic;
     line-height: 1.8;
@@ -407,7 +410,7 @@ body.day-page {
 }
 
 .tagline {
-    font-family: var(--font-liturgical);
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.3rem;
     font-style: italic;
     color: var(--color-sacred);
@@ -416,7 +419,7 @@ body.day-page {
 }
 
 .site-description {
-    font-family: var(--font-liturgical);
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.1rem;
     line-height: 1.8;
     color: rgba(245, 245, 245, 0.9);
@@ -437,7 +440,7 @@ body.day-page {
 }
 
 .month h2 {
-    font-family: var(--font-liturgical);
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 2.2rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
@@ -525,7 +528,7 @@ body.day-page {
 }
 
 .calendar-day .observance {
-    font-family: var(--font-liturgical);
+    font-family: 'Playfair Display', Georgia, serif;
     font-size: 0.85rem;
     color: var(--color-text);
     line-height: 1.4;
