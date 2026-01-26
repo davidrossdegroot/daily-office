@@ -21,10 +21,10 @@
     --color-sacred: #d4af37;
     --color-mystery: #1a1a2e;
     --color-twilight: #16213e;
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-serif: Georgia, "Times New Roman", Times, serif;
-    --font-sacred: 'Cinzel', serif;
-    --font-liturgical: 'Crimson Text', serif;
+    --font-liturgical: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
 }
 
 body {
@@ -171,6 +171,7 @@ body.day-page {
     background-color: rgba(255, 255, 255, 0.9);
 }
 .page-header h1 {
+    font-family: var(--font-display);
     font-size: 1.8rem;
     font-weight: 600;
     margin-top: 0.5rem;
@@ -178,6 +179,7 @@ body.day-page {
 }
 
 .page-header h2.observance {
+    font-family: var(--font-display);
     font-size: 1.2rem;
     font-weight: 400;
     color: var(--color-text-light);
@@ -199,6 +201,7 @@ body.day-page {
 }
 
 .office-section h3 {
+    font-family: var(--font-display);
     font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -242,9 +245,9 @@ body.day-page {
 .index-header {
     position: relative;
     text-align: center;
-    padding: 8rem 2rem;
-    min-height: 100vh; /* Fallback for older browsers */
-    min-height: 100dvh; /* Dynamic viewport height for modern browsers */
+    padding: 2rem;
+    min-height: 80vh; /* Fallback for older browsers */
+    min-height: 80dvh; /* Dynamic viewport height for modern browsers */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -307,7 +310,6 @@ body.day-page {
 .sacred-symbol {
     font-size: 3rem;
     color: var(--color-sacred);
-    margin-bottom: 2rem;
     opacity: 0.9;
     text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
 }
@@ -324,8 +326,8 @@ body.day-page {
 }
 
 .index-header h1 {
-    font-family: var(--font-sacred);
-    font-size: 4.5rem;
+    font-family: var(--font-display);
+    font-size: 3.5rem;
     font-weight: 600;
     margin-bottom: 1rem;
     letter-spacing: 0.1em;
@@ -334,38 +336,6 @@ body.day-page {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.3);
 }
 
-.sacred-verse {
-    font-family: var(--font-liturgical);
-    font-size: 1.4rem;
-    font-style: italic;
-    line-height: 1.8;
-    color: rgba(245, 245, 245, 0.95);
-    margin: 3rem auto;
-    padding: 2rem;
-    max-width: 600px;
-    border-left: 3px solid var(--color-sacred);
-    border-right: 3px solid var(--color-sacred);
-    background: rgba(255, 255, 255, 0.05);
-}
-
-@supports (backdrop-filter: blur(10px)) {
-    .sacred-verse {
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-    }
-}
-
-.sacred-verse cite {
-    display: block;
-    margin-top: 1rem;
-    font-size: 1rem;
-    font-style: normal;
-    color: var(--color-sacred);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-family: var(--font-sans);
-    font-weight: 600;
-}
 
 .hero-nav {
     position: absolute;
@@ -407,7 +377,7 @@ body.day-page {
 }
 
 .tagline {
-    font-family: var(--font-liturgical);
+    font-family: var(--font-display);
     font-size: 1.3rem;
     font-style: italic;
     color: var(--color-sacred);
@@ -416,7 +386,7 @@ body.day-page {
 }
 
 .site-description {
-    font-family: var(--font-liturgical);
+    font-family: var(--font-display);
     font-size: 1.1rem;
     line-height: 1.8;
     color: rgba(245, 245, 245, 0.9);
@@ -437,7 +407,7 @@ body.day-page {
 }
 
 .month h2 {
-    font-family: var(--font-liturgical);
+    font-family: var(--font-display);
     font-size: 2.2rem;
     font-weight: 600;
     margin-bottom: 1.5rem;
@@ -525,7 +495,7 @@ body.day-page {
 }
 
 .calendar-day .observance {
-    font-family: var(--font-liturgical);
+    font-family: var(--font-display);
     font-size: 0.85rem;
     color: var(--color-text);
     line-height: 1.4;
@@ -818,12 +788,6 @@ body.day-page {
     .site-description {
         font-size: 0.95rem;
         padding: 0 0.5rem;
-    }
-
-    .sacred-verse {
-        font-size: 1.1rem;
-        padding: 1.5rem;
-        margin: 2rem auto;
     }
 
     .sacred-symbol {
