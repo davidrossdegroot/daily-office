@@ -59,7 +59,7 @@ Or navigate to `build/index.html` in your web browser.
 ```
 daily-office/
 ├── data/
-│   └── acn-prayers-2026.csv    # Liturgical data source
+│   └── acna-prayers-2026.csv    # Liturgical data source
 ├── templates/
 │   ├── day.html                # Individual day template
 │   ├── all.html                # All-days print template
@@ -79,7 +79,7 @@ daily-office/
 
 ## Data Format
 
-The CSV file (`data/acn-prayers-2026.csv`) contains:
+The CSV file (`data/acna-prayers-2026.csv`) contains:
 - Date and liturgical observance
 - Morning Prayer: Opening sentence, antiphon, psalms, lessons
 - Evening Prayer: Opening sentence, psalms, lessons
