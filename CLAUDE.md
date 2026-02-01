@@ -10,7 +10,7 @@ This repository contains liturgical data for a Daily Office prayer application f
 
 ### Daily Office CSV Format
 
-The primary data source is `data/acn-prayers-2026.csv`, which contains the following columns:
+The primary data source is `data/acna-prayers-2026.csv`, which contains the following columns:
 
 - **Date**: Calendar date for the observance
 - **Liturgical Color**: Color designation (White, Green, Purple, Pink, Red)
@@ -75,7 +75,7 @@ The site automatically deploys on push to main:
 ### Directory Structure
 ```
 daily-office/
-├── data/acn-prayers-2026.csv   # Source data
+├── data/acna-prayers-2026.csv  # Source data
 ├── templates/                  # Jinja2 templates
 │   ├── day.html                # Individual day page
 │   ├── all.html                # All-days print page
@@ -144,7 +144,7 @@ sudo certbot renew
 
 When modifying the site:
 
-1. **Data changes**: Edit `data/acn-prayers-2026.csv` then run `python generate.py`
+1. **Data changes**: Edit `data/acna-prayers-2026.csv` then run `python generate.py`
 2. **Template changes**: Edit files in `templates/` then run `python generate.py`
 3. **Style changes**: Edit `static/style.css` then run `python generate.py`
 4. **Build script changes**: Edit `generate.py` then run it

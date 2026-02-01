@@ -206,7 +206,7 @@ def main():
 
     # Paths
     base_dir = Path(__file__).parent
-    csv_path = base_dir / 'data' / 'acn-prayers-2026.csv'
+    csv_path = base_dir / 'data' / 'acna-prayers-2026.csv'
     output_dir = base_dir / 'build'
 
     # Ensure output directory exists
