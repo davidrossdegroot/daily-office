@@ -119,6 +119,20 @@
             </div>
             {% endif %}
         </section>
+
+        {% if day['Seasonal Blessing'] %}
+        <section class="blessing">
+            <h3>Seasonal Blessing</h3>
+            <p>{{ day['Seasonal Blessing'] }}</p>
+        </section>
+        {% endif %}
+
+        {% if day['Remembrance'] %}
+        <section class="remembrance">
+            <h3>Remembrance</h3>
+            <p>{{ day['Remembrance'] }}</p>
+        </section>
+        {% endif %}
     </main>
 
     <footer class="page-footer no-print">
