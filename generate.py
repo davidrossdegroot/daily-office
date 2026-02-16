@@ -21,6 +21,9 @@ COLOR_MAP = {
     'Red': '#DC143C'
 }
 
+# Google Analytics measurement ID (configurable via environment variable)
+GA_MEASUREMENT_ID = os.environ.get('GA_MEASUREMENT_ID', 'G-RMEJ6VZKK0')
+
 
 def parse_csv(csv_path):
     """Parse the liturgical CSV file and return list of day dictionaries."""
@@ -80,7 +83,8 @@ def generate_day_page(env, day, prev_day, next_day, output_dir):
         day=day,
         prev_day=prev_day,
         next_day=next_day,
-        color_map=COLOR_MAP
+        color_map=COLOR_MAP,
+        ga_measurement_id=GA_MEASUREMENT_ID
     )
 
     output_path = output_dir / f"{day['date_slug']}.html"
@@ -157,7 +161,8 @@ def generate_index_page(env, days, output_dir):
     html = template.render(
         days=days,
         months=months,
-        color_map=COLOR_MAP
+        color_map=COLOR_MAP,
+        ga_measurement_id=GA_MEASUREMENT_ID
     )
 
     output_path = output_dir / 'index.html'
@@ -170,7 +175,8 @@ def generate_all_page(env, days, output_dir):
     template = env.get_template('all.html')
     html = template.render(
         days=days,
-        color_map=COLOR_MAP
+        color_map=COLOR_MAP,
+        ga_measurement_id=GA_MEASUREMENT_ID
     )
 
     output_path = output_dir / 'all.html'
@@ -181,7 +187,7 @@ def generate_all_page(env, days, output_dir):
 def generate_about_page(env, output_dir):
     """Generate the about page."""
     template = env.get_template('about.html')
-    html = template.render()
+    html = template.render(ga_measurement_id=GA_MEASUREMENT_ID)
 
     output_path = output_dir / 'about.html'
     with open(output_path, 'w', encoding='utf-8') as f:

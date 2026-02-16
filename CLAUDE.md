@@ -79,9 +79,12 @@ daily-office/
 ├── templates/                  # Jinja2 templates
 │   ├── day.html                # Individual day page
 │   ├── all.html                # All-days print page
-│   └── index.html              # Calendar index
+│   ├── index.html              # Calendar index
+│   ├── about.html              # About page
+│   └── analytics.html          # Google Analytics partial
 ├── static/style.css            # Styles (screen + print)
 ├── generate.py                 # Build script
+├── .env.example                # Example environment configuration
 └── build/                      # Generated site
     ├── index.html              # Calendar
     ├── all.html                # Print-all page
@@ -91,9 +94,32 @@ daily-office/
 ### Build Process
 The `generate.py` script:
 1. Parses CSV data into structured day objects
-2. Renders Jinja2 templates for each day
-3. Generates index and all-days pages
-4. Copies static assets to build directory
+2. Reads configuration from environment variables
+3. Renders Jinja2 templates for each day
+4. Generates index and all-days pages
+5. Copies static assets to build directory
+
+### Configuration
+
+#### Google Analytics
+The site supports optional Google Analytics tracking via the `GA_MEASUREMENT_ID` environment variable:
+
+```bash
+# Enable analytics with your measurement ID
+GA_MEASUREMENT_ID=G-XXXXXXXXXX python generate.py
+
+# Disable analytics (omit tracking code from generated pages)
+GA_MEASUREMENT_ID="" python generate.py
+
+# Use default production ID (G-RMEJ6VZKK0)
+python generate.py
+```
+
+**Implementation:**
+- Analytics code is in `templates/analytics.html` (shared partial)
+- All page templates include it via `{% include 'analytics.html' %}`
+- The partial only renders if `ga_measurement_id` is set
+- Different IDs can be used for dev/staging/production environments
 
 ## Common Commands
 
