@@ -621,6 +621,7 @@ body.day-page {
         box-shadow: none;
         border-radius: 0;
         background: white;
+        backdrop-filter: none;
     }
 
     .page-header {
