@@ -184,6 +184,36 @@ def generate_all_page(env, days, output_dir):
         f.write(html)
 
 
+def generate_monthly_pages(env, days, output_dir):
+    """Generate per-month print pages."""
+    template = env.get_template('all-month.html')
+
+    # Group days by month
+    months = {}
+    for day in days:
+        month_name = day['date_obj'].strftime('%B')
+        if month_name not in months:
+            months[month_name] = {
+                'name': month_name,
+                'year': day['date_obj'].year,
+                'days': []
+            }
+        months[month_name]['days'].append(day)
+
+    for month_name, month_data in months.items():
+        html = template.render(
+            days=month_data['days'],
+            month_name=month_name,
+            year=month_data['year'],
+            color_map=COLOR_MAP,
+            ga_measurement_id=GA_MEASUREMENT_ID
+        )
+        filename = f"all-{month_name.lower()}.html"
+        output_path = output_dir / filename
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(html)
+
+
 def generate_about_page(env, output_dir):
     """Generate the about page."""
     template = env.get_template('about.html')
@@ -241,6 +271,10 @@ def main():
     print("Generating print-all page...")
     generate_all_page(env, days, output_dir)
 
+    # Generate per-month print pages
+    print("Generating monthly print pages...")
+    generate_monthly_pages(env, days, output_dir)
+
     # Generate about page
     print("Generating about page...")
     generate_about_page(env, output_dir)
@@ -253,6 +287,7 @@ def main():
     print(f"✓ Generated {len(days)} day pages")
     print(f"✓ Generated index page")
     print(f"✓ Generated print-all page")
+    print(f"✓ Generated 12 monthly print pages")
     print(f"✓ Generated about page")
     print(f"\nOutput directory: {output_dir}")
     print(f"\nTo view:")

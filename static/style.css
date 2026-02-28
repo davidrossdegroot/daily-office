@@ -70,6 +70,45 @@ body.day-page {
     border-color: var(--color-sacred);
 }
 
+/* Month navigation bar (all.html and all-month.html) */
+.month-nav {
+    background: rgba(255, 255, 255, 0.92);
+    padding: 0.75rem 2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(44, 62, 80, 0.25);
+}
+
+.month-nav a {
+    color: var(--color-mystery);
+    text-decoration: none;
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    border: 1px solid rgba(44, 62, 80, 0.25);
+    background-color: rgba(255, 255, 255, 0.65);
+    transition: all 0.3s ease;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.month-nav a:hover,
+.month-nav a:focus-visible {
+    color: var(--color-mystery);
+    background-color: #e8edf3;
+    border-color: var(--color-mystery);
+}
+
+.month-nav a:focus-visible {
+    outline: 2px solid var(--color-mystery);
+    outline-offset: 2px;
+}
+
+.month-nav a:active {
+    background-color: #dde5ee;
+}
+
 /* ===================================
    DAY PAGE
    =================================== */

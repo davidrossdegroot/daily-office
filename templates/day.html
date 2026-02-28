@@ -16,7 +16,7 @@
 <body class="day-page">
     <nav class="navigation no-print">
         <a href="index.html">← Calendar</a>
-        <a href="all.html">Print All</a>
+        <a href="all.html">Print</a>
         {% if prev_day %}
         <a href="{{ prev_day.date_slug }}.html">← {{ prev_day.Date }}</a>
         {% endif %}
@@ -26,115 +26,7 @@
     </nav>
 
     <main class="daily-office">
-        <header class="page-header">
-            <h1>{{ day.day_of_week }}, {{ day.date_formatted }}</h1>
-            <h2 class="observance">{{ day.Observance }}</h2>
-
-            {{ macros.liturgical_banner(day, color_map) }}
-        </header>
-
-        <section class="office-section morning-prayer">
-            <h3>Morning Prayer</h3>
-
-            {% if day['MP Opening Sentence of Scripture'] %}
-            <div class="opening-sentence">
-                <h4>Opening Sentence</h4>
-                <p class="scripture">{{ day['MP Opening Sentence of Scripture'] }}</p>
-            </div>
-            {% endif %}
-
-            {% if day.Antiphon %}
-            <div class="antiphon">
-                <h4>Antiphon</h4>
-                <p>{{ day.Antiphon }}</p>
-            </div>
-            {% endif %}
-
-            <div class="readings">
-                <div class="reading">
-                    <h4>Psalms</h4>
-                    <p class="psalm-ref">{{ day['Psalms (MP, 60-day)'] }}</p>
-                </div>
-
-                {% if day['MP First Lesson'] %}
-                <div class="reading">
-                    <h4>First Lesson</h4>
-                    <p class="lesson-ref">{{ day['MP First Lesson'] }}</p>
-                </div>
-                {% endif %}
-
-                {% if day['MP Second Lesson'] %}
-                <div class="reading">
-                    <h4>Second Lesson</h4>
-                    <p class="lesson-ref">{{ day['MP Second Lesson'] }}</p>
-                </div>
-                {% endif %}
-            </div>
-        </section>
-
-        <section class="office-section evening-prayer">
-            <h3>Evening Prayer</h3>
-
-            {% if day['EP Opening Sentence of Scripture'] %}
-            <div class="opening-sentence">
-                <h4>Opening Sentence</h4>
-                <p class="scripture">{{ day['EP Opening Sentence of Scripture'] }}</p>
-            </div>
-            {% endif %}
-
-            <div class="readings">
-                <div class="reading">
-                    <h4>Psalms</h4>
-                    <p class="psalm-ref">{{ day['Psalms (EP, 60-day)'] }}</p>
-                </div>
-
-                {% if day['EP First Lesson'] %}
-                <div class="reading">
-                    <h4>First Lesson</h4>
-                    <p class="lesson-ref">{{ day['EP First Lesson'] }}</p>
-                </div>
-                {% endif %}
-
-                {% if day['EP Second Lesson'] %}
-                <div class="reading">
-                    <h4>Second Lesson</h4>
-                    <p class="lesson-ref">{{ day['EP Second Lesson'] }}</p>
-                </div>
-                {% endif %}
-            </div>
-        </section>
-
-        <section class="collects">
-            <h3>Collects</h3>
-
-            {% if day['Seasonal Collect'] %}
-            <div class="collect seasonal">
-                <h4>Seasonal Collect</h4>
-                <p>{{ day['Seasonal Collect'] }}</p>
-            </div>
-            {% endif %}
-
-            {% if day['Special Collect'] %}
-            <div class="collect special">
-                <h4>Special Collect</h4>
-                <p>{{ day['Special Collect'] }}</p>
-            </div>
-            {% endif %}
-        </section>
-
-        {% if day['Seasonal Blessing'] %}
-        <section class="blessing">
-            <h3>Seasonal Blessing</h3>
-            <p>{{ day['Seasonal Blessing'] }}</p>
-        </section>
-        {% endif %}
-
-        {% if day['Remembrance'] %}
-        <section class="remembrance">
-            <h3>Remembrance</h3>
-            <p>{{ day['Remembrance'] }}</p>
-        </section>
-        {% endif %}
+        {{ macros.daily_office_content(day, color_map) }}
     </main>
 
     <footer class="page-footer no-print">
