@@ -70,6 +70,33 @@ body.day-page {
     border-color: var(--color-sacred);
 }
 
+/* Month navigation bar (all.html and all-month.html) */
+.month-nav {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 2rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.month-nav a {
+    color: var(--color-sacred);
+    text-decoration: none;
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.month-nav a:hover {
+    background-color: rgba(212, 175, 55, 0.15);
+    border-color: var(--color-sacred);
+}
+
 /* ===================================
    DAY PAGE
    =================================== */
