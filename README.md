@@ -100,6 +100,17 @@ To regenerate the site after making changes to templates or data:
 python generate.py
 ```
 
+## Monthly Data Workflow
+
+For recurring monthly ingestion (Morning/Evening readings, remembrances, and common-prayer mapping), use:
+
+- Workflow doc: [`docs/monthly-workflow.md`](docs/monthly-workflow.md)
+- Canonical schema + mapping helper: `python bin/map_common_prayers.py --in month.csv --out month.with-prayers.csv`
+- Sheets-safe paste: `python bin/map_common_prayers.py --in month.csv --out month.with-prayers.tsv --format tsv --flatten-whitespace`
+- Fetch day-page fields from ACNA calendar (observance/color and available MP/EP psalms/readings): `python bin/map_common_prayers.py --in month.csv --out month.with-prayers.tsv --format tsv --acna-year 2026 --ignore-fetch-errors`
+- Seasonal Blessing inference from observance is enabled by default (`--seasonal-blessing-mode fill`)
+- Seasonal defaults mapping template: [`data/mappings/seasonal-defaults.template.csv`](data/mappings/seasonal-defaults.template.csv)
+
 ## License
 
 Liturgical content follows traditional Anglican/Episcopal Daily Office structure.
