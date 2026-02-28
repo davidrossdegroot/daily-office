@@ -51,22 +51,13 @@ This fills canonical fields from mapping rules plus calendar day pages:
 - `EP First Lesson`
 - `EP Second Lesson`
 - `Psalms (EP, 60-day)`
+- `Seasonal Collect`
 - `Special Collect`
 - `Seasonal Blessing`
 - `Remembrance` (recommended via `--fill-remembrance-from-calendar`)
 
-Optional seasonal collect integration (only if you create your own seasonal map CSV):
-
-```bash
-python bin/map_common_prayers.py \
-  --in /tmp/2026-03.input.csv \
-  --out /tmp/2026-03.generated.tsv \
-  --format tsv \
-  --flatten-whitespace \
-  --acna-year 2026 \
-  --fill-remembrance-from-calendar \
-  --ignore-fetch-errors
-```
+If `Seasonal Collect` is still blank for any date, fill manually in Sheets or provide a
+seasonal map CSV via `--seasonal-map` as an override source.
 
 ## Step 2: Verify in Google Sheets
 
