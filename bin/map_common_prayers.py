@@ -21,7 +21,7 @@ Seasonal blessing inference rules are based on:
 - Advent
 - Feast of the Nativity
 - Feast of the Epiphany
-- Lent (including Lent 1-5 prayers and Holy Week from Palm Sunday through Easter Day)
+- Lent (including Lent 1-5 prayers and Holy Week from Palm Sunday through Holy Saturday)
 - Eastertide and Commemoration of the Faithful Departed
 - Day of Pentecost
 """
@@ -404,12 +404,12 @@ def easter_sunday(year: int) -> date:
 
 
 def is_holy_week_span(current_date: date | None) -> bool:
-    """Palm Sunday through Easter Day, inclusive."""
+    """Palm Sunday through Holy Saturday, inclusive."""
     if current_date is None:
         return False
     easter = easter_sunday(current_date.year)
     palm_sunday = easter - timedelta(days=7)
-    return palm_sunday <= current_date <= easter
+    return palm_sunday <= current_date < easter
 
 
 def observance_is_holy_week_span(observance: str) -> bool:
@@ -428,8 +428,6 @@ def observance_is_holy_week_span(observance: str) -> bool:
         "good friday",
         "holy saturday",
         "easter eve",
-        "easter day",
-        "easter sunday",
     )
     return any(token in text for token in tokens)
 
