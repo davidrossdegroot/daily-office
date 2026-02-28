@@ -21,7 +21,7 @@ Seasonal blessing inference rules are based on:
 - Advent
 - Feast of the Nativity
 - Feast of the Epiphany
-- Lent (including Lent 1-5 prayers and Holy Week from Palm Sunday through Maundy Thursday)
+- Lent (including Lent 1-5 prayers and Holy Week from Palm Sunday through Holy Saturday)
 - Eastertide and Commemoration of the Faithful Departed
 - Day of Pentecost
 """
@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import argparse
 import csv
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
 import re
 from pathlib import Path
@@ -343,13 +343,107 @@ def flatten_whitespace(value: str) -> str:
 def parse_month_day(date_str: str, year: int) -> datetime:
     for fmt in ("%b %d", "%B %d"):
         try:
-            dt = datetime.strptime(clean(date_str), fmt)
-            return dt.replace(year=year)
+            dt = datetime.strptime(f"{clean(date_str)} {year}", f"{fmt} %Y")
+            return dt
         except ValueError:
             continue
     raise ValueError(
         f"Could not parse Date='{date_str}'. Expected like 'Mar 17' or 'March 17'."
     )
+
+
+def parse_row_date_for_inference(date_str: str, fallback_year: int | None) -> date | None:
+    """Parse a row date with optional year fallback for seasonal inference logic."""
+    text = clean(date_str)
+    if not text:
+        return None
+
+    dated_formats = ("%Y-%m-%d", "%b %d, %Y", "%B %d, %Y", "%b %d %Y", "%B %d %Y")
+    for fmt in dated_formats:
+        try:
+            return datetime.strptime(text, fmt).date()
+        except ValueError:
+            continue
+
+    if fallback_year is None:
+        return None
+
+    for fmt in ("%b %d", "%B %d"):
+        try:
+            return datetime.strptime(f"{text} {fallback_year}", f"{fmt} %Y").date()
+        except ValueError:
+            continue
+    return None
+
+
+def infer_year_from_filename(path: Path) -> int | None:
+    """Extract a 4-digit year from a filename (for example acna-prayers-2026.csv)."""
+    match = re.search(r"(?:^|[^0-9])((?:19|20)\d{2})(?:[^0-9]|$)", path.name)
+    if not match:
+        return None
+    return int(match.group(1))
+
+
+def easter_sunday(year: int) -> date:
+    """Return Gregorian Easter Sunday for the provided year."""
+    a = year % 19
+    b = year // 100
+    c = year % 100
+    d = b // 4
+    e = b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i = c // 4
+    k = c % 4
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    month = (h + l - 7 * m + 114) // 31
+    day = ((h + l - 7 * m + 114) % 31) + 1
+    return date(year, month, day)
+
+
+def is_holy_week_span(current_date: date | None) -> bool:
+    """Palm Sunday through Holy Saturday, inclusive."""
+    if current_date is None:
+        return False
+    easter = easter_sunday(current_date.year)
+    palm_sunday = easter - timedelta(days=7)
+    return palm_sunday <= current_date < easter
+
+
+def observance_is_holy_week_span(observance: str) -> bool:
+    """Text fallback for Holy Week span detection when date is unavailable."""
+    text = clean(observance).lower()
+    if not text:
+        return False
+
+    if "holy week" in text:
+        return True
+
+    tokens = (
+        "palm sunday",
+        "maundy thursday",
+        "maunday thursday",
+        "good friday",
+        "holy saturday",
+        "easter eve",
+    )
+    return any(token in text for token in tokens)
+
+
+def lent_rotation_index(current_date: date | None) -> int | None:
+    """
+    Return zero-based day index from Ash Wednesday through the Saturday before Palm Sunday.
+    """
+    if current_date is None:
+        return None
+    easter = easter_sunday(current_date.year)
+    ash_wednesday = easter - timedelta(days=46)
+    palm_sunday = easter - timedelta(days=7)
+    if current_date < ash_wednesday or current_date >= palm_sunday:
+        return None
+    return (current_date - ash_wednesday).days
 
 
 def normalize_liturgical_color(raw_color: str) -> str:
@@ -713,11 +807,15 @@ def infer_common_type(remembrance: str, observance: str) -> str:
     return "common of any commemoration"
 
 
-def infer_seasonal_blessing(observance: str) -> str:
+def infer_seasonal_blessing(observance: str, current_date: date | None = None) -> str:
     """
     Infer seasonal blessing/prayer-over-the-people from observance text.
     """
     text = clean(observance).lower()
+
+    if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
+        return SEASONAL_BLESSING_TEXT["holy_week"]
+
     if not text:
         return ""
 
@@ -732,15 +830,14 @@ def infer_seasonal_blessing(observance: str) -> str:
     if text in {"epiphany", "the epiphany"} or "feast of the epiphany" in text:
         return SEASONAL_BLESSING_TEXT["epiphany_feast"]
 
-    # Holy Week from Palm Sunday through Maundy Thursday.
-    if (
-        "palm sunday" in text
-        or "maundy thursday" in text
-        or ("holy week" in text and "good friday" not in text and "holy saturday" not in text)
-    ):
-        return SEASONAL_BLESSING_TEXT["holy_week"]
+    # Lent prayers over the people: rotate daily when date context is available.
+    if "lent" in text or "ash wednesday" in text or "penitential" in text:
+        idx = lent_rotation_index(current_date)
+        if idx is not None:
+            option_keys = ("lent_1", "lent_2", "lent_3", "lent_4", "lent_5")
+            return SEASONAL_BLESSING_TEXT[option_keys[idx % len(option_keys)]]
 
-    # Lent prayers over the people by week.
+    # Fallback for textual week labels when date context is unavailable.
     if "week of lent" in text:
         week_patterns = [
             (r"\b(first|1st)\b", "lent_1"),
@@ -769,18 +866,15 @@ def infer_seasonal_blessing(observance: str) -> str:
     return ""
 
 
-def infer_mp_opening_sentence(observance: str) -> str:
+def infer_mp_opening_sentence(observance: str, current_date: date | None = None) -> str:
     """Infer MP Opening Sentence of Scripture from observance text."""
     text = clean(observance).lower()
+
+    if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
+        return MP_OPENING_SENTENCES["holy_week"]
+
     if not text:
         return MP_OPENING_SENTENCES["at_any_time"]
-
-    if (
-        "palm sunday" in text
-        or "maundy thursday" in text
-        or "holy week" in text
-    ):
-        return MP_OPENING_SENTENCES["holy_week"]
 
     if "day of pentecost" in text or text == "pentecost":
         return MP_OPENING_SENTENCES["pentecost"]
@@ -801,7 +895,11 @@ def infer_mp_opening_sentence(observance: str) -> str:
         return MP_OPENING_SENTENCES["epiphany"]
 
     if "lent" in text or "ash wednesday" in text or "penitential" in text:
-        return MP_OPENING_SENTENCES["lent"]
+        idx = lent_rotation_index(current_date)
+        options = [MP_OPENING_SENTENCES["lent"], *MP_OPENING_ALTERNATES.get("lent", [])]
+        if idx is None:
+            return options[0]
+        return options[idx % len(options)]
 
     if "easter" in text or "eastertide" in text:
         return MP_OPENING_SENTENCES["easter"]
@@ -812,18 +910,15 @@ def infer_mp_opening_sentence(observance: str) -> str:
     return MP_OPENING_SENTENCES["at_any_time"]
 
 
-def infer_ep_opening_sentence(observance: str) -> str:
+def infer_ep_opening_sentence(observance: str, current_date: date | None = None) -> str:
     """Infer EP Opening Sentence of Scripture from observance text."""
     text = clean(observance).lower()
+
+    if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
+        return EP_OPENING_SENTENCES["holy_week"]
+
     if not text:
         return EP_OPENING_SENTENCES["at_any_time"]
-
-    if (
-        "palm sunday" in text
-        or "maundy thursday" in text
-        or "holy week" in text
-    ):
-        return EP_OPENING_SENTENCES["holy_week"]
 
     if "day of pentecost" in text or text == "pentecost":
         return EP_OPENING_SENTENCES["pentecost"]
@@ -844,7 +939,11 @@ def infer_ep_opening_sentence(observance: str) -> str:
         return EP_OPENING_SENTENCES["epiphany"]
 
     if "lent" in text or "ash wednesday" in text or "penitential" in text:
-        return EP_OPENING_SENTENCES["lent"]
+        idx = lent_rotation_index(current_date)
+        options = [EP_OPENING_SENTENCES["lent"], *EP_OPENING_ALTERNATES.get("lent", [])]
+        if idx is None:
+            return options[0]
+        return options[idx % len(options)]
 
     if "easter" in text or "eastertide" in text:
         return EP_OPENING_SENTENCES["easter"]
@@ -1063,8 +1162,11 @@ def process(
     if seasonal_map_path is not None:
         seasonal_map = load_seasonal_map(seasonal_map_path)
 
+    inference_year = acna_year if acna_year is not None else infer_year_from_filename(input_path)
+
     for row in rows:
         ensure_canonical_schema(row)
+        row_date = parse_row_date_for_inference(clean(row.get("Date")), inference_year)
 
         if acna_year is not None:
             try:
@@ -1087,13 +1189,19 @@ def process(
             apply_seasonal_defaults(row, seasonal_map, mode=seasonal_mode)
 
         if mp_opening_mode != "off":
-            inferred_mp_opening = infer_mp_opening_sentence(clean(row.get("Observance")))
+            inferred_mp_opening = infer_mp_opening_sentence(
+                clean(row.get("Observance")),
+                current_date=row_date,
+            )
             if inferred_mp_opening:
                 if mp_opening_mode == "overwrite" or not clean(row.get("MP Opening Sentence of Scripture")):
                     row["MP Opening Sentence of Scripture"] = inferred_mp_opening
 
         if ep_opening_mode != "off":
-            inferred_ep_opening = infer_ep_opening_sentence(clean(row.get("Observance")))
+            inferred_ep_opening = infer_ep_opening_sentence(
+                clean(row.get("Observance")),
+                current_date=row_date,
+            )
             if inferred_ep_opening:
                 if ep_opening_mode == "overwrite" or not clean(row.get("EP Opening Sentence of Scripture")):
                     row["EP Opening Sentence of Scripture"] = inferred_ep_opening
@@ -1108,7 +1216,10 @@ def process(
                     row["Antiphon"] = inferred_antiphon
 
         if seasonal_blessing_mode != "off":
-            inferred_blessing = infer_seasonal_blessing(clean(row.get("Observance")))
+            inferred_blessing = infer_seasonal_blessing(
+                clean(row.get("Observance")),
+                current_date=row_date,
+            )
             if inferred_blessing:
                 if seasonal_blessing_mode == "overwrite" or not clean(row.get("Seasonal Blessing")):
                     row["Seasonal Blessing"] = inferred_blessing
