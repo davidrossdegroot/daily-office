@@ -947,27 +947,6 @@ def apply_calendar_day_data(
             row[target_col] = value
 
 
-def write_seasonal_template(rows: list[dict[str, str]], output_path: Path) -> None:
-    # Build one row per unique observance with any existing values from input.
-    by_observance: dict[str, dict[str, str]] = {}
-    for row in rows:
-        observance = clean(row.get("Observance"))
-        if not observance:
-            continue
-        if observance not in by_observance:
-            by_observance[observance] = {"Observance": observance}
-            for col in SEASONAL_DEFAULT_COLUMNS:
-                by_observance[observance][col] = clean(row.get(col))
-
-    fieldnames = ["Observance"] + SEASONAL_DEFAULT_COLUMNS
-    ordered = [by_observance[k] for k in sorted(by_observance.keys(), key=str.lower)]
-
-    with output_path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(ordered)
-
-
 def process(
     input_path: Path,
     output_path: Path,
@@ -987,7 +966,6 @@ def process(
     seasonal_blessing_mode: str,
     special_collect_mode: str,
     include_common_type: bool,
-    seasonal_template_out: Path | None,
 ) -> None:
     rows = read_rows(input_path)
 
@@ -1069,9 +1047,6 @@ def process(
             for key, value in row.items():
                 if isinstance(value, str):
                     row[key] = flatten_whitespace(value)
-
-    if seasonal_template_out is not None:
-        write_seasonal_template(rows, seasonal_template_out)
 
     fieldnames = list(CANONICAL_COLUMNS)
     if include_common_type:
@@ -1178,10 +1153,6 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Add a debug column with the inferred common category.",
     )
-    parser.add_argument(
-        "--seasonal-template-out",
-        help="Optional path to write a template seasonal mapping CSV from unique observances in input.",
-    )
     return parser.parse_args()
 
 
@@ -1206,7 +1177,6 @@ def main() -> None:
         seasonal_blessing_mode=args.seasonal_blessing_mode,
         special_collect_mode=args.special_collect_mode,
         include_common_type=args.include_common_type,
-        seasonal_template_out=Path(args.seasonal_template_out) if args.seasonal_template_out else None,
     )
     print(f"Wrote month file: {args.output_csv} ({args.fmt})")
 
