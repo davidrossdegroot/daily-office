@@ -6,7 +6,7 @@ What this script does:
 - Ensures all canonical CSV columns exist and are output in canonical order.
 - Maps `Remembrance` to a `Special Collect` (common prayer text).
 - Optionally fetches day-page fields from liturgical-calendar.com (observance, color, and
-  available Daily Office psalms/readings).
+  available Daily Office psalms/readings/collect).
 - Optionally infers `MP Opening Sentence of Scripture` from Observance.
 - Optionally infers `EP Opening Sentence of Scripture` from Observance.
 - Optionally applies seasonal defaults by `Observance` from a mapping CSV.
@@ -247,7 +247,7 @@ SEASONAL_ANTIPHONS = {
 class LiturgicalDayPageParser(HTMLParser):
     """Extract basic heading/content blocks from a liturgical calendar day page."""
 
-    RELEVANT_TAGS = {"h2", "h3", "p", "li"}
+    RELEVANT_TAGS = {"h2", "h3", "h4", "h5", "p", "li"}
     SKIP_TAGS = {"script", "style"}
 
     def __init__(self) -> None:
@@ -289,7 +289,7 @@ class LiturgicalDayPageParser(HTMLParser):
 class LiturgicalDayOfficeParser(HTMLParser):
     """Extract office-related headings/content blocks from a day page."""
 
-    RELEVANT_TAGS = {"h2", "h3", "h4", "p", "li", "th", "td"}
+    RELEVANT_TAGS = {"h2", "h3", "h4", "h5", "h6", "p", "li", "th", "td"}
     SKIP_TAGS = {"script", "style"}
 
     def __init__(self) -> None:
@@ -330,6 +330,10 @@ class LiturgicalDayOfficeParser(HTMLParser):
 
 def clean(value: str | None) -> str:
     return (value or "").strip()
+
+
+def is_heading_tag(tag: str) -> bool:
+    return bool(re.fullmatch(r"h[1-6]", clean(tag).lower()))
 
 
 def flatten_whitespace(value: str) -> str:
@@ -394,7 +398,7 @@ def extract_observance_color_remembrance(html: str) -> tuple[str, str, str]:
 
     colors: list[str] = []
     for idx, (tag, text) in enumerate(parser.blocks):
-        if tag == "h3" and text.lower().startswith("liturgical colors"):
+        if is_heading_tag(tag) and text.lower().startswith("liturgical colors"):
             for _, next_text in parser.blocks[idx + 1 :]:
                 if next_text:
                     colors.append(next_text)
@@ -402,6 +406,42 @@ def extract_observance_color_remembrance(html: str) -> tuple[str, str, str]:
 
     primary_color = normalize_liturgical_color(colors[0]) if colors else ""
     return (primary_observance, primary_color, remembrance)
+
+
+def extract_primary_collect(html: str) -> str:
+    """
+    Parse one day page and return the first collect text for the primary observance.
+    """
+    parser = LiturgicalDayPageParser()
+    parser.feed(html)
+
+    h2_count = 0
+    within_primary_observance = False
+    awaiting_collect_text = False
+    for tag, text in parser.blocks:
+        if tag == "h2":
+            h2_count += 1
+            within_primary_observance = h2_count == 1
+            awaiting_collect_text = False
+            continue
+
+        if not within_primary_observance:
+            continue
+
+        if is_heading_tag(tag):
+            heading = clean(text).lower()
+            if heading.startswith("collect"):
+                awaiting_collect_text = True
+                continue
+            if awaiting_collect_text:
+                # Another heading started before collect content.
+                awaiting_collect_text = False
+            continue
+
+        if awaiting_collect_text and tag in {"p", "li"}:
+            return clean(text)
+
+    return ""
 
 
 def classify_office_label(text: str) -> str:
@@ -507,6 +547,43 @@ def parse_office_entries(entries: list[str]) -> dict[str, str]:
         if not classify_office_label(value):
             result[label_kind] = value
 
+    if all(result.values()):
+        return result
+
+    def looks_like_psalm_entry(value: str) -> bool:
+        lower = clean(value).lower()
+        return lower.startswith("psalm ") or lower.startswith("psalms ")
+
+    def looks_like_scripture_reference(value: str) -> bool:
+        text = clean(value)
+        if not text:
+            return False
+        return bool(re.match(r"^(?:[1-3]\s*)?[A-Za-z][A-Za-z .'-]*\d", text))
+
+    unlabeled_candidates: list[str] = []
+    for entry in normalized_entries:
+        if classify_office_label(entry):
+            continue
+        kind, _ = parse_office_line(entry)
+        if kind:
+            continue
+        if looks_like_psalm_entry(entry) or looks_like_scripture_reference(entry):
+            unlabeled_candidates.append(entry)
+
+    if unlabeled_candidates:
+        if not result["psalms"]:
+            psalm_candidates = [value for value in unlabeled_candidates if looks_like_psalm_entry(value)]
+            if psalm_candidates:
+                result["psalms"] = psalm_candidates[0]
+
+        reading_candidates = [
+            value for value in unlabeled_candidates if not looks_like_psalm_entry(value)
+        ]
+        if reading_candidates and not result["first_lesson"]:
+            result["first_lesson"] = reading_candidates[0]
+        if len(reading_candidates) > 1 and not result["second_lesson"]:
+            result["second_lesson"] = reading_candidates[1]
+
     return result
 
 
@@ -523,7 +600,7 @@ def extract_office_readings(html: str) -> dict[str, str]:
     }
     current_section = ""
     for tag, text in parser.blocks:
-        if tag in {"h2", "h3", "h4"}:
+        if is_heading_tag(tag):
             heading = clean(text).lower()
             if "morning prayer" in heading:
                 current_section = "mp"
@@ -531,6 +608,11 @@ def extract_office_readings(html: str) -> dict[str, str]:
             if "evening prayer" in heading:
                 current_section = "ep"
                 continue
+            if current_section:
+                # Keep subsection headings (for example "60 day cycle") within section capture.
+                if not any(token in heading for token in ("cycle", "psalm", "lesson", "reading")):
+                    current_section = ""
+                    continue
         if current_section in section_entries:
             section_entries[current_section].append(text)
 
@@ -577,11 +659,13 @@ def fetch_calendar_day(
             charset = content_type.split("charset=")[-1].split(";")[0].strip() or "utf-8"
         html = resp.read().decode(charset, errors="replace")
     observance, color, remembrance = extract_observance_color_remembrance(html)
+    seasonal_collect = extract_primary_collect(html)
     office_readings = extract_office_readings(html)
     return {
         "observance": observance,
         "liturgical_color": color,
         "remembrance": remembrance,
+        "seasonal_collect": seasonal_collect,
         **office_readings,
     }
 
@@ -940,6 +1024,7 @@ def apply_calendar_day_data(
         ("ep_first_lesson", "EP First Lesson"),
         ("ep_second_lesson", "EP Second Lesson"),
         ("ep_psalms", "Psalms (EP, 60-day)"),
+        ("seasonal_collect", "Seasonal Collect"),
     ]
     for source_key, target_col in office_field_map:
         value = clean(calendar_data.get(source_key))
@@ -1079,7 +1164,7 @@ def parse_args() -> argparse.Namespace:
         type=int,
         help=(
             "If set, fetch day-page fields from liturgical-calendar.com for this year "
-            "(Observance, Liturgical Color, and available MP/EP psalms/readings)."
+            "(Observance, Liturgical Color, Seasonal Collect, and available MP/EP psalms/readings)."
         ),
     )
     parser.add_argument(
