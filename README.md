@@ -66,6 +66,9 @@ daily-office/
 │   └── index.html              # Calendar index template
 ├── static/
 │   └── style.css               # Styles (screen + print)
+├── bin/
+│   ├── map_common_prayers.py   # Monthly mapping + calendar fetch helper
+│   └── make_month_skeleton.py  # Create month input skeletons (Date + Remembrance)
 ├── build/                      # Generated site (created by generate.py)
 │   ├── index.html
 │   ├── all.html
@@ -99,6 +102,16 @@ To regenerate the site after making changes to templates or data:
 ```bash
 python generate.py
 ```
+
+## Monthly Data Workflow
+
+For recurring monthly ingestion (Morning/Evening readings, remembrances, and common-prayer mapping), use:
+
+- Workflow doc: [`docs/monthly-workflow.md`](docs/monthly-workflow.md)
+- Create month input skeleton: `python bin/make_month_skeleton.py --year 2026 --month 3 --out /tmp/2026-03.input.csv`
+- Generate sheet-ready TSV with calendar fetch: `python bin/map_common_prayers.py --in /tmp/2026-03.input.csv --out /tmp/2026-03.generated.tsv --format tsv --flatten-whitespace --acna-year 2026 --fill-remembrance-from-calendar --ignore-fetch-errors`
+- Paste TSV into Google Sheets for verification, then export CSV and merge month rows into `data/acna-prayers-2026.csv`
+- Seasonal Blessing inference from observance is enabled by default (`--seasonal-blessing-mode fill`)
 
 ## License
 
