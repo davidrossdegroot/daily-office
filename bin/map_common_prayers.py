@@ -10,13 +10,14 @@ What this script does:
 - Optionally infers `MP Opening Sentence of Scripture` from Observance.
 - Optionally infers `EP Opening Sentence of Scripture` from Observance.
 - Optionally applies seasonal defaults by `Observance` from a mapping CSV.
-- Outputs CSV or TSV (TSV is best for Google Sheets paste).
+- Can update a month directly inside the canonical repo CSV.
 
 Examples:
-  python bin/map_common_prayers.py --year 2026 --month 3 --out 2026-03.full.tsv --format tsv --acna-year 2026
-  python bin/map_common_prayers.py --in month.csv --out month.full.tsv --format tsv --flatten-whitespace
-  python bin/map_common_prayers.py --in month.csv --out month.full.tsv --format tsv --acna-year 2026 --ignore-fetch-errors
+  python bin/map_common_prayers.py --year 2026 --month 3 --out 2026-03.full.csv --acna-year 2026
+  python bin/map_common_prayers.py --in month.csv --out month.full.csv --flatten-whitespace
+  python bin/map_common_prayers.py --in month.csv --out month.full.csv --acna-year 2026 --ignore-fetch-errors
   python bin/map_common_prayers.py --in month.csv --out month.full.csv --seasonal-map data/mappings/seasonal-defaults.csv
+  python bin/map_common_prayers.py --update-canonical data/acna-prayers-2026.csv --year 2026 --month 3 --acna-year 2026
 
 Seasonal blessing inference rules are based on:
 - Advent
@@ -670,7 +671,20 @@ def parse_office_entries(entries: list[str]) -> dict[str, str]:
         text = clean(value)
         if not text:
             return False
-        return bool(re.match(r"^(?:[1-3]\s*)?[A-Za-z][A-Za-z .'-]*\d", text))
+        if re.match(r"^(?:[1-3]\s*)?[A-Za-z][A-Za-z .'-]*\d", text):
+            return True
+
+        normalized = re.sub(r"\s+", " ", text.lower()).strip()
+        one_chapter_books = {
+            "obadiah",
+            "philemon",
+            "jude",
+            "2 john",
+            "3 john",
+            "ii john",
+            "iii john",
+        }
+        return normalized in one_chapter_books
 
     unlabeled_candidates: list[str] = []
     for entry in normalized_entries:
@@ -1149,12 +1163,10 @@ def apply_calendar_day_data(
             row[target_col] = value
 
 
-def process_rows(
+def prepare_rows(
     rows: list[dict[str, str]],
     source_path_for_inference: Path | None,
     generated_year_for_inference: int | None,
-    output_path: Path,
-    fmt: str,
     flatten: bool,
     acna_year: int | None,
     acna_base_url: str,
@@ -1170,7 +1182,7 @@ def process_rows(
     seasonal_blessing_mode: str,
     special_collect_mode: str,
     include_common_type: bool,
-) -> None:
+) -> tuple[list[str], list[dict[str, str]]]:
     if "Date" not in rows[0]:
         raise ValueError("Input CSV must contain a 'Date' column")
     if "Remembrance" not in rows[0]:
@@ -1271,8 +1283,53 @@ def process_rows(
     if include_common_type:
         fieldnames.append("Common Type")
 
+    return (fieldnames, rows)
+
+
+def process_rows(
+    rows: list[dict[str, str]],
+    source_path_for_inference: Path | None,
+    generated_year_for_inference: int | None,
+    output_path: Path,
+    fmt: str,
+    flatten: bool,
+    acna_year: int | None,
+    acna_base_url: str,
+    acna_province: str,
+    calendar_mode: str,
+    fill_remembrance_from_calendar: bool,
+    ignore_fetch_errors: bool,
+    seasonal_map_path: Path | None,
+    seasonal_mode: str,
+    mp_opening_mode: str,
+    ep_opening_mode: str,
+    antiphon_mode: str,
+    seasonal_blessing_mode: str,
+    special_collect_mode: str,
+    include_common_type: bool,
+) -> None:
+    fieldnames, prepared_rows = prepare_rows(
+        rows=rows,
+        source_path_for_inference=source_path_for_inference,
+        generated_year_for_inference=generated_year_for_inference,
+        flatten=flatten,
+        acna_year=acna_year,
+        acna_base_url=acna_base_url,
+        acna_province=acna_province,
+        calendar_mode=calendar_mode,
+        fill_remembrance_from_calendar=fill_remembrance_from_calendar,
+        ignore_fetch_errors=ignore_fetch_errors,
+        seasonal_map_path=seasonal_map_path,
+        seasonal_mode=seasonal_mode,
+        mp_opening_mode=mp_opening_mode,
+        ep_opening_mode=ep_opening_mode,
+        antiphon_mode=antiphon_mode,
+        seasonal_blessing_mode=seasonal_blessing_mode,
+        special_collect_mode=special_collect_mode,
+        include_common_type=include_common_type,
+    )
     delimiter = "\t" if fmt == "tsv" else ","
-    write_rows(output_path, fieldnames, rows, delimiter=delimiter)
+    write_rows(output_path, fieldnames, prepared_rows, delimiter=delimiter)
 
 
 def process(
@@ -1320,6 +1377,164 @@ def process(
     )
 
 
+def extract_month_rows_from_canonical(
+    canonical_rows: list[dict[str, str]],
+    *,
+    year: int,
+    month: int,
+) -> list[dict[str, str]]:
+    existing_rows_by_day: dict[int, dict[str, str]] = {}
+    for row_index, row in enumerate(canonical_rows, start=2):
+        raw_date = clean(row.get("Date"))
+        if not raw_date:
+            raise ValueError(f"Canonical row {row_index} is missing Date.")
+        try:
+            dt = parse_month_day(raw_date, year)
+        except ValueError as exc:
+            raise ValueError(
+                f"Could not parse Date='{raw_date}' in canonical row {row_index}."
+            ) from exc
+
+        if dt.month != month:
+            continue
+        if dt.day in existing_rows_by_day:
+            raise ValueError(
+                f"Duplicate canonical rows found for {dt.strftime('%b')} {dt.day}."
+            )
+        existing_rows_by_day[dt.day] = dict(row)
+
+    _, days_in_month = calendar.monthrange(year, month)
+    month_rows: list[dict[str, str]] = []
+    for day in range(1, days_in_month + 1):
+        existing_row = existing_rows_by_day.get(day)
+        if existing_row is not None:
+            month_rows.append(existing_row)
+            continue
+        dt = date(year, month, day)
+        month_rows.append(
+            {
+                "Date": f"{dt.strftime('%b')} {dt.day}",
+                "Remembrance": "",
+            }
+        )
+    return month_rows
+
+
+def merge_month_rows_into_canonical(
+    canonical_rows: list[dict[str, str]],
+    processed_month_rows: list[dict[str, str]],
+    *,
+    year: int,
+    month: int,
+) -> list[dict[str, str]]:
+    processed_by_day: dict[int, dict[str, str]] = {}
+    for row in processed_month_rows:
+        raw_date = clean(row.get("Date"))
+        dt = parse_month_day(raw_date, year)
+        if dt.month != month:
+            raise ValueError(
+                f"Processed row Date='{raw_date}' does not belong to target month {month}."
+            )
+        if dt.day in processed_by_day:
+            raise ValueError(f"Duplicate processed rows for {dt.strftime('%b')} {dt.day}.")
+        processed_by_day[dt.day] = ensure_canonical_schema(dict(row))
+
+    month_rows_sorted = [processed_by_day[day] for day in sorted(processed_by_day.keys())]
+    if not month_rows_sorted:
+        raise ValueError("No processed month rows to merge.")
+
+    merged_rows: list[dict[str, str]] = []
+    inserted_month = False
+    for row_index, row in enumerate(canonical_rows, start=2):
+        raw_date = clean(row.get("Date"))
+        if not raw_date:
+            raise ValueError(f"Canonical row {row_index} is missing Date.")
+        try:
+            dt = parse_month_day(raw_date, year)
+        except ValueError as exc:
+            raise ValueError(
+                f"Could not parse Date='{raw_date}' in canonical row {row_index}."
+            ) from exc
+
+        if dt.month == month:
+            if not inserted_month:
+                merged_rows.extend(month_rows_sorted)
+                inserted_month = True
+            continue
+
+        if not inserted_month and dt.month > month:
+            merged_rows.extend(month_rows_sorted)
+            inserted_month = True
+
+        merged_rows.append(ensure_canonical_schema(dict(row)))
+
+    if not inserted_month:
+        merged_rows.extend(month_rows_sorted)
+
+    return merged_rows
+
+
+def update_canonical_month(
+    *,
+    canonical_path: Path,
+    output_path: Path | None,
+    year: int,
+    month: int,
+    flatten: bool,
+    acna_year: int | None,
+    acna_base_url: str,
+    acna_province: str,
+    calendar_mode: str,
+    fill_remembrance_from_calendar: bool,
+    ignore_fetch_errors: bool,
+    seasonal_map_path: Path | None,
+    seasonal_mode: str,
+    mp_opening_mode: str,
+    ep_opening_mode: str,
+    antiphon_mode: str,
+    seasonal_blessing_mode: str,
+    special_collect_mode: str,
+) -> Path:
+    canonical_rows = read_rows(canonical_path)
+    month_rows = extract_month_rows_from_canonical(
+        canonical_rows,
+        year=year,
+        month=month,
+    )
+
+    _, processed_month_rows = prepare_rows(
+        rows=month_rows,
+        source_path_for_inference=canonical_path,
+        generated_year_for_inference=year,
+        flatten=flatten,
+        acna_year=acna_year,
+        acna_base_url=acna_base_url,
+        acna_province=acna_province,
+        calendar_mode=calendar_mode,
+        fill_remembrance_from_calendar=fill_remembrance_from_calendar,
+        ignore_fetch_errors=ignore_fetch_errors,
+        seasonal_map_path=seasonal_map_path,
+        seasonal_mode=seasonal_mode,
+        mp_opening_mode=mp_opening_mode,
+        ep_opening_mode=ep_opening_mode,
+        antiphon_mode=antiphon_mode,
+        seasonal_blessing_mode=seasonal_blessing_mode,
+        special_collect_mode=special_collect_mode,
+        include_common_type=False,
+    )
+
+    merged_rows = merge_month_rows_into_canonical(
+        canonical_rows,
+        processed_month_rows,
+        year=year,
+        month=month,
+    )
+
+    target_path = output_path if output_path is not None else canonical_path
+    write_rows(target_path, list(CANONICAL_COLUMNS), merged_rows, delimiter=",")
+    return target_path
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Prepare month rows in canonical Daily Office schema."
@@ -1339,13 +1554,26 @@ def parse_args() -> argparse.Namespace:
         type=int,
         help="Generate month input rows internally for this month 1-12 (requires --year).",
     )
-    parser.add_argument("--out", dest="output_csv", required=True, help="Output CSV/TSV path")
+    parser.add_argument(
+        "--update-canonical",
+        help=(
+            "Update this canonical CSV directly for the target --year/--month. "
+            "When used without --out, writes in place."
+        ),
+    )
+    parser.add_argument(
+        "--out",
+        dest="output_csv",
+        help=(
+            "Output CSV/TSV path. Required unless --update-canonical is used."
+        ),
+    )
     parser.add_argument(
         "--format",
         dest="fmt",
         choices=("csv", "tsv"),
         default="csv",
-        help="Output format (default: csv). Use tsv for easier Google Sheets paste.",
+        help="Output format (default: csv). Use tsv for tab-delimited review output.",
     )
     parser.add_argument(
         "--flatten-whitespace",
@@ -1435,6 +1663,20 @@ def parse_args() -> argparse.Namespace:
 
     has_input_csv = bool(args.input_csv)
     has_month_generation_args = args.year is not None or args.month is not None
+    has_update_canonical = bool(args.update_canonical)
+
+    if has_update_canonical:
+        if has_input_csv:
+            parser.error("Use either --in or --update-canonical, not both.")
+        if args.year is None or args.month is None:
+            parser.error("--update-canonical requires both --year and --month.")
+        if not (1 <= args.month <= 12):
+            parser.error("--month must be between 1 and 12")
+        if args.fmt != "csv":
+            parser.error("--update-canonical only supports --format csv.")
+        if args.include_common_type:
+            parser.error("--include-common-type cannot be used with --update-canonical.")
+        return args
 
     if has_input_csv and has_month_generation_args:
         parser.error("Use either --in or --year/--month, not both.")
@@ -1442,12 +1684,40 @@ def parse_args() -> argparse.Namespace:
         parser.error("Provide --in, or provide both --year and --month.")
     if args.month is not None and not (1 <= args.month <= 12):
         parser.error("--month must be between 1 and 12")
+    if not args.output_csv:
+        parser.error("--out is required unless --update-canonical is used.")
 
     return args
 
 
 def main() -> None:
     args = parse_args()
+    if args.update_canonical:
+        if args.year is None or args.month is None:
+            raise ValueError("Expected --year and --month with --update-canonical.")
+        written_path = update_canonical_month(
+            canonical_path=Path(args.update_canonical),
+            output_path=Path(args.output_csv) if args.output_csv else None,
+            year=args.year,
+            month=args.month,
+            flatten=args.flatten_whitespace,
+            acna_year=args.acna_year,
+            acna_base_url=args.acna_base_url,
+            acna_province=args.acna_province,
+            calendar_mode=args.calendar_mode,
+            fill_remembrance_from_calendar=args.fill_remembrance_from_calendar,
+            ignore_fetch_errors=args.ignore_fetch_errors,
+            seasonal_map_path=Path(args.seasonal_map) if args.seasonal_map else None,
+            seasonal_mode=args.seasonal_mode,
+            mp_opening_mode=args.mp_opening_mode,
+            ep_opening_mode=args.ep_opening_mode,
+            antiphon_mode=args.antiphon_mode,
+            seasonal_blessing_mode=args.seasonal_blessing_mode,
+            special_collect_mode=args.special_collect_mode,
+        )
+        print(f"Updated canonical file: {written_path} (month={args.year}-{args.month:02d})")
+        return
+
     if args.input_csv:
         process(
             input_path=Path(args.input_csv),
