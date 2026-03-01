@@ -66,11 +66,10 @@ Verify at least:
 
 If a day needs manual correction, edit `data/acna-prayers-2026.csv` directly.
 
-If you changed `Remembrance` values and want `Special Collect` to be recalculated, rerun Step 1 with:
+If you changed `Remembrance` values and want `Special Collect` to be recalculated:
 
-```bash
---special-collect-mode overwrite
-```
+- if Step 1 was run with `--special-collect-mode fill`, rerun it with `--special-collect-mode overwrite`
+- if Step 1 was run with the recommended command (already `overwrite`), just rerun Step 1 after your edits
 
 ## Step 4: Regenerate Site
 
