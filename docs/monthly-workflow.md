@@ -1,109 +1,82 @@
-# Monthly Data Workflow (TSV-First)
+# Monthly Data Workflow (Direct CSV Update)
 
 This is the default monthly pipeline for producing and shipping Daily Office data.
 
 ## Default 5-Step Flow
 
-1. Generate a month TSV in one command with `bin/map_common_prayers.py --year ... --month ...`.
-2. Paste TSV into Google Sheets and do manual verification.
-3. Export from Google Sheets to CSV.
-4. Merge that month into the canonical repo CSV (`data/acna-prayers-2026.csv`).
+1. Update the target month directly in the canonical repo CSV.
+2. Review the generated month changes with `git diff`.
+3. Apply any manual corrections directly in the canonical CSV (if needed).
+4. Regenerate the static site.
 5. Commit and open a PR.
 
-## Step 1: Generate Month TSV
-
-```bash
-python bin/map_common_prayers.py \
-  --year 2026 \
-  --month 3 \
-  --out /tmp/2026-03.generated.tsv \
-  --format tsv \
-  --flatten-whitespace \
-  --acna-year 2026 \
-  --fill-remembrance-from-calendar \
-  --ignore-fetch-errors
-```
-
-This single command first generates internal month input rows:
-
-- `Date` (formatted like `Mar 1`)
-- `Remembrance` (required input column; starts blank unless `--fill-remembrance-from-calendar` is used)
-
-Then it fills canonical fields from mapping rules plus calendar day pages:
-
-- `Liturgical Color`
-- `Observance`
-- `MP Opening Sentence of Scripture`
-- `Antiphon`
-- `MP First Lesson`
-- `MP Second Lesson`
-- `Psalms (MP, 60-day)`
-- `EP Opening Sentence of Scripture`
-- `EP First Lesson`
-- `EP Second Lesson`
-- `Psalms (EP, 60-day)`
-- `Seasonal Collect`
-- `Special Collect`
-- `Seasonal Blessing`
-- `Remembrance` (recommended via `--fill-remembrance-from-calendar`)
-
-If `Seasonal Collect` is still blank for any date, fill manually in Sheets or provide a
-seasonal map CSV via `--seasonal-map` as an override source.
-
-If you need to prefill custom remembrance values before mapping, use:
-
-1. `python bin/make_month_skeleton.py --year 2026 --month 3 --out /tmp/2026-03.input.csv`
-2. Edit `Remembrance` values in the input CSV.
-3. Run `python bin/map_common_prayers.py --in /tmp/2026-03.input.csv --out /tmp/2026-03.generated.tsv --format tsv ...`
-
-## Step 2: Verify in Google Sheets
-
-1. Open a blank Google Sheet.
-2. Paste `/tmp/2026-03.generated.tsv` directly.
-3. Verify at least:
-   - row count matches month length
-   - one row per date, no missing dates
-   - MP/EP readings and psalms look complete
-   - observance/color align with calendar expectations
-   - seasonal/special collects look correct for feast/fast days
-
-If you need manual edits, make them in Sheets.
-
-## Step 3: Export from Sheets to CSV
-
-1. Download as CSV from Google Sheets.
-2. Save as something like `/tmp/2026-03.sheet-export.csv`.
-3. Keep header names unchanged.
-
-## Step 4: Merge Into Canonical Repo CSV
+## Step 1: Update Canonical CSV In Place
 
 Target file:
 
-- [`data/acna-prayers-2026.csv`](./data/acna-prayers-2026.csv)
+- `data/acna-prayers-2026.csv`
 
-Merge rule:
+Recommended command:
 
-1. Replace only the target month rows in the canonical file.
-2. Preserve canonical header order.
-3. Keep one row per date.
+```bash
+python bin/map_common_prayers.py \
+  --update-canonical data/acna-prayers-2026.csv \
+  --year 2026 \
+  --month 3 \
+  --acna-year 2026 \
+  --flatten-whitespace \
+  --fill-remembrance-from-calendar \
+  --ignore-fetch-errors \
+  --calendar-mode overwrite \
+  --mp-opening-mode overwrite \
+  --ep-opening-mode overwrite \
+  --antiphon-mode overwrite \
+  --seasonal-blessing-mode overwrite \
+  --special-collect-mode overwrite
+```
 
-Columns to update for the month:
+What this does:
 
-- `Liturgical Color`
-- `Observance`
-- `MP Opening Sentence of Scripture`
-- `Antiphon`
-- `MP First Lesson`
-- `MP Second Lesson`
-- `Psalms (MP, 60-day)`
-- `EP Opening Sentence of Scripture`
-- `EP First Lesson`
-- `EP Second Lesson`
-- `Psalms (EP, 60-day)`
-- `Seasonal Collect`
-- `Special Collect`
-- `Seasonal Blessing`
-- `Remembrance`
+- replaces/adds all rows for the target month in `data/acna-prayers-2026.csv`
+- keeps canonical column order
+- fetches observance/readings/collect data from the ACNA calendar source
+- recomputes inferred fields (opening sentences, antiphon, seasonal blessing, special collect)
+
+If you want a preview file instead of writing in place, add:
+
+```bash
+--out /tmp/acna-prayers-2026.preview.csv
+```
+
+## Step 2: Review Changes
+
+```bash
+git diff -- data/acna-prayers-2026.csv
+```
+
+Verify at least:
+
+- row count for the target month matches calendar length
+- one row per date, no missing days
+- MP/EP readings and psalms look complete
+- observance/color align with calendar expectations
+- seasonal/special collects look correct for feast/fast days
+
+## Step 3: Optional Manual Corrections
+
+If a day needs manual correction, edit `data/acna-prayers-2026.csv` directly.
+
+If you changed `Remembrance` values and want `Special Collect` to be recalculated, rerun Step 1 with:
+
+```bash
+--special-collect-mode overwrite
+```
+
+## Step 4: Regenerate Site
+
+```bash
+python generate.py
+```
 
 ## Step 5: Commit and Open PR
 

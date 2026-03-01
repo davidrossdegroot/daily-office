@@ -108,9 +108,9 @@ python generate.py
 For recurring monthly ingestion (Morning/Evening readings, remembrances, and common-prayer mapping), use:
 
 - Workflow doc: [`docs/monthly-workflow.md`](docs/monthly-workflow.md)
-- Generate sheet-ready TSV with calendar fetch (single step): `python bin/map_common_prayers.py --year 2026 --month 3 --out /tmp/2026-03.generated.tsv --format tsv --flatten-whitespace --acna-year 2026 --fill-remembrance-from-calendar --ignore-fetch-errors`
-- Paste TSV into Google Sheets for verification, then export CSV and merge month rows into `data/acna-prayers-2026.csv`
-- Seasonal Blessing inference from observance is enabled by default (`--seasonal-blessing-mode fill`)
+- Update canonical CSV in place (single step): `python bin/map_common_prayers.py --update-canonical data/acna-prayers-2026.csv --year 2026 --month 3 --acna-year 2026 --flatten-whitespace --fill-remembrance-from-calendar --ignore-fetch-errors --calendar-mode overwrite --mp-opening-mode overwrite --ep-opening-mode overwrite --antiphon-mode overwrite --seasonal-blessing-mode overwrite --special-collect-mode overwrite`
+- Review with `git diff -- data/acna-prayers-2026.csv`
+- Seasonal Blessing inference from observance is enabled by default (`--seasonal-blessing-mode fill`; use `overwrite` in refresh runs)
 
 ## License
 
