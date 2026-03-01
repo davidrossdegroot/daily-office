@@ -13,6 +13,7 @@ What this script does:
 - Outputs CSV or TSV (TSV is best for Google Sheets paste).
 
 Examples:
+  python bin/map_common_prayers.py --year 2026 --month 3 --out 2026-03.full.tsv --format tsv --acna-year 2026
   python bin/map_common_prayers.py --in month.csv --out month.full.tsv --format tsv --flatten-whitespace
   python bin/map_common_prayers.py --in month.csv --out month.full.tsv --format tsv --acna-year 2026 --ignore-fetch-errors
   python bin/map_common_prayers.py --in month.csv --out month.full.csv --seasonal-map data/mappings/seasonal-defaults.csv
@@ -29,6 +30,7 @@ Seasonal blessing inference rules are based on:
 from __future__ import annotations
 
 import argparse
+import calendar
 import csv
 from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
@@ -382,6 +384,22 @@ def infer_year_from_filename(path: Path) -> int | None:
     if not match:
         return None
     return int(match.group(1))
+
+
+def build_month_input_rows(year: int, month: int) -> list[dict[str, str]]:
+    if month < 1 or month > 12:
+        raise ValueError("--month must be between 1 and 12")
+    _, days_in_month = calendar.monthrange(year, month)
+    rows: list[dict[str, str]] = []
+    for day in range(1, days_in_month + 1):
+        dt = date(year, month, day)
+        rows.append(
+            {
+                "Date": f"{dt.strftime('%b')} {dt.day}",
+                "Remembrance": "",
+            }
+        )
+    return rows
 
 
 def easter_sunday(year: int) -> date:
@@ -1131,8 +1149,10 @@ def apply_calendar_day_data(
             row[target_col] = value
 
 
-def process(
-    input_path: Path,
+def process_rows(
+    rows: list[dict[str, str]],
+    source_path_for_inference: Path | None,
+    generated_year_for_inference: int | None,
     output_path: Path,
     fmt: str,
     flatten: bool,
@@ -1151,8 +1171,6 @@ def process(
     special_collect_mode: str,
     include_common_type: bool,
 ) -> None:
-    rows = read_rows(input_path)
-
     if "Date" not in rows[0]:
         raise ValueError("Input CSV must contain a 'Date' column")
     if "Remembrance" not in rows[0]:
@@ -1162,7 +1180,12 @@ def process(
     if seasonal_map_path is not None:
         seasonal_map = load_seasonal_map(seasonal_map_path)
 
-    inference_year = acna_year if acna_year is not None else infer_year_from_filename(input_path)
+    if acna_year is not None:
+        inference_year = acna_year
+    elif source_path_for_inference is not None:
+        inference_year = infer_year_from_filename(source_path_for_inference)
+    else:
+        inference_year = generated_year_for_inference
 
     for row in rows:
         ensure_canonical_schema(row)
@@ -1252,11 +1275,70 @@ def process(
     write_rows(output_path, fieldnames, rows, delimiter=delimiter)
 
 
+def process(
+    input_path: Path,
+    output_path: Path,
+    fmt: str,
+    flatten: bool,
+    acna_year: int | None,
+    acna_base_url: str,
+    acna_province: str,
+    calendar_mode: str,
+    fill_remembrance_from_calendar: bool,
+    ignore_fetch_errors: bool,
+    seasonal_map_path: Path | None,
+    seasonal_mode: str,
+    mp_opening_mode: str,
+    ep_opening_mode: str,
+    antiphon_mode: str,
+    seasonal_blessing_mode: str,
+    special_collect_mode: str,
+    include_common_type: bool,
+) -> None:
+    rows = read_rows(input_path)
+    process_rows(
+        rows=rows,
+        source_path_for_inference=input_path,
+        generated_year_for_inference=None,
+        output_path=output_path,
+        fmt=fmt,
+        flatten=flatten,
+        acna_year=acna_year,
+        acna_base_url=acna_base_url,
+        acna_province=acna_province,
+        calendar_mode=calendar_mode,
+        fill_remembrance_from_calendar=fill_remembrance_from_calendar,
+        ignore_fetch_errors=ignore_fetch_errors,
+        seasonal_map_path=seasonal_map_path,
+        seasonal_mode=seasonal_mode,
+        mp_opening_mode=mp_opening_mode,
+        ep_opening_mode=ep_opening_mode,
+        antiphon_mode=antiphon_mode,
+        seasonal_blessing_mode=seasonal_blessing_mode,
+        special_collect_mode=special_collect_mode,
+        include_common_type=include_common_type,
+    )
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Prepare month rows in canonical Daily Office schema."
     )
-    parser.add_argument("--in", dest="input_csv", required=True, help="Input CSV path")
+    parser.add_argument(
+        "--in",
+        dest="input_csv",
+        help="Input CSV path (must include Date + Remembrance columns).",
+    )
+    parser.add_argument(
+        "--year",
+        type=int,
+        help="Generate month input rows internally for this year (requires --month).",
+    )
+    parser.add_argument(
+        "--month",
+        type=int,
+        help="Generate month input rows internally for this month 1-12 (requires --year).",
+    )
     parser.add_argument("--out", dest="output_csv", required=True, help="Output CSV/TSV path")
     parser.add_argument(
         "--format",
@@ -1349,31 +1431,70 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Add a debug column with the inferred common category.",
     )
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    has_input_csv = bool(args.input_csv)
+    has_month_generation_args = args.year is not None or args.month is not None
+
+    if has_input_csv and has_month_generation_args:
+        parser.error("Use either --in or --year/--month, not both.")
+    if not has_input_csv and not (args.year is not None and args.month is not None):
+        parser.error("Provide --in, or provide both --year and --month.")
+    if args.month is not None and not (1 <= args.month <= 12):
+        parser.error("--month must be between 1 and 12")
+
+    return args
 
 
 def main() -> None:
     args = parse_args()
-    process(
-        input_path=Path(args.input_csv),
-        output_path=Path(args.output_csv),
-        fmt=args.fmt,
-        flatten=args.flatten_whitespace,
-        acna_year=args.acna_year,
-        acna_base_url=args.acna_base_url,
-        acna_province=args.acna_province,
-        calendar_mode=args.calendar_mode,
-        fill_remembrance_from_calendar=args.fill_remembrance_from_calendar,
-        ignore_fetch_errors=args.ignore_fetch_errors,
-        seasonal_map_path=Path(args.seasonal_map) if args.seasonal_map else None,
-        seasonal_mode=args.seasonal_mode,
-        mp_opening_mode=args.mp_opening_mode,
-        ep_opening_mode=args.ep_opening_mode,
-        antiphon_mode=args.antiphon_mode,
-        seasonal_blessing_mode=args.seasonal_blessing_mode,
-        special_collect_mode=args.special_collect_mode,
-        include_common_type=args.include_common_type,
-    )
+    if args.input_csv:
+        process(
+            input_path=Path(args.input_csv),
+            output_path=Path(args.output_csv),
+            fmt=args.fmt,
+            flatten=args.flatten_whitespace,
+            acna_year=args.acna_year,
+            acna_base_url=args.acna_base_url,
+            acna_province=args.acna_province,
+            calendar_mode=args.calendar_mode,
+            fill_remembrance_from_calendar=args.fill_remembrance_from_calendar,
+            ignore_fetch_errors=args.ignore_fetch_errors,
+            seasonal_map_path=Path(args.seasonal_map) if args.seasonal_map else None,
+            seasonal_mode=args.seasonal_mode,
+            mp_opening_mode=args.mp_opening_mode,
+            ep_opening_mode=args.ep_opening_mode,
+            antiphon_mode=args.antiphon_mode,
+            seasonal_blessing_mode=args.seasonal_blessing_mode,
+            special_collect_mode=args.special_collect_mode,
+            include_common_type=args.include_common_type,
+        )
+    else:
+        if args.year is None or args.month is None:
+            raise ValueError("Expected --year and --month when --in is not provided.")
+        rows = build_month_input_rows(args.year, args.month)
+        process_rows(
+            rows=rows,
+            source_path_for_inference=None,
+            generated_year_for_inference=args.year,
+            output_path=Path(args.output_csv),
+            fmt=args.fmt,
+            flatten=args.flatten_whitespace,
+            acna_year=args.acna_year,
+            acna_base_url=args.acna_base_url,
+            acna_province=args.acna_province,
+            calendar_mode=args.calendar_mode,
+            fill_remembrance_from_calendar=args.fill_remembrance_from_calendar,
+            ignore_fetch_errors=args.ignore_fetch_errors,
+            seasonal_map_path=Path(args.seasonal_map) if args.seasonal_map else None,
+            seasonal_mode=args.seasonal_mode,
+            mp_opening_mode=args.mp_opening_mode,
+            ep_opening_mode=args.ep_opening_mode,
+            antiphon_mode=args.antiphon_mode,
+            seasonal_blessing_mode=args.seasonal_blessing_mode,
+            special_collect_mode=args.special_collect_mode,
+            include_common_type=args.include_common_type,
+        )
     print(f"Wrote month file: {args.output_csv} ({args.fmt})")
 
 

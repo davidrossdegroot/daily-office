@@ -4,7 +4,7 @@ This is the default monthly pipeline for producing and shipping Daily Office dat
 
 ## Default 5-Step Flow
 
-1. Generate a month TSV with `bin/make_month_skeleton.py` + `bin/map_common_prayers.py`.
+1. Generate a month TSV in one command with `bin/map_common_prayers.py --year ... --month ...`.
 2. Paste TSV into Google Sheets and do manual verification.
 3. Export from Google Sheets to CSV.
 4. Merge that month into the canonical repo CSV (`data/acna-prayers-2026.csv`).
@@ -12,24 +12,10 @@ This is the default monthly pipeline for producing and shipping Daily Office dat
 
 ## Step 1: Generate Month TSV
 
-### 1.1 Create month input skeleton
-
-```bash
-python bin/make_month_skeleton.py --year 2026 --month 3 --out /tmp/2026-03.input.csv
-```
-
-This creates:
-
-- `Date` (formatted like `Mar 1`)
-- `Remembrance` (required input column; starts blank)
-
-All other canonical columns are added/fillable in Step 1.2 by `map_common_prayers.py`.
-
-### 1.2 Build full canonical TSV
-
 ```bash
 python bin/map_common_prayers.py \
-  --in /tmp/2026-03.input.csv \
+  --year 2026 \
+  --month 3 \
   --out /tmp/2026-03.generated.tsv \
   --format tsv \
   --flatten-whitespace \
@@ -38,7 +24,12 @@ python bin/map_common_prayers.py \
   --ignore-fetch-errors
 ```
 
-This fills canonical fields from mapping rules plus calendar day pages:
+This single command first generates internal month input rows:
+
+- `Date` (formatted like `Mar 1`)
+- `Remembrance` (required input column; starts blank unless `--fill-remembrance-from-calendar` is used)
+
+Then it fills canonical fields from mapping rules plus calendar day pages:
 
 - `Liturgical Color`
 - `Observance`
@@ -58,6 +49,12 @@ This fills canonical fields from mapping rules plus calendar day pages:
 
 If `Seasonal Collect` is still blank for any date, fill manually in Sheets or provide a
 seasonal map CSV via `--seasonal-map` as an override source.
+
+If you need to prefill custom remembrance values before mapping, use:
+
+1. `python bin/make_month_skeleton.py --year 2026 --month 3 --out /tmp/2026-03.input.csv`
+2. Edit `Remembrance` values in the input CSV.
+3. Run `python bin/map_common_prayers.py --in /tmp/2026-03.input.csv --out /tmp/2026-03.generated.tsv --format tsv ...`
 
 ## Step 2: Verify in Google Sheets
 
