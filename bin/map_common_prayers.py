@@ -690,6 +690,8 @@ def parse_office_entries(entries: list[str]) -> dict[str, str]:
             "3 john",
             "ii john",
             "iii john",
+            "susanna",
+            "bel and the dragon",
         }
         return normalized in one_chapter_books
 
