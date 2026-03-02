@@ -595,8 +595,15 @@ def parse_office_line(line: str) -> tuple[str, str]:
     if ":" in raw:
         label, value = raw.split(":", 1)
         kind = classify_office_label(label)
-        if kind and clean(value):
-            return (kind, clean(value))
+        cleaned_label = clean(label)
+        cleaned_value = clean(value)
+        if kind and cleaned_value:
+            # Preserve chapter/verse psalm references when the source uses
+            # "Psalm 107:1-22" formatting.
+            psalm_ref_match = re.fullmatch(r"psalms?\s+(\d+[a-z]?)", cleaned_label, flags=re.IGNORECASE)
+            if kind == "psalms" and psalm_ref_match:
+                return (kind, f"{psalm_ref_match.group(1)}:{cleaned_value}")
+            return (kind, cleaned_value)
 
     dash_match = re.match(r"^(?P<label>.+?)\s+[-\u2013\u2014]\s+(?P<value>.+)$", raw)
     if dash_match:
