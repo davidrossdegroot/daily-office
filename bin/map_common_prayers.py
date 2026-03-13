@@ -70,46 +70,82 @@ SEASONAL_DEFAULT_COLUMNS = [
 
 COMMON_PRAYERS = {
     "common of a martyr": (
-        "For the witness of your martyrs, who took up their cross and followed you "
-        "even unto death, and revealed your power made perfect in human weakness."
+        "Almighty God, you gave your servant N. boldness to confess the Name of our "
+        "Savior Jesus Christ before the rulers of this world, and courage to die for "
+        "this faith: Grant that we may always be ready to give a reason for the hope "
+        "that is in us, and to suffer gladly for the sake of our Lord Jesus Christ; "
+        "who lives and reigns with you and the Holy Spirit, one God, for ever and "
+        "ever. Amen."
     ),
     "common of a missionary or evangelist": (
-        "For the gifts of your Holy Spirit poured out upon prophets and evangelists, "
-        "to proclaim the Gospel to the ends of the earth, and to bring all peoples "
-        "under the reign of Jesus Christ our Lord."
+        "Almighty and everlasting God, you called your servant N. to preach the "
+        "Gospel to the people of _________ [or to the __________ people]: Raise up "
+        "in this and every land evangelists and heralds of your kingdom, that your "
+        "Church may proclaim the unsearchable riches of our Savior Jesus Christ; who "
+        "lives and reigns with you and the Holy Spirit, one God, now and for ever. "
+        "Amen."
     ),
     "common of a pastor": (
-        "Through Jesus Christ, the great shepherd of the sheep; in him you call "
-        "faithful pastors and anoint them with your Holy Spirit, to feed your flock "
-        "by Word and Sacrament, and to lead them in the way of everlasting life."
+        "O God, our heavenly Father, you raised up your faithful servant N. to be a "
+        "[Bishop and] pastor in your Church and to feed your flock: Give abundantly "
+        "to all pastors the gifts of your Holy Spirit, that they may minister in your "
+        "household as true servants of Christ and stewards of your divine mysteries; "
+        "through Jesus Christ our Lord, who lives and reigns with you and the Holy "
+        "Spirit, one God, for ever and ever. Amen."
     ),
     "common of a teacher of the faith": (
-        "For you have imparted gifts of wisdom and knowledge to those who teach the "
-        "Gospel in word and deed, to build up the body of Christ, until we all attain "
-        "to the unity of the faith and of the knowledge of the Son of God."
+        "Almighty God, you gave your servant N. special gifts of grace to understand "
+        "and teach the truth revealed in Christ Jesus: Grant that by this teaching we "
+        "may know you, the one true God, and Jesus Christ whom you have sent; who "
+        "lives and reigns with you and the Holy Spirit, one God, for ever and ever. "
+        "Amen."
     ),
     "common of a monastic or religious": (
-        "For calling to the consecrated life those who leave everything for the sake "
-        "of your kingdom, and who show forth in this world an anticipation of the "
-        "abundant life you promise in the age to come."
+        "O God, your blessed Son became poor for our sake, and chose the Cross over "
+        "the kingdoms of this world: Deliver us from an inordinate love of worldly "
+        "things, that we, inspired by the devotion of your servant N., may seek you "
+        "with singleness of heart, behold your glory by faith, and attain to the "
+        "riches of your everlasting kingdom, where we shall be united with our Savior "
+        "Jesus Christ; who lives and reigns with you and the Holy Spirit, one God, "
+        "now and for ever. Amen."
     ),
     "common of an ecumenist": (
-        "Through your Son Jesus Christ our Lord; in him you bring us to the knowledge "
-        "of your truth, and unite us by the bond of one Faith and one Baptism, that "
-        "we might love one another and manifest your love to the world."
+        "Almighty God, we give you thanks for the ministry of N., who labored that "
+        "the Church of Jesus Christ might be one: Grant that we, instructed by his "
+        "teaching and example, and knit together in unity by your Spirit, may ever "
+        "stand firm upon the one foundation, which is Jesus Christ our Lord; who "
+        "lives and reigns with you, in the unity of the Holy Spirit, one God, now "
+        "and for ever. Amen."
     ),
     "common of a renewer of society": (
-        "For you never turn away from us, and continually send among us those who seek "
-        "justice, defend the oppressed, feed the poor, and bind up the brokenhearted."
+        "Almighty and everlasting God, you kindled the flame of your love in the "
+        "heart of your servant N. to manifest your compassion and mercy to the poor "
+        "and the persecuted: Grant to us, your humble servants, a like faith and "
+        "power of love, that we who give thanks for his righteous zeal may profit by "
+        "his example; through Jesus Christ our Lord, who lives and reigns with you "
+        "and the Holy Spirit, one God, for ever and ever. Amen."
     ),
     "common of a reformer of the church": (
-        "For you, the master builder, never abandon your Church, which you have built "
-        "of living stones; you call your faithful servants to restore its ancient walls "
-        "and reunite its broken ramparts, that it may be a holy temple of your presence."
+        "O God, by your grace your servant N., kindled by the flame of your love, "
+        "became a burning and shining light in your Church, turning pride into "
+        "humility and error into truth: Grant that we may be set aflame with the "
+        "same spirit of love and discipline, and walk before you as children of "
+        "light; through Jesus Christ our Lord, who lives and reigns with you, in the "
+        "unity of the Holy Spirit, one God, now and for ever. Amen."
     ),
     "common of any commemoration": (
-        "For the grace and virtue manifest in [N. and all] your saints, who have been "
-        "the chosen vessels of your love, and the lights of the world in their generations."
+        "Almighty God, you have surrounded us with a great cloud of witnesses: Grant "
+        "that we, encouraged by the good example of your servant N., may persevere in "
+        "running the race that is set before us, until at last, with him, we attain "
+        "to your eternal joy; through Jesus Christ, the pioneer and perfecter of our "
+        "faith, who lives and reigns with you and the Holy Spirit, one God, for ever "
+        "and ever. Amen. Or this: Almighty God, by your Holy Spirit you have made us "
+        "one with your saints in heaven and on earth: Grant that in our earthly "
+        "pilgrimage we may always be supported by this fellowship of love and prayer, "
+        "and know ourselves to be surrounded by their witness to your power and "
+        "mercy; for the sake of Jesus Christ, in whom all our intercessions are "
+        "acceptable through the Spirit, and who lives and reigns with you and the "
+        "same Spirit, one God, for ever and ever. Amen."
     ),
 }
 
@@ -824,9 +860,6 @@ def infer_common_type(remembrance: str, observance: str) -> str:
     if any(hint in text for hint in missionary_hints):
         return "common of a missionary or evangelist"
 
-    if "teacher of the faith" in text or "doctor of the church" in text:
-        return "common of a teacher of the faith"
-
     if "reformer of the church" in text or "reformer" in text:
         return "common of a reformer of the church"
 
@@ -844,6 +877,9 @@ def infer_common_type(remembrance: str, observance: str) -> str:
     pastor_hints = ("bishop", "priest", "pastor", "archbishop", "deacon")
     if any(hint in text for hint in pastor_hints):
         return "common of a pastor"
+
+    if "teacher of the faith" in text or "doctor of the church" in text:
+        return "common of a teacher of the faith"
 
     return "common of any commemoration"
 
