@@ -149,6 +149,463 @@ COMMON_PRAYERS = {
     ),
 }
 
+FIXED_HOLY_DAY_PROPERS: dict[tuple[int, int], dict[str, object]] = {
+    (1, 1): {
+        "heading": "The Circumcision and Holy Name of Our Lord Jesus Christ",
+        "collect": (
+            "Almighty God, your blessed Son fulfilled the covenant of circumcision "
+            "for our sake, and was given the Name that is above every name: Give us "
+            "grace faithfully to bear his Name, and to worship him with pure hearts "
+            "according to the New Covenant; who lives and reigns with you, in the "
+            "unity of the Holy Spirit, one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "circumsicion & name",
+            "circumcision & name",
+            "circumcision and holy name",
+            "the circumcision and holy name of our lord jesus christ",
+        ),
+    },
+    (1, 18): {
+        "heading": "Confession of Saint Peter",
+        "collect": (
+            "Almighty Father, who inspired Simon Peter, first among the apostles, to "
+            "confess Jesus as Messiah and Son of the living God: Keep your Church "
+            "steadfast upon the rock of this faith, that in unity and peace we may "
+            "proclaim the one truth and follow the one Lord, our Savior Jesus Christ; "
+            "who lives and reigns with you and the Holy Spirit, one God, now and for "
+            "ever. Amen."
+        ),
+        "aliases": (
+            "confession of peter",
+            "confession of saint peter",
+        ),
+    },
+    (1, 25): {
+        "heading": "Conversion of Saint Paul",
+        "collect": (
+            "O God, by the preaching of your apostle Paul you have caused the light "
+            "of the Gospel to shine throughout the world: Grant, we pray, that having "
+            "his wonderful conversion in remembrance, we may show ourselves thankful "
+            "to you by following his holy teaching; through Jesus Christ our Lord, "
+            "who lives and reigns with you, in the unity of the Holy Spirit, one God, "
+            "now and for ever. Amen."
+        ),
+        "aliases": (
+            "conversion of paul",
+            "conversion of saint paul",
+        ),
+    },
+    (2, 2): {
+        "heading": "The Presentation of Christ in the Temple",
+        "collect": (
+            "Almighty and everliving God, we humbly pray that, as your only-begotten "
+            "Son was this day presented in the temple in the substance of our flesh, "
+            "so we may be presented to you with pure and clean hearts by Jesus "
+            "Christ our Lord; who lives and reigns with you and the Holy Spirit, one "
+            "God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "presentation",
+            "the presentation of christ in the temple",
+        ),
+    },
+    (2, 24): {
+        "heading": "Saint Matthias",
+        "collect": (
+            "Almighty God, who in the place of Judas chose your faithful servant "
+            "Matthias to be numbered among the Twelve: Grant that your Church, being "
+            "delivered from false apostles, may always be guided and governed by "
+            "faithful and true pastors; through Jesus Christ our Lord, who lives and "
+            "reigns with you, in the unity of the Holy Spirit, one God, now and for "
+            "ever. Amen."
+        ),
+        "aliases": (
+            "matthias",
+            "saint matthias",
+        ),
+    },
+    (3, 19): {
+        "heading": "Saint Joseph",
+        "collect": (
+            "O God, who from the family of your servant David raised up Joseph to be "
+            "the guardian of your incarnate Son and the husband of his virgin mother: "
+            "Give us grace to imitate his uprightness of life and his obedience to "
+            "your commands; through Jesus Christ our Lord, who lives and reigns with "
+            "you and the Holy Spirit, one God, for ever and ever. Amen."
+        ),
+        "aliases": (
+            "st joseph",
+            "saint joseph",
+            "joseph, husband of the virgin mary and guardian of jesus",
+        ),
+    },
+    (3, 25): {
+        "heading": "The Annunciation",
+        "collect": (
+            "Pour your grace into our hearts, O Lord, that we who have known the "
+            "incarnation of your Son Jesus Christ, announced by an angel to the "
+            "Virgin Mary, may by his Cross and passion be brought to the glory of "
+            "his resurrection; who lives and reigns with you, in the unity of the "
+            "Holy Spirit, one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "annunciation",
+            "the annunciation",
+        ),
+    },
+    (4, 25): {
+        "heading": "Saint Mark",
+        "collect": (
+            "Almighty God, by the hand of Mark the evangelist you have given to your "
+            "Church the Gospel of Jesus Christ: We thank you for his witness, and "
+            "pray that you will give us grace to know the truth, and not to be "
+            "carried about by every wind of false doctrine, that we may know Jesus "
+            "Christ as our Lord and Savior; who lives and reigns with you and the "
+            "Holy Spirit, one God, for ever and ever. Amen."
+        ),
+        "aliases": (
+            "mark the evangelist",
+            "saint mark",
+        ),
+    },
+    (5, 1): {
+        "heading": "Saint Philip and Saint James",
+        "collect": (
+            "Almighty God, you gave to your apostles Philip and James the grace and "
+            "strength to bear witness to Jesus as the way, the truth, and the life: "
+            "Grant that we, being mindful of their victory of faith, may glorify in "
+            "life and death the Name of our Lord Jesus Christ; who lives and reigns "
+            "with you and the Holy Spirit, one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "philip and james, apostles",
+            "saint philip and saint james",
+            "philip and james",
+        ),
+    },
+    (5, 31): {
+        "heading": "The Visitation",
+        "collect": (
+            "Almighty God, by whose grace Elizabeth rejoiced with the blessed Virgin "
+            "Mary and greeted her as the mother of the Lord: Look with favor on your "
+            "lowly servants, that, with Mary, we may magnify your holy Name and "
+            "rejoice to acclaim her Son as our Savior; who lives and reigns with you, "
+            "in the unity of the Holy Spirit, one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "the visitation of the virgin mary to elizabeth and zechariah",
+            "the visitation",
+            "visitation",
+        ),
+    },
+    (6, 11): {
+        "heading": "Saint Barnabas",
+        "collect": (
+            "Grant, O God, that we may follow the example of your faithful servant "
+            "Barnabas, who, seeking not his own renown but the well-being of your "
+            "Church, gave generously of his life and substance for the relief of the "
+            "poor, and went forth courageously in mission for the spread of the "
+            "Gospel; through Jesus Christ our Lord, who lives and reigns with you "
+            "and the Holy Spirit, one God, for ever and ever. Amen."
+        ),
+        "aliases": (
+            "barnabas the apostle",
+            "saint barnabas",
+        ),
+    },
+    (6, 24): {
+        "heading": "The Nativity of Saint John the Baptist",
+        "collect": (
+            "Almighty God, by whose providence your servant John the Baptist was "
+            "wonderfully born, and sent to prepare the way of your Son our Savior by "
+            "preaching repentance: Make us so to follow his teaching and holy life, "
+            "that we may truly repent, boldly rebuke vice, patiently suffer for the "
+            "sake of truth, and proclaim the coming of Jesus Christ our Lord; who "
+            "lives and reigns with you and the Holy Spirit, one God, for ever and "
+            "ever. Amen."
+        ),
+        "aliases": (
+            "the nativity of john the baptist",
+            "the nativity of saint john the baptist",
+        ),
+    },
+    (6, 29): {
+        "heading": "Saint Peter and Saint Paul",
+        "collect": (
+            "Almighty God, whose blessed apostles Peter and Paul glorified you by "
+            "their martyrdom: Grant that your Church, instructed by their teaching "
+            "and example, and knit together in unity by your Spirit, may ever stand "
+            "firm upon the one foundation, which is Jesus Christ our Lord; who lives "
+            "and reigns with you, in the unity of the Holy Spirit, one God, now and "
+            "for ever. Amen."
+        ),
+        "aliases": (
+            "peter and paul, apostles",
+            "saint peter and saint paul",
+            "peter and paul",
+        ),
+    },
+    (7, 22): {
+        "heading": "Saint Mary Magdalene",
+        "collect": (
+            "Almighty God, whose blessed Son restored Mary Magdalene to health of "
+            "body and of mind, and called her to be a witness of his resurrection: "
+            "Mercifully grant that, by your grace, we may be healed from all our "
+            "infirmities and know you in the power of his unending life; who with "
+            "you and the Holy Spirit lives and reigns, one God, now and for ever. "
+            "Amen."
+        ),
+        "aliases": (
+            "mary magdalene",
+            "saint mary magdalene",
+        ),
+    },
+    (7, 25): {
+        "heading": "Saint James",
+        "collect": (
+            "O gracious God, your servant and apostle James was first among the "
+            "Twelve to suffer martyrdom for the Name of Jesus Christ: Pour out upon "
+            "the leaders of your Church that spirit of self-denying service, by "
+            "which they may have true authority among your people; through Jesus "
+            "Christ our Lord, who lives and reigns with you and the Holy Spirit, one "
+            "God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "james the elder, apostle",
+            "saint james",
+            "james the elder",
+        ),
+    },
+    (8, 6): {
+        "heading": "The Transfiguration",
+        "collect": (
+            "O God, who on the holy mount revealed to chosen witnesses your "
+            "well-beloved Son, wonderfully transfigured, in raiment white and "
+            "glistening: Mercifully grant that we, being delivered from the "
+            "disquietude of this world, may by faith behold the King in his beauty; "
+            "who with you and the Holy Spirit lives and reigns, one God, for ever "
+            "and ever. Amen."
+        ),
+        "aliases": (
+            "the transfiguration of our lord jesus christ",
+            "the transfiguration",
+            "transfiguration",
+        ),
+    },
+    (8, 15): {
+        "heading": "Saint Mary the Virgin",
+        "collect": (
+            "O God, you have taken to yourself the blessed Virgin Mary, mother of "
+            "your incarnate Son: Grant that we, who have been redeemed by his blood, "
+            "may share with her the glory of your eternal kingdom; through Jesus "
+            "Christ our Lord, who lives and reigns with you, in the unity of the "
+            "Holy Spirit, one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "the virgin mary, mother of our lord jesus christ",
+            "saint mary the virgin",
+            "mary the virgin",
+        ),
+    },
+    (8, 24): {
+        "heading": "Saint Bartholomew",
+        "collect": (
+            "Almighty and everlasting God, you gave your apostle Bartholomew grace "
+            "truly to believe and to preach your Word: Grant that your Church may "
+            "love what he believed and preach what he taught; through Jesus Christ "
+            "our Lord, who lives and reigns with you and the Holy Spirit, one God, "
+            "for ever and ever. Amen."
+        ),
+        "aliases": (
+            "bartholomew the apostle",
+            "saint bartholomew",
+            "bartholomew",
+        ),
+    },
+    (9, 14): {
+        "heading": "Holy Cross Day",
+        "collect": (
+            "Almighty God, whose Son our Savior Jesus Christ was lifted high upon the "
+            "Cross that he might draw the whole world to himself: Mercifully grant "
+            "that we, who glory in the mystery of our redemption, may have grace to "
+            "take up our cross and follow him; who lives and reigns with you and the "
+            "Holy Spirit, one God, in glory everlasting. Amen."
+        ),
+        "aliases": ("holy cross day",),
+    },
+    (9, 21): {
+        "heading": "Saint Matthew",
+        "collect": (
+            "Lord Jesus, you called Matthew from collecting taxes to become your "
+            "apostle and evangelist: Grant us the grace to forsake all covetous "
+            "desires and inordinate love of riches, that we may follow you as he did "
+            "and proclaim to the world around us the good news of your salvation; "
+            "for with the Father and the Holy Spirit you live and reign, one God, "
+            "now and for ever. Amen."
+        ),
+        "aliases": (
+            "matthew, apostle and evangelist",
+            "saint matthew",
+            "matthew",
+        ),
+    },
+    (9, 29): {
+        "heading": "Holy Michael and All Angels",
+        "collect": (
+            "Everlasting God, you have ordained and constituted in a wonderful order "
+            "the ministries of angels and mortals: Mercifully grant that, as your "
+            "holy angels always serve and worship you in heaven, so by your "
+            "appointment they may help and defend us here on earth; through Jesus "
+            "Christ our Lord, who lives and reigns with you and the Holy Spirit, one "
+            "God, for ever and ever. Amen."
+        ),
+        "aliases": (
+            "holy michael and all angels",
+            "michaelmas",
+        ),
+    },
+    (10, 18): {
+        "heading": "Saint Luke",
+        "collect": (
+            "Almighty God, you called your servant Luke to be an evangelist and "
+            "physician of the soul: Grant that, by the wholesome medicine of the "
+            "doctrine he taught, all the diseases of our souls may be healed; "
+            "through Jesus Christ our Lord, who lives and reigns with you and the "
+            "Holy Spirit, one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "luke the evangelist and companion of paul",
+            "saint luke",
+            "luke",
+        ),
+    },
+    (10, 23): {
+        "heading": "Saint James of Jerusalem",
+        "collect": (
+            "Grant, O God, that, following the example of your apostle James the "
+            "Just, kinsman of our Lord, your Church may give itself continually to "
+            "prayer and to the reconciliation of all who are at variance and enmity; "
+            "through Jesus Christ our Lord, who lives and reigns with you and the "
+            "Holy Spirit, one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "james of jerusalem, bishop and martyr, brother of our lord",
+            "saint james of jerusalem",
+            "james of jerusalem",
+        ),
+    },
+    (10, 28): {
+        "heading": "Saint Simon and Saint Jude",
+        "collect": (
+            "Grant, O God, that as your apostles Simon and Jude were faithful and "
+            "zealous in their mission, so we may with ardent devotion make known the "
+            "love and mercy of our Lord and Savior Jesus Christ; who lives and "
+            "reigns with you and the Holy Spirit, one God, for ever and ever. Amen."
+        ),
+        "aliases": (
+            "simon and jude, apostles",
+            "saint simon and saint jude",
+            "simon and jude",
+        ),
+    },
+    (11, 1): {
+        "heading": "All Saints' Day",
+        "collect": (
+            "Almighty God, you have knit together your elect in one communion and "
+            "fellowship in the mystical Body of your Son: Give us grace so to follow "
+            "your blessed saints in all virtuous and godly living, that we may come "
+            "to those ineffable joys that you have prepared for those who truly love "
+            "you; through Jesus Christ our Lord, who with you and the Holy Spirit "
+            "lives and reigns, one God, in glory everlasting. Amen."
+        ),
+        "aliases": (
+            "all saints day",
+            "all saints' day",
+        ),
+    },
+    (11, 30): {
+        "heading": "Saint Andrew",
+        "collect": (
+            "Almighty God, you gave such grace to your apostle Andrew that he "
+            "readily obeyed the call of your Son Jesus Christ, and brought his "
+            "brother with him: Give us, who are called by your holy Word, grace to "
+            "follow him without delay, and to bring those near to us into his "
+            "gracious presence; who lives and reigns with you and the Holy Spirit, "
+            "one God, now and for ever. Amen."
+        ),
+        "aliases": (
+            "andrew the apostle",
+            "saint andrew",
+            "andrew",
+        ),
+    },
+    (12, 21): {
+        "heading": "Saint Thomas",
+        "collect": (
+            "Everliving God, you strengthened your apostle Thomas with firm and "
+            "certain faith in your Son's resurrection: Grant us so perfectly and "
+            "without doubt to believe in Jesus Christ, our Lord and our God, that "
+            "our faith may never be found wanting in your sight; through him who "
+            "lives and reigns with you and the Holy Spirit, one God, now and for "
+            "ever. Amen."
+        ),
+        "aliases": (
+            "thomas the apostle",
+            "saint thomas",
+            "thomas",
+        ),
+    },
+    (12, 26): {
+        "heading": "Saint Stephen",
+        "collect": (
+            "O Glorious Lord, your servant Stephen looked up to heaven and prayed "
+            "for his persecutors: Grant that in all our sufferings here upon earth "
+            "we may love and forgive our enemies, looking steadfastly to Jesus "
+            "Christ our Lord, who sits at your right hand and intercedes for us; and "
+            "who lives and reigns with you and the Holy Spirit, one God, now and for "
+            "ever. Amen."
+        ),
+        "aliases": (
+            "stephen, deacon and martyr",
+            "saint stephen",
+            "stephen",
+        ),
+    },
+    (12, 27): {
+        "heading": "Saint John the Evangelist",
+        "collect": (
+            "Shed upon your Church, O Lord, the brightness of your light; that we, "
+            "being illumined by the teaching of your apostle and evangelist John, "
+            "may so walk in the light of your truth, that at length we may attain to "
+            "the fullness of eternal life; through Jesus Christ our Lord, who lives "
+            "and reigns with you and the Holy Spirit, one God, for ever and ever. "
+            "Amen."
+        ),
+        "aliases": (
+            "john, apostle and evangelist",
+            "saint john the evangelist",
+            "john the evangelist",
+        ),
+    },
+    (12, 28): {
+        "heading": "The Holy Innocents",
+        "collect": (
+            "Almighty God, out of the mouths of children you manifest your truth, "
+            "and by the death of the Holy Innocents at the hands of evil tyrants you "
+            "show your strength in our weakness: We ask you to mortify all that is "
+            "evil within us, and so strengthen us by your grace, that we may glorify "
+            "your holy Name by the innocence of our lives and the constancy of our "
+            "faith even unto death; through Jesus Christ our Lord, who died for us "
+            "and now lives with you and the Holy Spirit, world without end. Amen."
+        ),
+        "aliases": (
+            "the holy innocents",
+            "holy innocents",
+        ),
+    },
+}
+
 SEASONAL_BLESSING_TEXT = {
     "advent": (
         "Christ the Sun of Righteousness shine upon you, scatter the darkness from "
@@ -884,6 +1341,102 @@ def infer_common_type(remembrance: str, observance: str) -> str:
     return "common of any commemoration"
 
 
+def normalize_for_match(value: str | None) -> str:
+    text = clean(value).lower()
+    text = text.replace("&", " and ")
+    text = text.replace("’", "'")
+    text = re.sub(r"[^a-z0-9']+", " ", text)
+    return " ".join(text.split())
+
+
+def text_matches_any_alias(text: str, aliases: tuple[str, ...]) -> bool:
+    normalized_text = normalize_for_match(text)
+    if not normalized_text:
+        return False
+    return any(normalize_for_match(alias) in normalized_text for alias in aliases)
+
+
+def observance_is_temporal(observance: str) -> bool:
+    text = normalize_for_match(observance)
+    if not text:
+        return False
+
+    temporal_tokens = (
+        "sunday",
+        "lent",
+        "advent",
+        "epiphany",
+        "after pentecost",
+        "pentecost",
+        "christmas",
+        "easter",
+        "holy week",
+        "ash wednesday",
+        "maundy thursday",
+        "good friday",
+        "holy saturday",
+        "ember day",
+    )
+    return any(token in text for token in temporal_tokens)
+
+
+def apply_fixed_holy_day_proper(
+    row: dict[str, str],
+    row_date: date | None,
+    *,
+    include_common_type: bool,
+) -> bool:
+    if row_date is None:
+        return False
+
+    proper = FIXED_HOLY_DAY_PROPERS.get((row_date.month, row_date.day))
+    if proper is None:
+        return False
+
+    heading = str(proper["heading"])
+    collect = str(proper["collect"])
+    aliases = tuple(str(alias) for alias in proper["aliases"])
+
+    observance = clean(row.get("Observance"))
+    remembrance = clean(row.get("Remembrance"))
+    observance_mentions_holy_day = text_matches_any_alias(observance, aliases)
+    remembrance_mentions_holy_day = text_matches_any_alias(remembrance, aliases)
+
+    if not (observance_mentions_holy_day or remembrance_mentions_holy_day):
+        return False
+
+    secondary_holy_day = False
+    if observance_mentions_holy_day:
+        if "/" in observance:
+            parts = [clean(part) for part in observance.split("/")]
+            normalized_parts = [
+                heading if text_matches_any_alias(part, aliases) else part
+                for part in parts
+            ]
+            row["Observance"] = " / ".join(part for part in normalized_parts if part)
+            row["Remembrance"] = heading
+            secondary_holy_day = True
+        else:
+            row["Observance"] = heading
+            row["Remembrance"] = ""
+            secondary_holy_day = False
+    elif observance_is_temporal(observance):
+        row["Remembrance"] = heading
+        secondary_holy_day = True
+    else:
+        row["Remembrance"] = heading
+        secondary_holy_day = True
+
+    seasonal_collect = clean(row.get("Seasonal Collect"))
+    if secondary_holy_day or normalize_for_match(seasonal_collect) != normalize_for_match(collect):
+        row["Special Collect"] = collect
+    else:
+        row["Special Collect"] = ""
+    if include_common_type:
+        row["Common Type"] = "fixed holy day proper"
+    return True
+
+
 def infer_seasonal_blessing(observance: str, current_date: date | None = None) -> str:
     """
     Infer seasonal blessing/prayer-over-the-people from observance text.
@@ -1304,9 +1857,17 @@ def prepare_rows(
                 if seasonal_blessing_mode == "overwrite" or not clean(row.get("Seasonal Blessing")):
                     row["Seasonal Blessing"] = inferred_blessing
 
+        applied_fixed_holy_day = apply_fixed_holy_day_proper(
+            row,
+            row_date,
+            include_common_type=include_common_type,
+        )
+
         remembrance = clean(row.get("Remembrance"))
         observance = clean(row.get("Observance"))
-        if remembrance:
+        if applied_fixed_holy_day:
+            pass
+        elif remembrance:
             common_type = infer_common_type(remembrance, observance)
             common_prayer = COMMON_PRAYERS.get(common_type, "")
 
