@@ -6,6 +6,7 @@ Parses liturgical CSV data and generates beautiful, printable HTML pages.
 
 import csv
 import os
+import re
 import shutil
 from datetime import datetime
 from pathlib import Path
@@ -59,6 +60,14 @@ def parse_csv(csv_path):
             for key, value in row.items():
                 if isinstance(value, str) and value.strip() == '':
                     row[key] = None
+
+            # Substitute remembrance name into special collect placeholders
+            if row.get('Special Collect') and row.get('Remembrance'):
+                saint_name = row['Remembrance'].split(',')[0].strip()
+                special_collect = row['Special Collect']
+                special_collect = special_collect.replace(' N.', f' {saint_name}')
+                special_collect = re.sub(r'_{5,}', saint_name, special_collect)
+                row['Special Collect'] = special_collect
 
             days.append(row)
 
