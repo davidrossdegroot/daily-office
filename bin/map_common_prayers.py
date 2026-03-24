@@ -5,8 +5,10 @@ Prepare month rows in canonical Daily Office schema.
 What this script does:
 - Ensures all canonical CSV columns exist and are output in canonical order.
 - Maps `Remembrance` to a `Special Collect` (common prayer text).
-- Optionally fetches day-page fields from liturgical-calendar.com (observance, color, and
-  available Daily Office psalms/readings/collect).
+- Optionally fetches day-page fields from liturgical-calendar.com (observance and available
+  Daily Office psalms/readings/collect).
+- Derives `Liturgical Color` locally from the resolved observance/preference rules used by
+  this dataset.
 - Optionally infers `MP Opening Sentence of Scripture` from Observance.
 - Optionally infers `EP Opening Sentence of Scripture` from Observance.
 - Optionally applies seasonal defaults by `Observance` from a mapping CSV.
@@ -604,6 +606,39 @@ FIXED_HOLY_DAY_PROPERS: dict[tuple[int, int], dict[str, object]] = {
             "holy innocents",
         ),
     },
+}
+
+FIXED_HOLY_DAY_COLORS: dict[tuple[int, int], str] = {
+    (1, 1): "White",
+    (1, 18): "White",
+    (1, 25): "White",
+    (2, 2): "White",
+    (2, 24): "Red",
+    (3, 19): "White",
+    (3, 25): "White",
+    (4, 25): "Red",
+    (5, 1): "Red",
+    (5, 31): "White",
+    (6, 11): "Red",
+    (6, 24): "White",
+    (6, 29): "Red",
+    (7, 22): "White",
+    (7, 25): "Red",
+    (8, 6): "White",
+    (8, 15): "White",
+    (8, 24): "Red",
+    (9, 14): "Red",
+    (9, 21): "Red",
+    (9, 29): "White",
+    (10, 18): "Red",
+    (10, 23): "Red",
+    (10, 28): "Red",
+    (11, 1): "White",
+    (11, 30): "Red",
+    (12, 21): "Red",
+    (12, 26): "Red",
+    (12, 27): "White",
+    (12, 28): "Red",
 }
 
 SEASONAL_BLESSING_TEXT = {
@@ -1356,6 +1391,22 @@ def text_matches_any_alias(text: str, aliases: tuple[str, ...]) -> bool:
     return any(normalize_for_match(alias) in normalized_text for alias in aliases)
 
 
+def infer_fixed_holy_day_color(observance: str, current_date: date | None) -> str:
+    if current_date is None:
+        return ""
+
+    mmdd = (current_date.month, current_date.day)
+    proper = FIXED_HOLY_DAY_PROPERS.get(mmdd)
+    if proper is None:
+        return ""
+
+    aliases = tuple(str(alias) for alias in proper["aliases"])
+    if not text_matches_any_alias(observance, aliases):
+        return ""
+
+    return FIXED_HOLY_DAY_COLORS.get(mmdd, "")
+
+
 def observance_is_temporal(observance: str) -> bool:
     text = normalize_for_match(observance)
     if not text:
@@ -1435,6 +1486,81 @@ def apply_fixed_holy_day_proper(
     if include_common_type:
         row["Common Type"] = "fixed holy day proper"
     return True
+
+
+def infer_liturgical_color(observance: str, current_date: date | None = None) -> str:
+    """
+    Derive the display color from the resolved primary observance.
+    Optional commemorations in Remembrance do not control the result unless they have already
+    been folded into Observance by precedence handling elsewhere.
+    """
+    text = normalize_for_match(observance)
+    if not text:
+        return ""
+
+    fixed_holy_day_color = infer_fixed_holy_day_color(observance, current_date)
+    if fixed_holy_day_color:
+        return fixed_holy_day_color
+
+    if "laetare" in text:
+        return "Pink"
+
+    if "maundy thursday" in text or "holy thursday" in text:
+        return "White"
+
+    if "day of pentecost" in text or text == "pentecost" or "whitsunday" in text:
+        return "Red"
+
+    if "trinity sunday" in text:
+        return "White"
+
+    if "ascension" in text:
+        return "White"
+
+    if "last sunday of epiphany" in text or "last sunday in epiphany" in text:
+        return "Green"
+
+    if "transfiguration" in text:
+        return "White"
+
+    if "all saints" in text:
+        return "White"
+
+    if "christmas" in text or "christmastide" in text:
+        return "White"
+
+    if text == "epiphany":
+        if current_date is not None and (current_date.month, current_date.day) == (1, 6):
+            return "White"
+        return "Green"
+
+    if "epiphany" in text:
+        return "Green"
+
+    if (
+        "palm sunday" in text
+        or "good friday" in text
+        or "holy saturday" in text
+        or "easter eve" in text
+    ):
+        return "Red"
+
+    if is_holy_week_span(current_date) or observance_is_holy_week_span(observance):
+        return "Red"
+
+    if "easter" in text or "eastertide" in text:
+        return "White"
+
+    if "ash wednesday" in text or "lent" in text:
+        return "Purple"
+
+    if "advent" in text:
+        return "Purple"
+
+    if "after pentecost" in text:
+        return "Green"
+
+    return ""
 
 
 def infer_seasonal_blessing(observance: str, current_date: date | None = None) -> str:
@@ -1880,6 +2006,13 @@ def prepare_rows(
         elif include_common_type:
             row["Common Type"] = ""
 
+        inferred_color = infer_liturgical_color(
+            clean(row.get("Observance")),
+            current_date=row_date,
+        )
+        if inferred_color:
+            row["Liturgical Color"] = inferred_color
+
         if flatten:
             for key, value in row.items():
                 if isinstance(value, str):
@@ -2191,7 +2324,8 @@ def parse_args() -> argparse.Namespace:
         type=int,
         help=(
             "If set, fetch day-page fields from liturgical-calendar.com for this year "
-            "(Observance, Liturgical Color, Seasonal Collect, and available MP/EP psalms/readings)."
+            "(Observance, Seasonal Collect, and available MP/EP psalms/readings). "
+            "Liturgical Color is derived locally."
         ),
     )
     parser.add_argument(

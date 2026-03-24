@@ -14,6 +14,7 @@ class HolyDayDataTests(unittest.TestCase):
 
     def test_st_joseph_uses_proper_remembrance_and_collect(self) -> None:
         row = self.rows["March 19"]
+        self.assertEqual(row["Liturgical Color"], "White")
         self.assertEqual(row["Observance"], "Lent / Saint Joseph")
         self.assertEqual(row["Remembrance"], "Saint Joseph")
         self.assertEqual(
@@ -27,6 +28,7 @@ class HolyDayDataTests(unittest.TestCase):
 
     def test_annunciation_uses_proper_remembrance_and_collect(self) -> None:
         row = self.rows["March 25"]
+        self.assertEqual(row["Liturgical Color"], "White")
         self.assertEqual(row["Observance"], "Lent / The Annunciation")
         self.assertEqual(row["Remembrance"], "The Annunciation")
         self.assertEqual(

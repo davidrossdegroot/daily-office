@@ -127,6 +127,7 @@ class FixedHolyDayProperTests(unittest.TestCase):
             MODULE.FIXED_HOLY_DAY_PROPERS[(3, 19)]["collect"],
         )
         self.assertEqual(rows[0]["Common Type"], "fixed holy day proper")
+        self.assertEqual(rows[0]["Liturgical Color"], "White")
 
     def test_primary_holy_day_replaces_generic_weekday_remembrance(self) -> None:
         _, rows = MODULE.prepare_rows(
@@ -162,6 +163,7 @@ class FixedHolyDayProperTests(unittest.TestCase):
         self.assertEqual(rows[0]["Remembrance"], "")
         self.assertEqual(rows[0]["Special Collect"], "")
         self.assertEqual(rows[0]["Common Type"], "fixed holy day proper")
+        self.assertEqual(rows[0]["Liturgical Color"], "Red")
 
     def test_combined_sunday_observance_is_normalized_to_exact_heading(self) -> None:
         _, rows = MODULE.prepare_rows(
@@ -202,6 +204,102 @@ class FixedHolyDayProperTests(unittest.TestCase):
             MODULE.FIXED_HOLY_DAY_PROPERS[(1, 18)]["collect"],
         )
         self.assertEqual(rows[0]["Common Type"], "fixed holy day proper")
+        self.assertEqual(rows[0]["Liturgical Color"], "White")
+
+
+class LiturgicalColorInferenceTests(unittest.TestCase):
+    def test_optional_saint_in_lent_keeps_seasonal_purple(self) -> None:
+        _, rows = MODULE.prepare_rows(
+            rows=[
+                {
+                    "Date": "March 23",
+                    "Observance": "Lent",
+                    "Remembrance": "Gregory the Illuminator, Missionary to Armenia, 333",
+                    "Liturgical Color": "Green",
+                }
+            ],
+            source_path_for_inference=None,
+            generated_year_for_inference=2026,
+            flatten=False,
+            acna_year=None,
+            acna_base_url="",
+            acna_province="",
+            calendar_mode="fill",
+            fill_remembrance_from_calendar=False,
+            ignore_fetch_errors=False,
+            seasonal_map_path=None,
+            seasonal_mode="fill",
+            mp_opening_mode="off",
+            ep_opening_mode="off",
+            antiphon_mode="off",
+            seasonal_blessing_mode="off",
+            special_collect_mode="off",
+            include_common_type=False,
+        )
+
+        self.assertEqual(rows[0]["Liturgical Color"], "Purple")
+
+    def test_secondary_holy_day_in_lent_can_override_with_white(self) -> None:
+        _, rows = MODULE.prepare_rows(
+            rows=[
+                {
+                    "Date": "March 25",
+                    "Observance": "Lent / The Annunciation",
+                    "Remembrance": "The Annunciation",
+                    "Liturgical Color": "Purple",
+                }
+            ],
+            source_path_for_inference=None,
+            generated_year_for_inference=2026,
+            flatten=False,
+            acna_year=None,
+            acna_base_url="",
+            acna_province="",
+            calendar_mode="fill",
+            fill_remembrance_from_calendar=False,
+            ignore_fetch_errors=False,
+            seasonal_map_path=None,
+            seasonal_mode="fill",
+            mp_opening_mode="off",
+            ep_opening_mode="off",
+            antiphon_mode="off",
+            seasonal_blessing_mode="off",
+            special_collect_mode="off",
+            include_common_type=False,
+        )
+
+        self.assertEqual(rows[0]["Liturgical Color"], "White")
+
+    def test_last_sunday_in_epiphany_keeps_green_despite_transfiguration_label(self) -> None:
+        _, rows = MODULE.prepare_rows(
+            rows=[
+                {
+                    "Date": "Feb 15",
+                    "Observance": "Last Sunday in Epiphany / Transfiguration",
+                    "Remembrance": "",
+                    "Liturgical Color": "Purple",
+                }
+            ],
+            source_path_for_inference=None,
+            generated_year_for_inference=2026,
+            flatten=False,
+            acna_year=None,
+            acna_base_url="",
+            acna_province="",
+            calendar_mode="fill",
+            fill_remembrance_from_calendar=False,
+            ignore_fetch_errors=False,
+            seasonal_map_path=None,
+            seasonal_mode="fill",
+            mp_opening_mode="off",
+            ep_opening_mode="off",
+            antiphon_mode="off",
+            seasonal_blessing_mode="off",
+            special_collect_mode="off",
+            include_common_type=False,
+        )
+
+        self.assertEqual(rows[0]["Liturgical Color"], "Green")
 
 
 if __name__ == "__main__":
