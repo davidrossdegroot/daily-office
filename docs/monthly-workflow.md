@@ -40,6 +40,7 @@ What this does:
 - replaces/adds all rows for the target month in `data/acna-prayers-2026.csv`
 - keeps canonical column order
 - fetches observance/readings/collect data from the ACNA calendar source
+- derives liturgical color locally from the resolved observance/precedence rules
 - recomputes inferred fields (opening sentences, antiphon, seasonal blessing, special collect)
 
 If you want a preview file instead of writing in place, add:
