@@ -24,19 +24,21 @@ class RemembranceSubstitutionTests(unittest.TestCase):
         self.assertIn("Patrick", day["Special Collect"])
         self.assertNotIn(" N.", day["Special Collect"])
 
-    def test_saint_name_replaces_blank_placeholder(self) -> None:
+    def test_blank_placeholder_is_left_untouched(self) -> None:
         day = self.days["March 17"]
-        self.assertNotIn("_________", day["Special Collect"])
+        self.assertIn("people of _________", day["Special Collect"])
 
     def test_substitution_uses_name_before_first_comma(self) -> None:
         day = self.days["March 21"]  # Thomas Cranmer, Archbishop of Canterbury..., 1556
         self.assertIn("Thomas Cranmer", day["Special Collect"])
         self.assertNotIn(" N.", day["Special Collect"])
 
+    def test_saint_name_replaces_N_followed_by_comma(self) -> None:
+        day = self.days["March 29"]  # John Keble — collect uses "servant N., kindled…"
+        self.assertIn("John Keble", day["Special Collect"])
+        self.assertNotIn("N.,", day["Special Collect"])
+
     def test_no_substitution_without_remembrance(self) -> None:
-        # Ash Wednesday has no Remembrance — collect should be unchanged
-        day = self.days["Feb 18"]  # has Remembrance (Martin Luther), skip
-        # Find a day with Special Collect but no Remembrance
         day_without_remembrance = next(
             d for d in self.days.values()
             if d.get("Special Collect") and not d.get("Remembrance")
