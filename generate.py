@@ -285,14 +285,14 @@ def main():
 
     print("=" * 50)
     print(f"✓ Generated {len(days)} day pages")
-    print(f"✓ Generated index page")
-    print(f"✓ Generated print-all page")
-    print(f"✓ Generated 12 monthly print pages")
-    print(f"✓ Generated about page")
+    print("✓ Generated index page")
+    print("✓ Generated print-all page")
+    print("✓ Generated 12 monthly print pages")
+    print("✓ Generated about page")
     print(f"\nOutput directory: {output_dir}")
-    print(f"\nTo view:")
+    print("\nTo view:")
     print(f"  open {output_dir}/index.html")
-    print(f"\nTo print all days:")
+    print("\nTo print all days:")
     print(f"  open {output_dir}/all.html")
 
 
