@@ -302,5 +302,25 @@ class LiturgicalColorInferenceTests(unittest.TestCase):
         self.assertEqual(rows[0]["Liturgical Color"], "Green")
 
 
+class AntiphonInferenceTests(unittest.TestCase):
+    def test_good_friday_keeps_lenten_antiphon_despite_saint_remembrance(self) -> None:
+        self.assertEqual(
+            MODULE.infer_antiphon(
+                "Good Friday",
+                "James Lloyd Breck, Priest and Missionary, 1879",
+            ),
+            MODULE.SEASONAL_ANTIPHONS["lent"],
+        )
+
+    def test_holy_saturday_keeps_lenten_antiphon_despite_easter_eve_remembrance(self) -> None:
+        self.assertEqual(
+            MODULE.infer_antiphon(
+                "Holy Saturday",
+                "Easter Eve / Martin Luther King, Jr., Renewer of Society, 1968",
+            ),
+            MODULE.SEASONAL_ANTIPHONS["lent"],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
