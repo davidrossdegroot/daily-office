@@ -1733,17 +1733,20 @@ def infer_antiphon(observance: str, remembrance: str) -> str:
     if "ascension" in text:
         return SEASONAL_ANTIPHONS["ascension_until_pentecost"]
 
-    if "easter" in text or "eastertide" in text:
-        return SEASONAL_ANTIPHONS["easter_until_ascension"]
-
     if (
         "lent" in text
         or "ash wednesday" in text
         or "holy week" in text
         or "palm sunday" in text
         or "maundy thursday" in text
+        or "good friday" in text
+        or "holy saturday" in text
+        or "easter eve" in text
     ):
         return SEASONAL_ANTIPHONS["lent"]
+
+    if "easter" in text or "eastertide" in text:
+        return SEASONAL_ANTIPHONS["easter_until_ascension"]
 
     if "nativity" in text or "christmas" in text or "christmastide" in text:
         return SEASONAL_ANTIPHONS["christmas"]
