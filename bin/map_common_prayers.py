@@ -163,6 +163,22 @@ COMMON_PRAYERS = {
         "Jesus Christ our Lord, who lives and reigns with you, in the unity of the "
         "Holy Spirit, one God, now and for ever. Amen."
     ),
+    "ember day": (
+        "Almighty God, the giver of all good gifts, in your divine providence you have "
+        "appointed various orders in your Church: Give your grace, we humbly pray, to "
+        "all who are [now] called to any office and ministry for your people; and so "
+        "fill them with the truth of your doctrine and clothe them with holiness of "
+        "life, that they may faithfully serve before you, to the glory of your great "
+        "Name and for the benefit of your holy Church; through Jesus Christ our Lord, "
+        "who lives and reigns with you, in the unity of the Holy Spirit, one God, now "
+        "and for ever. Amen. Or this: O God, you led your holy apostles to ordain "
+        "ministers in every place: Grant that your Church, under the guidance of the "
+        "Holy Spirit, may choose suitable persons for the ministry of Word and "
+        "Sacrament, and may uphold them in their work for the extension of your "
+        "kingdom; through the great Shepherd and Bishop of our souls, Jesus Christ our "
+        "Lord, who lives and reigns with you and the Holy Spirit, one God, for ever "
+        "and ever. Amen."
+    ),
 }
 
 FIXED_HOLY_DAY_PROPERS: dict[tuple[int, int], dict[str, object]] = {
@@ -1389,6 +1405,9 @@ def infer_common_type(remembrance: str, observance: str) -> str:
 
     if "rogation" in text:
         return "rogation day"
+
+    if "ember" in text:
+        return "ember day"
 
     return "common of any commemoration"
 
