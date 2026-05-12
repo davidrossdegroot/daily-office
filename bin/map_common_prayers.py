@@ -149,6 +149,20 @@ COMMON_PRAYERS = {
         "acceptable through the Spirit, and who lives and reigns with you and the "
         "same Spirit, one God, for ever and ever. Amen."
     ),
+    "rogation day": (
+        "Almighty God, Lord of heaven and earth: We humbly pray that your gracious "
+        "providence may give and preserve to our use the harvests of the land and of "
+        "the seas, and may prosper all who labor to gather them, that we, who are "
+        "constantly receiving good things from your hand, may always give you thanks; "
+        "through Jesus Christ our Lord, who lives and reigns with you and the Holy "
+        "Spirit, one God, for ever and ever. Amen. Or this: Almighty God, whose Son "
+        "Jesus Christ in his earthly life shared our toil and hallowed our labor: Be "
+        "present with your people where they work; make those who carry on the "
+        "industries and commerce of this land responsive to your will; and give us all "
+        "a right satisfaction in what we do, and a just return for our labor; through "
+        "Jesus Christ our Lord, who lives and reigns with you, in the unity of the "
+        "Holy Spirit, one God, now and for ever. Amen."
+    ),
 }
 
 FIXED_HOLY_DAY_PROPERS: dict[tuple[int, int], dict[str, object]] = {
@@ -1133,7 +1147,7 @@ def parse_office_line(line: str) -> tuple[str, str]:
                 return (kind, f"{psalm_ref_match.group(1)}:{cleaned_value}")
             return (kind, cleaned_value)
 
-    dash_match = re.match(r"^(?P<label>.+?)\s+[-\u2013\u2014]\s+(?P<value>.+)$", raw)
+    dash_match = re.match(r"^(?P<label>.+?)\s+[-–—]\s+(?P<value>.+)$", raw)
     if dash_match:
         kind = classify_office_label(dash_match.group("label"))
         value = clean(dash_match.group("value"))
@@ -1158,9 +1172,9 @@ def parse_office_line(line: str) -> tuple[str, str]:
             continue
         if len(lower) > len(prefix):
             next_char = lower[len(prefix)]
-            if next_char not in {" ", ":", "-", "\u2013", "\u2014", "("}:
+            if next_char not in {" ", ":", "-", "–", "—", "("}:
                 continue
-            value = clean(raw[len(prefix) :]).lstrip(" :-\u2013\u2014")
+            value = clean(raw[len(prefix) :]).lstrip(" :-–—")
             if not value:
                 continue
             # Keep label-only forms (for example "(60 day cycle)") for pairwise fallback.
@@ -1372,6 +1386,9 @@ def infer_common_type(remembrance: str, observance: str) -> str:
 
     if "teacher of the faith" in text or "doctor of the church" in text:
         return "common of a teacher of the faith"
+
+    if "rogation" in text:
+        return "rogation day"
 
     return "common of any commemoration"
 
