@@ -35,11 +35,12 @@ from __future__ import annotations
 import argparse
 import calendar
 import csv
-from datetime import date, datetime, timedelta
-from html.parser import HTMLParser
 import re
+from datetime import date, datetime, timedelta, timezone
+from html.parser import HTMLParser
 from pathlib import Path
-from urllib.error import URLError, HTTPError
+from typing import ClassVar
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 CANONICAL_COLUMNS = [
@@ -808,8 +809,8 @@ SEASONAL_ANTIPHONS = {
 class LiturgicalDayPageParser(HTMLParser):
     """Extract basic heading/content blocks from a liturgical calendar day page."""
 
-    RELEVANT_TAGS = {"h2", "h3", "h4", "h5", "p", "li"}
-    SKIP_TAGS = {"script", "style"}
+    RELEVANT_TAGS: ClassVar[set[str]] = {"h2", "h3", "h4", "h5", "p", "li"}
+    SKIP_TAGS: ClassVar[set[str]] = {"script", "style"}
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -850,8 +851,8 @@ class LiturgicalDayPageParser(HTMLParser):
 class LiturgicalDayOfficeParser(HTMLParser):
     """Extract office-related headings/content blocks from a day page."""
 
-    RELEVANT_TAGS = {"h2", "h3", "h4", "h5", "h6", "p", "li", "th", "td"}
-    SKIP_TAGS = {"script", "style"}
+    RELEVANT_TAGS: ClassVar[set[str]] = {"h2", "h3", "h4", "h5", "h6", "p", "li", "th", "td"}
+    SKIP_TAGS: ClassVar[set[str]] = {"script", "style"}
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -904,7 +905,7 @@ def flatten_whitespace(value: str) -> str:
 def parse_month_day(date_str: str, year: int) -> datetime:
     for fmt in ("%b %d", "%B %d"):
         try:
-            dt = datetime.strptime(f"{clean(date_str)} {year}", f"{fmt} %Y")
+            dt = datetime.strptime(f"{clean(date_str)} {year}", f"{fmt} %Y").replace(tzinfo=timezone.utc)
             return dt
         except ValueError:
             continue
@@ -922,7 +923,7 @@ def parse_row_date_for_inference(date_str: str, fallback_year: int | None) -> da
     dated_formats = ("%Y-%m-%d", "%b %d, %Y", "%B %d, %Y", "%b %d %Y", "%B %d %Y")
     for fmt in dated_formats:
         try:
-            return datetime.strptime(text, fmt).date()
+            return datetime.strptime(text, fmt).replace(tzinfo=timezone.utc).date()
         except ValueError:
             continue
 
@@ -931,7 +932,7 @@ def parse_row_date_for_inference(date_str: str, fallback_year: int | None) -> da
 
     for fmt in ("%b %d", "%B %d"):
         try:
-            return datetime.strptime(f"{text} {fallback_year}", f"{fmt} %Y").date()
+            return datetime.strptime(f"{text} {fallback_year}", f"{fmt} %Y").replace(tzinfo=timezone.utc).date()
         except ValueError:
             continue
     return None
@@ -1230,7 +1231,7 @@ def parse_office_entries(entries: list[str]) -> dict[str, str]:
 
     def looks_like_psalm_entry(value: str) -> bool:
         lower = clean(value).lower()
-        return lower.startswith("psalm ") or lower.startswith("psalms ")
+        return lower.startswith(("psalm ", "psalms "))
 
     def looks_like_scripture_reference(value: str) -> bool:
         text = clean(value)
@@ -1301,11 +1302,10 @@ def extract_office_readings(html: str) -> dict[str, str]:
             if "evening prayer" in heading:
                 current_section = "ep"
                 continue
-            if current_section:
-                # Keep subsection headings (for example "60 day cycle") within section capture.
-                if not any(token in heading for token in ("cycle", "psalm", "lesson", "reading")):
-                    current_section = ""
-                    continue
+            # Keep subsection headings (for example "60 day cycle") within section capture.
+            if current_section and not any(token in heading for token in ("cycle", "psalm", "lesson", "reading")):
+                current_section = ""
+                continue
         if current_section in section_entries:
             section_entries[current_section].append(text)
 
@@ -1991,36 +1991,38 @@ def prepare_rows(
                 clean(row.get("Observance")),
                 current_date=row_date,
             )
-            if inferred_mp_opening:
-                if mp_opening_mode == "overwrite" or not clean(row.get("MP Opening Sentence of Scripture")):
-                    row["MP Opening Sentence of Scripture"] = inferred_mp_opening
+            if inferred_mp_opening and (
+                mp_opening_mode == "overwrite" or not clean(row.get("MP Opening Sentence of Scripture"))
+            ):
+                row["MP Opening Sentence of Scripture"] = inferred_mp_opening
 
         if ep_opening_mode != "off":
             inferred_ep_opening = infer_ep_opening_sentence(
                 clean(row.get("Observance")),
                 current_date=row_date,
             )
-            if inferred_ep_opening:
-                if ep_opening_mode == "overwrite" or not clean(row.get("EP Opening Sentence of Scripture")):
-                    row["EP Opening Sentence of Scripture"] = inferred_ep_opening
+            if inferred_ep_opening and (
+                ep_opening_mode == "overwrite" or not clean(row.get("EP Opening Sentence of Scripture"))
+            ):
+                row["EP Opening Sentence of Scripture"] = inferred_ep_opening
 
         if antiphon_mode != "off":
             inferred_antiphon = infer_antiphon(
                 clean(row.get("Observance")),
                 clean(row.get("Remembrance")),
             )
-            if inferred_antiphon:
-                if antiphon_mode == "overwrite" or not clean(row.get("Antiphon")):
-                    row["Antiphon"] = inferred_antiphon
+            if inferred_antiphon and (antiphon_mode == "overwrite" or not clean(row.get("Antiphon"))):
+                row["Antiphon"] = inferred_antiphon
 
         if seasonal_blessing_mode != "off":
             inferred_blessing = infer_seasonal_blessing(
                 clean(row.get("Observance")),
                 current_date=row_date,
             )
-            if inferred_blessing:
-                if seasonal_blessing_mode == "overwrite" or not clean(row.get("Seasonal Blessing")):
-                    row["Seasonal Blessing"] = inferred_blessing
+            if inferred_blessing and (
+                seasonal_blessing_mode == "overwrite" or not clean(row.get("Seasonal Blessing"))
+            ):
+                row["Seasonal Blessing"] = inferred_blessing
 
         applied_fixed_holy_day = apply_fixed_holy_day_proper(
             row,
@@ -2039,9 +2041,10 @@ def prepare_rows(
             if include_common_type:
                 row["Common Type"] = common_type
 
-            if special_collect_mode != "off":
-                if special_collect_mode == "overwrite" or not clean(row.get("Special Collect")):
-                    row["Special Collect"] = common_prayer
+            if special_collect_mode != "off" and (
+                special_collect_mode == "overwrite" or not clean(row.get("Special Collect"))
+            ):
+                row["Special Collect"] = common_prayer
         elif include_common_type:
             row["Common Type"] = ""
 

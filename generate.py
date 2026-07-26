@@ -8,10 +8,10 @@ import csv
 import os
 import re
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
-from jinja2 import Environment, FileSystemLoader
 
+from jinja2 import Environment, FileSystemLoader
 
 # Liturgical color mapping
 COLOR_MAP = {
@@ -41,10 +41,10 @@ def parse_csv(csv_path):
             try:
                 # Try abbreviated month format first (Jan, Feb, etc.)
                 try:
-                    date_obj = datetime.strptime(row['Date'], '%b %d')
+                    date_obj = datetime.strptime(row['Date'], '%b %d').replace(tzinfo=timezone.utc)
                 except ValueError:
                     # Try full month format (January, February, etc.)
-                    date_obj = datetime.strptime(row['Date'], '%B %d')
+                    date_obj = datetime.strptime(row['Date'], '%B %d').replace(tzinfo=timezone.utc)
 
                 # Add year 2026
                 date_obj = date_obj.replace(year=2026)
