@@ -1,7 +1,6 @@
 import csv
-from pathlib import Path
 import unittest
-
+from pathlib import Path
 
 DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "acna-prayers-2026.csv"
 
