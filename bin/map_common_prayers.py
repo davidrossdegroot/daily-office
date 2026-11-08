@@ -742,7 +742,7 @@ SEASONAL_BLESSING_TEXT = {
 MP_OPENING_SENTENCES = {
     "advent": "In the wilderness prepare the way of the Lord; make straight in the desert a highway for our God. isaiah 40:3",
     "christmas": "Fear not, for behold, I bring you good news of great joy that will be for all the people. For unto you is born this day in the city of David a Savior, who is Christ the Lord. luke 2:10-11",
-    "epiphany": "EPIPHANY_PLACEHOLDER",
+    "epiphany": "From the rising of the sun to its setting my name will be great among the nations, and in every place incense will be offered to my name, and a pure offering. For my name will be great among the nations, says the Lord of hosts. malachi 1:11",
     "lent": "Repent, for the kingdom of heaven is at hand. matthew 3:2",
     "holy_week": "Is it nothing to you, all you who pass by? Look and see if there is any sorrow like my sorrow, which was brought upon me, which the Lord inflicted on the day of his fierce anger. lamentations 1:12",
     "easter": "If then you have been raised with Christ, seek the things that are above, where Christ is, seated at the right hand of God. colossians 3:1",
