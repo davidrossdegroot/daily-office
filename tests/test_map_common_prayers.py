@@ -1,6 +1,6 @@
 import importlib.util
 import unittest
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "bin" / "map_common_prayers.py"
@@ -350,6 +350,82 @@ class AntiphonInferenceTests(unittest.TestCase):
             ),
             MODULE.SEASONAL_ANTIPHONS["lent"],
         )
+
+    def test_ordinary_antiphons_rotate_from_the_monday_after_pentecost(self) -> None:
+        for monday in (date(2027, 5, 17), date(2028, 6, 5)):
+            with self.subTest(monday=monday):
+                for offset in range(6):
+                    self.assertEqual(
+                        MODULE.infer_antiphon("Ordinary day", "", monday + timedelta(days=offset)),
+                        MODULE.ORDINARY_ANTIPHONS[offset % 3],
+                    )
+
+    def test_ordinary_antiphons_keep_bcp_order(self) -> None:
+        self.assertEqual(
+            [antiphon.split(":", 1)[0] for antiphon in MODULE.ORDINARY_ANTIPHONS],
+            [
+                "The earth is the Lord’s for he made it",
+                "Worship the Lord in the beauty of holiness",
+                "The mercy of the Lord is everlasting",
+            ],
+        )
+
+    def test_approved_feasts_after_pentecost_use_the_saints_antiphon(self) -> None:
+        saints = MODULE.SEASONAL_ANTIPHONS["all_saints_major"]
+        feasts = (
+            (5, 31), (6, 11), (6, 24), (6, 29), (7, 22), (7, 25), (8, 15),
+            (8, 24), (9, 21), (9, 29), (10, 18), (10, 23), (10, 28),
+        )
+        for month, day in feasts:
+            with self.subTest(month=month, day=day):
+                self.assertEqual(MODULE.infer_antiphon("Feast", "", date(2027, month, day)), saints)
+        self.assertEqual(MODULE.infer_antiphon("All Saints' Day", "", date(2027, 11, 1)), saints)
+
+    def test_saint_andrew_uses_saints_antiphon_only_before_advent(self) -> None:
+        self.assertEqual(
+            MODULE.infer_antiphon("Saint Andrew", "", date(2028, 11, 30)),
+            MODULE.SEASONAL_ANTIPHONS["all_saints_major"],
+        )
+        self.assertEqual(
+            MODULE.infer_antiphon("Saint Andrew", "", date(2027, 11, 30)),
+            MODULE.SEASONAL_ANTIPHONS["advent"],
+        )
+
+    def test_holy_cross_follows_the_ordinary_rotation(self) -> None:
+        current = date(2027, 9, 14)
+        expected = MODULE.ORDINARY_ANTIPHONS[(current - date(2027, 5, 17)).days % 3]
+        self.assertEqual(MODULE.infer_antiphon("Holy Cross Day", "", current), expected)
+
+    def test_optional_commemorations_follow_the_ordinary_rotation(self) -> None:
+        current = date(2027, 5, 25)
+        expected = MODULE.ORDINARY_ANTIPHONS[(current - date(2027, 5, 17)).days % 3]
+        for remembrance in (
+            "Bede the Venerable, Priest and Monk of Jarrow, 735",
+            "John Calvin, Reformer of the Church, 1564",
+            "Ember Day",
+        ):
+            with self.subTest(remembrance=remembrance):
+                self.assertEqual(MODULE.infer_antiphon("Ordinary day", remembrance, current), expected)
+
+    def test_seasonal_antiphons_outrank_feasts_and_commemorations(self) -> None:
+        cases = (
+            (date(2025, 5, 31), "The Visitation", "", "ascension_until_pentecost"),
+            (date(2028, 6, 11), "Trinity Sunday", "Barnabas the Apostle", "trinity_sunday"),
+            (date(2027, 3, 12), "Lent", "Gregory the Great, Bishop of Rome, 604", "lent"),
+        )
+        for current, observance, remembrance, key in cases:
+            with self.subTest(current=current):
+                self.assertEqual(
+                    MODULE.infer_antiphon(observance, remembrance, current),
+                    MODULE.SEASONAL_ANTIPHONS[key],
+                )
+
+    def test_every_day_has_an_antiphon_across_years(self) -> None:
+        for year in (2027, 2028):
+            current = date(year, 1, 1)
+            while current.year == year:
+                self.assertTrue(MODULE.infer_antiphon("Ordinary day", "", current), current)
+                current += timedelta(days=1)
 
 
 if __name__ == "__main__":
