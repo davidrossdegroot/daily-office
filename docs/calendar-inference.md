@@ -53,7 +53,9 @@ readings are still populated. A successful refetch clears it. HTTP 200 responses
 without the required calendar data are also source failures.
 
 HTML generation creates a draft by default and writes `OUTPUT_DIR.review.json`.
-Its report includes final decoded HTML checks after name substitution. A raw
+Its report includes final decoded HTML checks after name substitution,
+including pages in every yearly subdirectory. Multi-year builds aggregate CSV
+findings for all selected years before rendering. A raw
 `N.` token is allowed only where it can be resolved as a special-collect name;
 none may remain in the final pages. Underscore blanks and literal placeholders
 are rejected, and bracketed prayer alternatives require editorial review.

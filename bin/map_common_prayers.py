@@ -2267,20 +2267,25 @@ def validate_rows(
 def validate_rendered_pages(output_dir: Path) -> list[dict[str, str]]:
     """Check the final, decoded prayer text, including substituted saint names."""
     findings = []
-    for page in sorted(output_dir.glob('*.html')):
+    for page in sorted(output_dir.rglob('*.html')):
         text = html_module.unescape(page.read_text(encoding='utf-8'))
         if re.search(r"\bN\.|_{3,}|\b\w*PLACEHOLDER\w*\b", text, re.IGNORECASE):
-            findings.append({"date": page.stem, "field": "Rendered HTML",
+            findings.append({"date": page.relative_to(output_dir).with_suffix('').as_posix(), "field": "Rendered HTML",
                              "code": "rendered_placeholder",
                              "message": "Final page still contains an unresolved name, blank, or placeholder."})
     return findings
 
-def write_review_report(path: Path, findings: list[dict[str, str]], year: int, month: int | None = None) -> None:
+def write_review_report(
+    path: Path, findings: list[dict[str, str]], year: int | None, month: int | None = None,
+    *, years: list[int] | None = None,
+) -> None:
     import json
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"year": year, "month": month, "publishable": not findings,
-                               "findings": findings}, indent=2) + "\n", encoding="utf-8")
+    report = {"year": year, "month": month, "publishable": not findings, "findings": findings}
+    if years is not None:
+        report["years"] = years
+    path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 
 def process_rows(
     rows: list[dict[str, str]],

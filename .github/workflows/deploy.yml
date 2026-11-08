@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Rebuild at the new year (midnight US Eastern) so the site root moves to the new calendar.
+    - cron: '0 5 1 1 *'
   workflow_dispatch:
 
 jobs:

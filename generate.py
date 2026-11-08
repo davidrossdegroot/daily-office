@@ -85,14 +85,19 @@ def parse_csv(csv_path, year=None):
     return sorted(days, key=lambda x: x['date_obj'])
 
 
-def setup_jinja_env():
-    """Set up Jinja2 templating environment."""
+def setup_jinja_env(root_path='', year_links=()):
+    """Set up Jinja2 templating environment.
+
+    root_path is the relative path from the rendered pages to the site root.
+    year_links drives the calendar's year switcher, which is hidden when empty.
+    """
     template_dir = Path(__file__).parent / 'templates'
     env = Environment(
         loader=FileSystemLoader(str(template_dir)),
         trim_blocks=True,
         lstrip_blocks=True
     )
+    env.globals.update(root_path=root_path, year_links=year_links)
     return env
 
 
@@ -257,6 +262,84 @@ def copy_static_files(output_dir):
     shutil.copytree(static_dir, build_static_dir)
 
 
+def generate_day_redirect(env, day, output_dir):
+    """Keep a day's root URL working when its year is not the one at the site root."""
+    template = env.get_template('redirect.html')
+    html = template.render(target=f"{day['date_obj'].year}/{day['date_slug']}.html")
+
+    output_path = output_dir / f"{day['date_slug']}.html"
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(html)
+
+
+def select_default_year(years, current_year):
+    """Return the year for the site root: the current year, else the nearest earlier one."""
+    return max((year for year in years if year <= current_year), default=min(years))
+
+
+def build_year_links(years, selected_year, root_path=''):
+    """Describe the year switcher for a page showing selected_year."""
+    return [
+        {
+            'year': year,
+            'href': f'{root_path}{year}/index.html',
+            'current': year == selected_year,
+        }
+        for year in sorted(years)
+    ]
+
+
+def build_year_pages(days, output_dir, root_path='', year_links=()):
+    """Render every page for one year into output_dir."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    env = setup_jinja_env(root_path=root_path, year_links=year_links)
+
+    for i, day in enumerate(days):
+        prev_day = days[i - 1] if i > 0 else None
+        next_day = days[i + 1] if i < len(days) - 1 else None
+        generate_day_page(env, day, prev_day, next_day, output_dir)
+
+    generate_index_page(env, days, output_dir)
+    generate_all_page(env, days, output_dir)
+    generate_monthly_pages(env, days, output_dir)
+    generate_about_page(env, output_dir, days[0]['date_obj'].year)
+
+
+def build_site(days_by_year, output_dir, current_year):
+    """Build the site for one or more years.
+
+    A single year is built flat at the root with no year switcher. With several
+    years, each gets its own YEAR/ directory and the root repeats the default
+    year. Other years' day URLs at the root redirect into their directories, so
+    links stay valid when the default year changes.
+    """
+    output_dir.mkdir(parents=True, exist_ok=True)
+    years = sorted(days_by_year)
+
+    if len(years) == 1:
+        build_year_pages(days_by_year[years[0]], output_dir)
+    else:
+        default_year = select_default_year(years, current_year)
+        build_year_pages(
+            days_by_year[default_year],
+            output_dir,
+            year_links=build_year_links(years, default_year),
+        )
+        redirect_env = setup_jinja_env()
+        for year in years:
+            build_year_pages(
+                days_by_year[year],
+                output_dir / str(year),
+                root_path='../',
+                year_links=build_year_links(years, year, root_path='../'),
+            )
+            if year != default_year:
+                for day in days_by_year[year]:
+                    generate_day_redirect(redirect_env, day, output_dir)
+
+    copy_static_files(output_dir)
+
+
 def main():
     """Main build function."""
     print("Daily Office Static Site Generator")
@@ -275,33 +358,42 @@ def main():
     if args.year is not None and not 1 <= args.year <= 9999:
         parser.error('--year must be between 1 and 9999')
     if args.csv is not None:
-        csv_path = args.csv
+        csv_paths = [args.csv]
     elif args.year is not None:
-        csv_path = base_dir / 'data' / f'acna-prayers-{args.year}.csv'
+        csv_paths = [base_dir / 'data' / f'acna-prayers-{args.year}.csv']
     else:
-        available = sorted((base_dir / 'data').glob('acna-prayers-[0-9][0-9][0-9][0-9].csv'))
-        if not available:
+        csv_paths = sorted((base_dir / 'data').glob('acna-prayers-[0-9][0-9][0-9][0-9].csv'))
+        if not csv_paths:
             parser.error('No yearly CSV found; provide --year or --csv')
-        csv_path = available[-1]
     output_dir = args.output_dir
 
-    # Parse CSV data
-    print(f"Parsing {csv_path}...")
-    year = args.year or infer_year_from_filename(csv_path)
-    if year is None:
-        parser.error('Specify --year or use a CSV filename containing its year')
-
-    with csv_path.open(newline='', encoding='utf-8') as stream:
-        findings = validate_rows(list(csv.DictReader(stream)), year, args.month, full_year=args.publish)
+    # Validate every selected year before rendering or replacing published output.
+    findings = []
+    source_years = []
+    for csv_path in csv_paths:
+        year = args.year or infer_year_from_filename(csv_path)
+        if year is None:
+            parser.error('Specify --year or use a CSV filename containing its year')
+        source_years.append(year)
+        with csv_path.open(newline='', encoding='utf-8') as stream:
+            findings.extend(validate_rows(list(csv.DictReader(stream)), year, args.month, full_year=args.publish))
+    report_year = source_years[0] if len(source_years) == 1 else None
     report_path = args.review_report or output_dir.with_suffix('.review.json')
-    write_review_report(report_path, findings, year, args.month)
+    report_years = sorted(set(source_years)) if len(source_years) > 1 else None
+    write_review_report(report_path, findings, report_year, args.month, years=report_years)
     if args.publish and findings:
         parser.error(f'Publication blocked by {len(findings)} findings; see {report_path}')
     print(f"Review findings: {len(findings)} ({report_path})")
-    days = parse_csv(csv_path, year=year)
-    if not days:
-        parser.error('Input CSV contains no valid dates')
-    print(f"Found {len(days)} days of liturgical data")
+
+    days_by_year = {}
+    for csv_path, year in zip(csv_paths, source_years):
+        print(f"Parsing {csv_path}...")
+        days = parse_csv(csv_path, year=year)
+        if not days:
+            parser.error(f'{csv_path} contains no valid dates')
+        days_by_year[year] = days
+        print(f"Found {len(days)} days of liturgical data")
+
     destination = output_dir
     staging = None
     if args.publish:
@@ -310,38 +402,12 @@ def main():
         output_dir = Path(staging.name) / 'site'
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Set up Jinja2
-    env = setup_jinja_env()
-
-    # Generate individual day pages
-    print("Generating individual day pages...")
-    for i, day in enumerate(days):
-        prev_day = days[i - 1] if i > 0 else None
-        next_day = days[i + 1] if i < len(days) - 1 else None
-        generate_day_page(env, day, prev_day, next_day, output_dir)
-
-    # Generate index page
-    print("Generating index page...")
-    generate_index_page(env, days, output_dir)
-
-    # Generate all-in-one page
-    print("Generating print-all page...")
-    generate_all_page(env, days, output_dir)
-
-    # Generate per-month print pages
-    print("Generating monthly print pages...")
-    generate_monthly_pages(env, days, output_dir)
-
-    # Generate about page
-    print("Generating about page...")
-    generate_about_page(env, output_dir, year)
-
-    # Copy static files
-    print("Copying static files...")
-    copy_static_files(output_dir)
+    # Render the site
+    print("Generating pages...")
+    build_site(days_by_year, output_dir, datetime.now(UTC).year)
 
     findings.extend(validate_rendered_pages(output_dir))
-    write_review_report(report_path, findings, year, args.month)
+    write_review_report(report_path, findings, report_year, args.month, years=report_years)
     if args.publish and findings:
         staging.cleanup()
         parser.error(f'Publication blocked by rendered content; see {report_path}')
@@ -354,11 +420,8 @@ def main():
         output_dir = destination
 
     print("=" * 50)
-    print(f"✓ Generated {len(days)} day pages")
-    print("✓ Generated index page")
-    print("✓ Generated print-all page")
-    print(f"✓ Generated {len({day['date_obj'].month for day in days})} monthly print pages")
-    print("✓ Generated about page")
+    for year, days in sorted(days_by_year.items()):
+        print(f"✓ Generated {year}: {len(days)} day pages")
     print(f"\nOutput directory: {output_dir}")
     print("\nTo view:")
     print(f"  open {output_dir}/index.html")

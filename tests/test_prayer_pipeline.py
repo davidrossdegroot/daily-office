@@ -383,3 +383,35 @@ class PrayerPipelineTests(unittest.TestCase):
         )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('--year', result.stderr)
+
+    def test_default_multi_year_build_validates_every_published_csv(self):
+        import shutil
+
+        data = self.work / 'data'
+        data.mkdir()
+        for year in (2027, 2028):
+            source = [dict(self.february[0], **{
+                'Date': f'Jan {day}', 'Observance': 'Feria', 'Remembrance': '', 'Special Collect': '',
+            }) for day in range(1, 32)]
+            rows, target = self.regenerate(source, year=year)
+            if year == 2028:
+                rows[0]['MP Opening Sentence of Scripture'] = 'UNREVIEWED_PLACEHOLDER'
+                with target.open('w', newline='') as stream:
+                    writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+                    writer.writeheader()
+                    writer.writerows(rows)
+            shutil.copyfile(target, data / f'acna-prayers-{year}.csv')
+        shutil.copyfile(ROOT / 'generate.py', self.work / 'generate.py')
+        (self.work / 'bin').symlink_to(ROOT / 'bin', target_is_directory=True)
+        output = self.work / 'multi-year-site'
+        result = subprocess.run(
+            [sys.executable, str(self.work / 'generate.py'), '--publish', '--month', '1',
+             '--output-dir', str(output)],
+            cwd=self.work, capture_output=True, text=True, check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        report = json.loads(output.with_suffix('.review.json').read_text())
+        self.assertEqual(report['years'], [2027, 2028])
+        self.assertTrue(any(item['date'].startswith('2028-') and
+                            item['code'] == 'unresolved_placeholder' for item in report['findings']))
+        self.assertFalse(output.exists())

@@ -415,6 +415,42 @@ body.day-page {
     transform: translateY(-2px);
 }
 
+.year-switcher {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.year-link {
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--color-sacred);
+    text-decoration: none;
+    padding: 0.5rem 1.25rem;
+    border: 2px solid var(--color-sacred);
+    border-radius: 4px;
+    background: rgba(212, 175, 55, 0.1);
+}
+
+a.year-link:hover {
+    background: rgba(212, 175, 55, 0.2);
+}
+
+.year-link-current {
+    background: rgba(212, 175, 55, 0.35);
+    color: #f5f5f5;
+}
+
+@media print {
+    .year-switcher {
+        display: none;
+    }
+}
+
 .tagline {
     font-family: var(--font-display);
     font-size: 1.3rem;
