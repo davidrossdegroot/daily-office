@@ -202,6 +202,18 @@ proper collects. Unapproved commemorations retain their review findings.
 - Lydia, Dorcas, and Phoebe: the first commemoration common, plural. The title names
   them helpers of the apostles, not missionaries (Acts 9:36; 16:14-15; Romans 16:1-2).
 
+## Approved April selections
+
+- Anselm and William Law: the Teacher of the Faith common, which their BCP titles name.
+- Henry Budd: the pastor common without bishop wording.
+- George Augustus Selwyn: missionary common, the people of New Zealand, following
+  his BCP title.
+- James Lloyd Breck: missionary common, the people of Wisconsin, Minnesota, and
+  California. His title names no place; these are the regions of his missions
+  according to secondary sources.
+- A transferred Annunciation keeps its own antiphon (BCP 2019, p. 29) rather than
+  the Easter antiphon, matching the feast on its usual date.
+
 ## Agent workflow
 
 The repository skill at `.agents/skills/generate-daily-office/SKILL.md` defines

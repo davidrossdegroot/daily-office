@@ -592,6 +592,31 @@ class PrayerPipelineTests(unittest.TestCase):
                     findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
                     self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
 
+    def test_reviewed_april_collects_persist_across_years(self):
+        selections = {
+            'Anselm, Archbishop of Canterbury and Teacher of the Faith, 1109': (
+                'your servant Anselm special gifts of grace',
+            ),
+            'William Law, Priest and Teacher of the Faith, 1761': ('your servant William Law special gifts of grace',),
+            'Henry Budd, First Native Priest in Canada, 1850': (
+                'your faithful servant Henry Budd to be a pastor in your Church',
+            ),
+            'George Augustus Selwyn, Bishop and Missionary to New Zealand, 1878': (
+                'your servant George Augustus Selwyn to preach the Gospel to the people of New Zealand:',
+            ),
+            'James Lloyd Breck, Priest and Missionary, 1876': (
+                'your servant James Lloyd Breck to preach the Gospel to the people of Wisconsin, Minnesota, and California:',
+            ),
+        }
+        for year in (2027, 2028):
+            for remembrance, phrases in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('Apr 21', 'Easter', remembrance)], year=year)
+                    for phrase in phrases:
+                        self.assertIn(phrase, rows[0]['Special Collect'])
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
     def test_approval_for_one_cyril_does_not_cover_another(self):
         source = self.source_row('Mar 9', 'Lent', 'Cyril of Alexandria, Bishop and Teacher of the Faith, 444')
         rows, target = self.regenerate([source])
