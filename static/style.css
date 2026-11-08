@@ -442,6 +442,7 @@ a.year-link:hover {
 
 .year-link-current {
     background: rgba(212, 175, 55, 0.35);
+    color: #f5f5f5;
 }
 
 @media print {
