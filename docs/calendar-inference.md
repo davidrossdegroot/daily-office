@@ -214,6 +214,31 @@ proper collects. Unapproved commemorations retain their review findings.
 - A transferred Annunciation keeps its own antiphon (BCP 2019, p. 29) rather than
   the Easter antiphon, matching the feast on its usual date.
 
+## Approved May selections and category rules
+
+- **Teacher of the Faith default** (maintainer-approved category rule). A commemoration
+  titled "Teacher of the Faith" takes the Teacher of the Faith common instead of the
+  pastor common. Categories checked earlier, such as martyr or missionary, still come
+  first. This is a deliberate exception to approving each person separately.
+- Rogation Days: the first common prayer only, for the harvests, matching Ember Days.
+- Josephine Butler, Mary Sumner, Mother Teresa of Calcutta, and Elizabeth of Hungary:
+  the renewer of society common with "her" for the BCP's "his". Other commemorations
+  keep the BCP's wording.
+- The Martyrs of the Sudan: the martyr common with plural servants.
+- Julian of Norwich: the monastic common, from her title "Anchoress".
+- Dunstan with Ember Day and Helena with Ember Day: two complete, separately labeled
+  collects, using the reformer common for Dunstan and the first commemoration common
+  with "her" for Helena, followed by the selected Ember common.
+- Jackson Kemper: missionary common, the people of the American West, narrower than
+  his title's "United States" because the 1835 appointment was to the expanding West.
+- Augustine of Canterbury: missionary common, the English people, the mission on which
+  Gregory the Great sent him. Augustine of Hippo is a separate identity. Their history
+  comes from secondary sources, not a direct reading of Bede.
+
+**Missionary place wording** is delegated: the maintainer accepts the recommended
+"people of" clause without a separate approval, based on evidence and listed in each
+month's report so it can be vetoed. Other decisions still need an explicit answer.
+
 ## Agent workflow
 
 The repository skill at `.agents/skills/generate-daily-office/SKILL.md` defines
