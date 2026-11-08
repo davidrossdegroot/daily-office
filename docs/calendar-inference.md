@@ -57,8 +57,8 @@ Its report includes final decoded HTML checks after name substitution,
 including pages in every yearly subdirectory. Multi-year builds aggregate CSV
 findings for all selected years before rendering. A raw
 `N.` token is allowed only where it can be resolved as a special-collect name;
-none may remain in the final pages. Underscore blanks and literal placeholders
-are rejected, and bracketed prayer alternatives require editorial review.
+none may remain in the final pages of strict years. Underscore blanks and literal placeholders
+are rejected for strict years, and bracketed prayer alternatives require editorial review.
 
 ```bash
 python generate.py --year 2027 --month 2 \
@@ -82,10 +82,27 @@ Publication builds in a temporary directory and checks final HTML before
 replacing the requested output directory. Rejected content leaves existing
 output untouched; successful publication removes stale preview pages.
 
-Deployment now runs `python generate.py --publish`. Existing canonical data is
-not exempt: the recorded check of the current 2026 CSV found 295 blockers,
-which will block subsequent deployments until reviewed. The already deployed site is not changed by a rejected build.
-PR preview builds remain drafts so the report and content can be inspected.
+Deployment runs `python generate.py --publish`. **2026 is the sole legacy
+exemption**: its CSV and rendered findings remain in the report with
+`year: 2026` and `blocking: false`; they never block publication. This is not a
+claim that 2026 content has been corrected. Every other year remains strict,
+including the full-year requirement unless `--month` explicitly selects a month.
+The report's `publishable` value depends on blocking findings, not whether the
+findings list is empty.
+
+No year is removed to obtain a passing build. Multi-year builds retain 2026's
+`/2026/` calendar and day pages, both switcher entries, and existing root day URLs.
+A single-year 2026 build keeps its existing flat layout. The build returns an
+explicit HTML-page-to-year manifest: this identifies ownership of root summary
+pages (`index.html`, `all.html`, monthly pages, and `about.html`), yearly directory
+pages, and legacy day redirects. Rendered review uses that manifest, not the
+finding's date string. When the root repeats 2026 its findings are non-blocking;
+when it repeats 2027 they remain strict. Unknown ownership is always blocking.
+
+Strict CSV checks run before building; strict rendered checks run in the staged
+output before replacement. A 2027 finding therefore leaves existing published
+output untouched, regardless of any 2026 exemptions. PR preview builds remain
+drafts; both workflows retain review reports as artifacts.
 
 ## Reproducible annual checks
 
@@ -128,3 +145,12 @@ independent of year, before the generic common fallback:
 
 These are reviewed adaptations of the existing commons, not newly sourced
 proper collects. Unapproved commemorations retain their review findings.
+
+## Agent workflow
+
+The repository skill at `.agents/skills/generate-daily-office/SKILL.md` defines
+monthly generation, evidence-backed recommendations in small batches, explicit
+maintainer choices, durable mappings, regression tests, and regeneration. It
+reuses existing approvals and leaves new editorial decisions pending until
+answered. Invoke it as `$generate-daily-office`. Skill instructions guide the
+agent; the Python publication checks enforce the release policy.

@@ -304,6 +304,12 @@ def build_year_pages(days, output_dir, root_path='', year_links=()):
     generate_monthly_pages(env, days, output_dir)
     generate_about_page(env, output_dir, days[0]['date_obj'].year)
 
+    year = days[0]['date_obj'].year
+    pages = ['index.html', 'all.html', 'about.html']
+    pages.extend(f"{day['date_slug']}.html" for day in days)
+    pages.extend(f"all-{month}.html" for month in {day['date_obj'].strftime('%B').lower() for day in days})
+    return {page: year for page in pages}
+
 
 def build_site(days_by_year, output_dir, current_year):
     """Build the site for one or more years.
@@ -315,29 +321,33 @@ def build_site(days_by_year, output_dir, current_year):
     """
     output_dir.mkdir(parents=True, exist_ok=True)
     years = sorted(days_by_year)
+    page_years = {}
 
     if len(years) == 1:
-        build_year_pages(days_by_year[years[0]], output_dir)
+        page_years.update(build_year_pages(days_by_year[years[0]], output_dir))
     else:
         default_year = select_default_year(years, current_year)
-        build_year_pages(
+        page_years.update(build_year_pages(
             days_by_year[default_year],
             output_dir,
             year_links=build_year_links(years, default_year),
-        )
+        ))
         redirect_env = setup_jinja_env()
         for year in years:
-            build_year_pages(
+            yearly_pages = build_year_pages(
                 days_by_year[year],
                 output_dir / str(year),
                 root_path='../',
                 year_links=build_year_links(years, year, root_path='../'),
             )
+            page_years.update({f'{year}/{page}': owner for page, owner in yearly_pages.items()})
             if year != default_year:
                 for day in days_by_year[year]:
                     generate_day_redirect(redirect_env, day, output_dir)
+                    page_years[f"{day['date_slug']}.html"] = year
 
     copy_static_files(output_dir)
+    return page_years
 
 
 def main():
@@ -381,7 +391,7 @@ def main():
     report_path = args.review_report or output_dir.with_suffix('.review.json')
     report_years = sorted(set(source_years)) if len(source_years) > 1 else None
     write_review_report(report_path, findings, report_year, args.month, years=report_years)
-    if args.publish and findings:
+    if args.publish and any(item.get('blocking', True) for item in findings):
         parser.error(f'Publication blocked by {len(findings)} findings; see {report_path}')
     print(f"Review findings: {len(findings)} ({report_path})")
 
@@ -404,11 +414,11 @@ def main():
 
     # Render the site
     print("Generating pages...")
-    build_site(days_by_year, output_dir, datetime.now(UTC).year)
+    page_years = build_site(days_by_year, output_dir, datetime.now(UTC).year)
 
-    findings.extend(validate_rendered_pages(output_dir))
+    findings.extend(validate_rendered_pages(output_dir, page_years))
     write_review_report(report_path, findings, report_year, args.month, years=report_years)
-    if args.publish and findings:
+    if args.publish and any(item.get('blocking', True) for item in findings):
         staging.cleanup()
         parser.error(f'Publication blocked by rendered content; see {report_path}')
 

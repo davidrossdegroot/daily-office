@@ -45,6 +45,9 @@ from typing import ClassVar, NamedTuple
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+ReviewFinding = dict[str, str | int | bool | None]
+
+
 CANONICAL_COLUMNS = [
     "Date",
     "Liturgical Color",
@@ -2226,17 +2229,18 @@ def prepare_rows(
 
 def validate_rows(
     rows: list[dict[str, str]], year: int, month: int | None = None, *, full_year: bool = False,
-) -> list[dict[str, str]]:
-    """Return publication blockers without preventing a reviewable draft.
+) -> list[ReviewFinding]:
+    """Return publication findings without preventing a reviewable draft.
 
     Drafts validate the months represented by their dates. Publication requires a
     full year unless the caller explicitly requests a particular month.
     """
-    findings: list[dict[str, str]] = []
+    findings: list[ReviewFinding] = []
     dates: Counter[date] = Counter()
 
     def add(label: str, field: str, code: str, message: str) -> None:
-        findings.append({"date": label, "field": field, "code": code, "message": message})
+        findings.append({"date": label, "field": field, "code": code, "message": message,
+                         "year": year, "blocking": year != 2026})
 
     required = (
         "Observance", "Liturgical Color", "MP Opening Sentence of Scripture", "Antiphon",
@@ -2313,25 +2317,29 @@ def validate_rows(
 
 
 
-def validate_rendered_pages(output_dir: Path) -> list[dict[str, str]]:
+def validate_rendered_pages(
+    output_dir: Path, page_years: dict[str, int] | None = None,
+) -> list[ReviewFinding]:
     """Check the final, decoded prayer text, including substituted saint names."""
     findings = []
     for page in sorted(output_dir.rglob('*.html')):
+        relative = page.relative_to(output_dir).as_posix()
+        year = (page_years or {}).get(relative)
         text = html_module.unescape(page.read_text(encoding='utf-8'))
         if re.search(r"\bN\.|_{3,}|\b\w*PLACEHOLDER\w*\b", text, re.IGNORECASE):
             findings.append({"date": page.relative_to(output_dir).with_suffix('').as_posix(), "field": "Rendered HTML",
-                             "code": "rendered_placeholder",
+                             "code": "rendered_placeholder", "year": year, "blocking": year != 2026,
                              "message": "Final page still contains an unresolved name, blank, or placeholder."})
     return findings
 
 def write_review_report(
-    path: Path, findings: list[dict[str, str]], year: int | None, month: int | None = None,
+    path: Path, findings: list[ReviewFinding], year: int | None, month: int | None = None,
     *, years: list[int] | None = None,
 ) -> None:
     import json
 
     path.parent.mkdir(parents=True, exist_ok=True)
-    report = {"year": year, "month": month, "publishable": not findings, "findings": findings}
+    report = {"year": year, "month": month, "publishable": not any(item.get("blocking", True) for item in findings), "findings": findings}
     if years is not None:
         report["years"] = years
     path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

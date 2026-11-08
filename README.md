@@ -62,8 +62,8 @@ Or navigate to `build/index.html` in your web browser.
 
 Draft generation produces a JSON review report next to its output. Use
 `python generate.py --publish` to enforce content validation before publishing;
-deployment uses this strict mode. Existing content with unresolved prayers will
-block deployment until reviewed. `--month` selects a complete month instead of
+deployment uses this strict mode. Findings for the legacy 2026 calendar are retained as non-blocking; unresolved
+content in every other year blocks deployment. `--month` selects a complete month instead of
 a full year, and `--review-report` selects the report path.
 
 See [calendar inference and publication review](docs/calendar-inference.md) for

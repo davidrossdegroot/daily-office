@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate Daily Office"
+  short_description: "Generate prayers and resolve editorial review findings"
+  default_prompt: "Use $generate-daily-office to generate the requested month, review findings, and recommend editorial choices."
