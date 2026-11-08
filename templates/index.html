@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACNA Daily Office - {{ year }} Calendar</title>
-    <link rel="icon" href="static/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="icon" href="{{ root_path }}static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ root_path }}static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" media="screen">
@@ -26,6 +26,17 @@
             <p class="site-description">
                 A one-page Daily Office companion that gathers the day's essentials—readings, psalms, and collects—into a single, printable card so you can pray Morning and Evening Prayer without flipping through the BCP.
             </p>
+            {% if year_links %}
+            <nav class="year-switcher" aria-label="Calendar year">
+                {% for link in year_links %}
+                {% if link.current %}
+                <span class="year-link year-link-current" aria-current="page">{{ link.year }}</span>
+                {% else %}
+                <a class="year-link" href="{{ link.href }}">{{ link.year }}</a>
+                {% endif %}
+                {% endfor %}
+            </nav>
+            {% endif %}
         </div>
     </header>
 
