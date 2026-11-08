@@ -187,6 +187,21 @@ proper collects. Unapproved commemorations retain their review findings.
   "First Primate of Canada"; he was consecrated Bishop of Rupert's Land in 1865.
 - James DeKoven and John Donne: the pastor common without bishop wording.
 
+## Approved January selections
+
+- Hilary of Poitiers and Thomas Aquinas: the Teacher of the Faith common, which
+  their BCP titles name, rather than the pastor common.
+- Vedanayagam Samuel Azariah: missionary common, the people of South India.
+- Kentigern: missionary common, the people of Strathclyde and Cumbria. Both places
+  follow the BCP 2019 calendar titles.
+- Anthony: the monastic common, from his title "Hermit in Egypt".
+- Wulfstan: the pastor common with "Bishop and".
+- Timothy and Titus: the pastor common, plural and without bishop wording, because
+  Paul left them to oversee existing churches at Ephesus and Crete (1 Timothy 1:3;
+  Titus 1:5).
+- Lydia, Dorcas, and Phoebe: the first commemoration common, plural. The title names
+  them helpers of the apostles, not missionaries (Acts 9:36; 16:14-15; Romans 16:1-2).
+
 ## Agent workflow
 
 The repository skill at `.agents/skills/generate-daily-office/SKILL.md` defines

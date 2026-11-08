@@ -543,6 +543,55 @@ class PrayerPipelineTests(unittest.TestCase):
                     findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
                     self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
 
+    def test_reviewed_january_first_batch_persists_across_years(self):
+        selections = {
+            'Hilary of Poitiers, Bishop and Teacher of the Faith, 367': (
+                'your servant Hilary of Poitiers special gifts of grace',
+            ),
+            'Thomas Aquinas, Friar, Priest, and Teacher of the Faith, 1274': (
+                'your servant Thomas Aquinas special gifts of grace',
+            ),
+            'Vedanayagam Samuel Azariah, Bishop in South India, Evangelist, 1945': (
+                'your servant Vedanayagam Samuel Azariah to preach the Gospel to the people of South India:',
+            ),
+            'Kentigern, Missionary to Strathclyde and Cumbria, 603': (
+                'your servant Kentigern to preach the Gospel to the people of Strathclyde and Cumbria:',
+            ),
+            'Anthony, Hermit in Egypt, 356': ('inspired by the devotion of your servant Anthony, may seek you',),
+            'Wulfstan, Bishop of Worcester, 1095': (
+                'your faithful servant Wulfstan to be a Bishop and pastor in your Church',
+            ),
+        }
+        for year in (2027, 2028):
+            for remembrance, phrases in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('Jan 13', 'Epiphany', remembrance)], year=year)
+                    for phrase in phrases:
+                        self.assertIn(phrase, rows[0]['Special Collect'])
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_january_companions_are_plural_across_years(self):
+        selections = {
+            'Timothy and Titus, Companions of Paul the Apostle': (
+                'your faithful servants Timothy and Titus to be pastors in your Church',
+            ),
+            'Lydia, Dorcas and Phoebe, Helpers of the Apostles': (
+                'the good example of your servants Lydia, Dorcas, and Phoebe, may persevere',
+                'until at last, with them, we attain',
+            ),
+        }
+        for year in (2027, 2028):
+            for remembrance, phrases in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('Jan 13', 'Epiphany', remembrance)], year=year)
+                    prayer = rows[0]['Special Collect']
+                    for phrase in phrases:
+                        self.assertIn(phrase, prayer)
+                    self.assertNotIn('Or this', prayer)
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
     def test_approval_for_one_cyril_does_not_cover_another(self):
         source = self.source_row('Mar 9', 'Lent', 'Cyril of Alexandria, Bishop and Teacher of the Faith, 444')
         rows, target = self.regenerate([source])
