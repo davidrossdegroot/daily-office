@@ -99,6 +99,8 @@ The `generate.py` script:
 4. Generates index and all-days pages
 5. Copies static assets to build directory
 
+Without `--year` or `--csv`, every `data/acna-prayers-YYYY.csv` is built. With one year the output is flat in `build/`. With several, each year gets `build/YYYY/`, the root repeats the default year (the current calendar year, or the nearest earlier published year), `index.html` shows a year switcher, and other years' root `YYYY-MM-DD.html` URLs redirect into their directories. Templates must prefix links to shared assets with `{{ root_path }}`. `deploy.yml` also runs on January 1 so the root moves to the new year.
+
 ### Configuration
 
 #### Google Analytics
