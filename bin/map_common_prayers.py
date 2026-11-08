@@ -981,6 +981,45 @@ def easter_sunday(year: int) -> date:
     return date(year, month, day)
 
 
+def office_season(current_date: date | None) -> str:
+    """Resolve the calendar season independently of a named feast's heading."""
+    if current_date is None:
+        return ""
+    year = current_date.year
+    easter = easter_sunday(year)
+    christmas = date(year, 12, 25)
+    advent_anchor = date(year, 11, 27)
+    advent = advent_anchor + timedelta(days=(6 - advent_anchor.weekday()) % 7)
+    if current_date >= christmas or current_date < date(year, 1, 6):
+        return "christmas"
+    if current_date < easter - timedelta(days=46):
+        return "epiphany"
+    if current_date < easter - timedelta(days=7):
+        return "lent"
+    if current_date < easter:
+        return "holy week"
+    if current_date < easter + timedelta(days=39):
+        return "easter"
+    if current_date < easter + timedelta(days=49):
+        return "ascension"
+    if current_date == easter + timedelta(days=49):
+        return "day of pentecost"
+    if current_date == easter + timedelta(days=56):
+        return "trinity sunday"
+    if current_date >= advent:
+        return "advent"
+    return ""
+
+
+def is_epiphany_feast(observance: str, current_date: date | None) -> bool:
+    text = normalize_for_match(observance)
+    if current_date is not None:
+        return (current_date.month, current_date.day) == (1, 6) and "epiphany" in text
+    return text in {"epiphany", "the epiphany"} or text.startswith((
+        "the epiphany of ", "the epiphany the ", "feast of the epiphany"
+    ))
+
+
 def is_holy_week_span(current_date: date | None) -> bool:
     """Palm Sunday through Holy Saturday, inclusive."""
     if current_date is None:
@@ -1573,6 +1612,9 @@ def infer_liturgical_color(observance: str, current_date: date | None = None) ->
     if "christmas" in text or "christmastide" in text:
         return "White"
 
+    if is_epiphany_feast(observance, current_date) or "baptism of our lord" in text:
+        return "White"
+
     if text == "epiphany":
         if current_date is not None and (current_date.month, current_date.day) == (1, 6):
             return "White"
@@ -1627,7 +1669,7 @@ def infer_seasonal_blessing(observance: str, current_date: date | None = None) -
         return SEASONAL_BLESSING_TEXT["nativity"]
 
     # Feast of Epiphany only, not the whole Epiphany season.
-    if text in {"epiphany", "the epiphany"} or "feast of the epiphany" in text:
+    if is_epiphany_feast(observance, current_date):
         return SEASONAL_BLESSING_TEXT["epiphany_feast"]
 
     # Lent prayers over the people: rotate daily when date context is available.
@@ -1668,7 +1710,7 @@ def infer_seasonal_blessing(observance: str, current_date: date | None = None) -
 
 def infer_mp_opening_sentence(observance: str, current_date: date | None = None) -> str:
     """Infer MP Opening Sentence of Scripture from observance text."""
-    text = clean(observance).lower()
+    text = f"{clean(observance).lower()} {office_season(current_date)}".strip()
 
     if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
         return MP_OPENING_SENTENCES["holy_week"]
@@ -1712,7 +1754,7 @@ def infer_mp_opening_sentence(observance: str, current_date: date | None = None)
 
 def infer_ep_opening_sentence(observance: str, current_date: date | None = None) -> str:
     """Infer EP Opening Sentence of Scripture from observance text."""
-    text = clean(observance).lower()
+    text = f"{clean(observance).lower()} {office_season(current_date)}".strip()
 
     if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
         return EP_OPENING_SENTENCES["holy_week"]
