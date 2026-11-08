@@ -312,3 +312,11 @@ When working with this data:
 - Maintain proper attribution in collect texts
 - Handle empty cells gracefully (displayed as None or hidden in templates)
 - Date parsing supports both abbreviated (Jan, Feb) and full (January, February) month names
+
+## Prayer generation workflow
+
+For monthly/yearly Daily Office generation or editorial review findings, use
+[generate-daily-office](.agents/skills/generate-daily-office/SKILL.md). Reuse
+approved choices and present new editorial decisions with recommendations and
+alternatives before applying them. The Python publication checks remain the
+source of enforcement, including the explicit 2026-only exemption.

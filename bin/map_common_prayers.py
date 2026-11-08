@@ -35,13 +35,18 @@ from __future__ import annotations
 import argparse
 import calendar
 import csv
+import html as html_module
 import re
+from collections import Counter
 from datetime import UTC, date, datetime, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import ClassVar
+from typing import ClassVar, NamedTuple
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+
+ReviewFinding = dict[str, str | int | bool | None]
+
 
 CANONICAL_COLUMNS = [
     "Date",
@@ -181,6 +186,54 @@ COMMON_PRAYERS = {
         "and ever. Amen."
     ),
 }
+
+# Maintainer-reviewed choices are keyed by commemoration identity, not year/date.
+REVIEWED_COMMEMORATION_COLLECTS = {
+    "ember day": COMMON_PRAYERS["ember day"].split(" Or this:", 1)[0].replace("[now] ", ""),
+    "william billy graham": COMMON_PRAYERS["common of a missionary or evangelist"].replace(
+        "N.", "Billy Graham"
+    ).replace("the people of _________ [or to the __________ people]", "the peoples of the world"),
+    "cornelius the centurion": COMMON_PRAYERS["common of any commemoration"].split(
+        " Or this:", 1
+    )[0].replace("N.", "Cornelius the Centurion"),
+    "martyrs of japan": COMMON_PRAYERS["common of a martyr"].replace(
+        "your servant N.", "your servants the martyrs of Japan"
+    ),
+    "thomas bray": COMMON_PRAYERS["common of a pastor"].replace(
+        "N.", "Thomas Bray"
+    ).replace("[Bishop and] ", ""),
+    "cyril and methodius": COMMON_PRAYERS["common of a missionary or evangelist"].replace(
+        "your servant N.", "your servants Cyril and Methodius"
+    ).replace("the people of _________ [or to the __________ people]", "the Slavic people"),
+    "anskar": COMMON_PRAYERS["common of a missionary or evangelist"].replace(
+        "N.", "Anskar"
+    ).replace("the people of _________ [or to the __________ people]", "the people of Denmark and Sweden"),
+}
+
+for _pastor_name in ("Absalom Jones", "George Herbert"):
+    REVIEWED_COMMEMORATION_COLLECTS[_pastor_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
+        "N.", _pastor_name
+    ).replace("[Bishop and] ", "")
+
+REVIEWED_COMMEMORATION_COLLECTS["janani luwum"] = COMMON_PRAYERS["common of a martyr"].replace(
+    "N.", "Janani Luwum"
+)
+REVIEWED_COMMEMORATION_GROUPS = {
+    ("ember day", "janani luwum"): (
+        "Janani Luwum: " + REVIEWED_COMMEMORATION_COLLECTS["janani luwum"]
+        + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
+    ),
+}
+
+
+def reviewed_commemoration_collect(remembrance: str) -> str | None:
+    identities = tuple(sorted(
+        normalize_for_match(part.split(",")[0]) for part in remembrance.split(" / ")
+    ))
+    if len(identities) == 1:
+        return REVIEWED_COMMEMORATION_COLLECTS.get(identities[0])
+    return REVIEWED_COMMEMORATION_GROUPS.get(identities)
+
 
 FIXED_HOLY_DAY_PROPERS: dict[tuple[int, int], dict[str, object]] = {
     (1, 1): {
@@ -1011,6 +1064,30 @@ def office_season(current_date: date | None) -> str:
     return ""
 
 
+class CalendarContext(NamedTuple):
+    current_date: date | None
+    season: str
+    primary_observance: str
+    commemorations: tuple[str, ...]
+
+    @property
+    def seasonal_heading(self) -> str:
+        if self.current_date is None:
+            return self.primary_observance.lower()
+        if "thanksgiving" in self.primary_observance.lower():
+            return "thanksgiving"
+        return self.season or "ordinary"
+
+
+def resolve_calendar_context(
+    observance: str, remembrance: str = "", current_date: date | None = None,
+) -> CalendarContext:
+    return CalendarContext(
+        current_date, office_season(current_date), clean(observance),
+        tuple(clean(part) for part in remembrance.split(" / ") if clean(part)),
+    )
+
+
 def is_epiphany_feast(observance: str, current_date: date | None) -> bool:
     text = normalize_for_match(observance)
     if current_date is not None:
@@ -1393,6 +1470,10 @@ def fetch_calendar_day(
     observance, color, remembrance = extract_observance_color_remembrance(html)
     seasonal_collect = extract_primary_collect(html)
     office_readings = extract_office_readings(html)
+    source_fields = {"observance": observance, "seasonal_collect": seasonal_collect, **office_readings}
+    missing = [key for key, value in source_fields.items() if not clean(value)]
+    if missing:
+        raise ValueError(f"Calendar response is missing required source fields: {', '.join(missing)}")
     return {
         "observance": observance,
         "liturgical_color": color,
@@ -1412,7 +1493,8 @@ def infer_common_type(remembrance: str, observance: str) -> str:
     ):
         return ""
 
-    text = f"{remembrance} {observance}".strip().lower()
+    # Classify the commemoration itself; the primary day's title is not its role.
+    text = clean(remembrance).lower()
     if not text:
         return ""
 
@@ -1571,13 +1653,16 @@ def apply_fixed_holy_day_proper(
     return True
 
 
-def infer_liturgical_color(observance: str, current_date: date | None = None) -> str:
+def infer_liturgical_color(
+    observance: str, current_date: date | None = None, *, context: CalendarContext | None = None,
+) -> str:
     """
     Derive the display color from the resolved primary observance.
     Optional commemorations in Remembrance do not control the result unless they have already
     been folded into Observance by precedence handling elsewhere.
     """
-    text = normalize_for_match(observance)
+    context = context or resolve_calendar_context(observance, current_date=current_date)
+    text = normalize_for_match(context.primary_observance)
     if not text:
         return ""
 
@@ -1649,11 +1734,14 @@ def infer_liturgical_color(observance: str, current_date: date | None = None) ->
     return ""
 
 
-def infer_seasonal_blessing(observance: str, current_date: date | None = None) -> str:
+def infer_seasonal_blessing(observance: str, current_date: date | None = None, *,
+    context: CalendarContext | None = None,
+) -> str:
     """
     Infer seasonal blessing/prayer-over-the-people from observance text.
     """
-    text = clean(observance).lower()
+    context = context or resolve_calendar_context(observance, current_date=current_date)
+    text = context.seasonal_heading
 
     if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
         return SEASONAL_BLESSING_TEXT["holy_week"]
@@ -1665,7 +1753,9 @@ def infer_seasonal_blessing(observance: str, current_date: date | None = None) -
     if "day of pentecost" in text or text == "pentecost":
         return SEASONAL_BLESSING_TEXT["pentecost"]
 
-    if "nativity" in text or "christmas day" in text:
+    if (current_date is not None and (current_date.month, current_date.day) == (12, 25)) or (
+        current_date is None and ("nativity" in text or "christmas day" in text)
+    ):
         return SEASONAL_BLESSING_TEXT["nativity"]
 
     # Feast of Epiphany only, not the whole Epiphany season.
@@ -1699,7 +1789,7 @@ def infer_seasonal_blessing(observance: str, current_date: date | None = None) -
     if "advent" in text:
         return SEASONAL_BLESSING_TEXT["advent"]
 
-    if "faithful departed" in text:
+    if "faithful departed" in clean(observance).lower():
         return SEASONAL_BLESSING_TEXT["eastertide"]
 
     if "easter" in text or "eastertide" in text:
@@ -1708,9 +1798,12 @@ def infer_seasonal_blessing(observance: str, current_date: date | None = None) -
     return ""
 
 
-def infer_mp_opening_sentence(observance: str, current_date: date | None = None) -> str:
+def infer_mp_opening_sentence(observance: str, current_date: date | None = None, *,
+    context: CalendarContext | None = None,
+) -> str:
     """Infer MP Opening Sentence of Scripture from observance text."""
-    text = f"{clean(observance).lower()} {office_season(current_date)}".strip()
+    context = context or resolve_calendar_context(observance, current_date=current_date)
+    text = context.seasonal_heading
 
     if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
         return MP_OPENING_SENTENCES["holy_week"]
@@ -1752,9 +1845,12 @@ def infer_mp_opening_sentence(observance: str, current_date: date | None = None)
     return MP_OPENING_SENTENCES["at_any_time"]
 
 
-def infer_ep_opening_sentence(observance: str, current_date: date | None = None) -> str:
+def infer_ep_opening_sentence(observance: str, current_date: date | None = None, *,
+    context: CalendarContext | None = None,
+) -> str:
     """Infer EP Opening Sentence of Scripture from observance text."""
-    text = f"{clean(observance).lower()} {office_season(current_date)}".strip()
+    context = context or resolve_calendar_context(observance, current_date=current_date)
+    text = context.seasonal_heading
 
     if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
         return EP_OPENING_SENTENCES["holy_week"]
@@ -1796,18 +1892,21 @@ def infer_ep_opening_sentence(observance: str, current_date: date | None = None)
     return EP_OPENING_SENTENCES["at_any_time"]
 
 
-def infer_antiphon(observance: str, remembrance: str) -> str:
+def infer_antiphon(observance: str, remembrance: str, current_date: date | None = None, *,
+    context: CalendarContext | None = None,
+) -> str:
     """Infer seasonal antiphon from observance/remembrance text."""
-    observance_text = clean(observance).lower()
+    context = context or resolve_calendar_context(observance, remembrance, current_date)
+    observance_text = context.primary_observance.lower()
     remembrance_text = clean(remembrance).lower()
-    text = f"{observance_text} {remembrance_text}".strip()
+    text = context.seasonal_heading
     if not text:
         return ""
 
-    if "presentation" in text or "annunciation" in text:
+    if "presentation" in observance_text or "annunciation" in observance_text:
         return SEASONAL_ANTIPHONS["presentation_annunciation"]
 
-    if "transfiguration" in text:
+    if "transfiguration" in observance_text:
         return SEASONAL_ANTIPHONS["epiphany"]
 
     if "day of pentecost" in text or observance_text == "pentecost":
@@ -1843,7 +1942,7 @@ def infer_antiphon(observance: str, remembrance: str) -> str:
     if "epiphany" in text:
         return SEASONAL_ANTIPHONS["epiphany"]
 
-    if "all saints" in text:
+    if "all saints" in observance_text:
         return SEASONAL_ANTIPHONS["all_saints_major"]
 
     major_saint_hints = (
@@ -1873,6 +1972,9 @@ def read_rows(path: Path) -> list[dict[str, str]]:
 
 
 def write_rows(path: Path, fieldnames: list[str], rows: list[dict[str, str]], delimiter: str) -> None:
+    fieldnames = list(fieldnames)
+    if any("Source Error" in row for row in rows) and "Source Error" not in fieldnames:
+        fieldnames.append("Source Error")
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=delimiter)
         writer.writeheader()
@@ -2005,12 +2107,9 @@ def prepare_rows(
     if seasonal_map_path is not None:
         seasonal_map = load_seasonal_map(seasonal_map_path)
 
-    if acna_year is not None:
-        inference_year = acna_year
-    elif source_path_for_inference is not None:
-        inference_year = infer_year_from_filename(source_path_for_inference)
-    else:
-        inference_year = generated_year_for_inference
+    inference_year = acna_year or generated_year_for_inference or (
+        infer_year_from_filename(source_path_for_inference) if source_path_for_inference else None
+    )
 
     for row in rows:
         ensure_canonical_schema(row)
@@ -2026,9 +2125,11 @@ def prepare_rows(
                     mode=calendar_mode,
                     fill_remembrance=fill_remembrance_from_calendar,
                 )
+                row.pop("Source Error", None)
             except (ValueError, HTTPError, URLError, TimeoutError) as exc:
                 message = f"Calendar fetch warning for Date={row.get('Date', '')}: {exc}"
                 if ignore_fetch_errors:
+                    row["Source Error"] = message
                     print(message)
                 else:
                     raise RuntimeError(message) from exc
@@ -2036,10 +2137,21 @@ def prepare_rows(
         if seasonal_map:
             apply_seasonal_defaults(row, seasonal_map, mode=seasonal_mode)
 
+        applied_fixed_holy_day = apply_fixed_holy_day_proper(
+            row,
+            row_date,
+            include_common_type=include_common_type,
+        )
+
+        context = resolve_calendar_context(
+            clean(row.get("Observance")), clean(row.get("Remembrance")), row_date,
+        )
+
         if mp_opening_mode != "off":
             inferred_mp_opening = infer_mp_opening_sentence(
                 clean(row.get("Observance")),
                 current_date=row_date,
+                context=context,
             )
             if inferred_mp_opening and (
                 mp_opening_mode == "overwrite" or not clean(row.get("MP Opening Sentence of Scripture"))
@@ -2050,6 +2162,7 @@ def prepare_rows(
             inferred_ep_opening = infer_ep_opening_sentence(
                 clean(row.get("Observance")),
                 current_date=row_date,
+                context=context,
             )
             if inferred_ep_opening and (
                 ep_opening_mode == "overwrite" or not clean(row.get("EP Opening Sentence of Scripture"))
@@ -2060,6 +2173,8 @@ def prepare_rows(
             inferred_antiphon = infer_antiphon(
                 clean(row.get("Observance")),
                 clean(row.get("Remembrance")),
+                current_date=row_date,
+                context=context,
             )
             if inferred_antiphon and (antiphon_mode == "overwrite" or not clean(row.get("Antiphon"))):
                 row["Antiphon"] = inferred_antiphon
@@ -2068,17 +2183,12 @@ def prepare_rows(
             inferred_blessing = infer_seasonal_blessing(
                 clean(row.get("Observance")),
                 current_date=row_date,
+                context=context,
             )
-            if inferred_blessing and (
-                seasonal_blessing_mode == "overwrite" or not clean(row.get("Seasonal Blessing"))
+            if seasonal_blessing_mode == "overwrite" or (
+                inferred_blessing and not clean(row.get("Seasonal Blessing"))
             ):
                 row["Seasonal Blessing"] = inferred_blessing
-
-        applied_fixed_holy_day = apply_fixed_holy_day_proper(
-            row,
-            row_date,
-            include_common_type=include_common_type,
-        )
 
         remembrance = clean(row.get("Remembrance"))
         observance = clean(row.get("Observance"))
@@ -2086,7 +2196,7 @@ def prepare_rows(
             pass
         elif remembrance:
             common_type = infer_common_type(remembrance, observance)
-            common_prayer = COMMON_PRAYERS.get(common_type, "")
+            common_prayer = reviewed_commemoration_collect(remembrance) or COMMON_PRAYERS.get(common_type, "")
 
             if include_common_type:
                 row["Common Type"] = common_type
@@ -2099,8 +2209,7 @@ def prepare_rows(
             row["Common Type"] = ""
 
         inferred_color = infer_liturgical_color(
-            clean(row.get("Observance")),
-            current_date=row_date,
+            context.primary_observance, current_date=row_date, context=context,
         )
         if inferred_color:
             row["Liturgical Color"] = inferred_color
@@ -2116,6 +2225,124 @@ def prepare_rows(
 
     return (fieldnames, rows)
 
+
+
+def validate_rows(
+    rows: list[dict[str, str]], year: int, month: int | None = None, *, full_year: bool = False,
+) -> list[ReviewFinding]:
+    """Return publication findings without preventing a reviewable draft.
+
+    Drafts validate the months represented by their dates. Publication requires a
+    full year unless the caller explicitly requests a particular month.
+    """
+    findings: list[ReviewFinding] = []
+    dates: Counter[date] = Counter()
+
+    def add(label: str, field: str, code: str, message: str) -> None:
+        findings.append({"date": label, "field": field, "code": code, "message": message,
+                         "year": year, "blocking": year != 2026})
+
+    required = (
+        "Observance", "Liturgical Color", "MP Opening Sentence of Scripture", "Antiphon",
+        "EP Opening Sentence of Scripture", "MP First Lesson", "MP Second Lesson",
+        "EP First Lesson", "EP Second Lesson", "Psalms (MP, 60-day)", "Psalms (EP, 60-day)",
+        "Seasonal Collect",
+    )
+    if not rows:
+        add(str(year), "Date", "empty_input", "No Daily Office entries are available.")
+    for number, row in enumerate(rows, start=2):
+        raw_date = clean(row.get("Date"))
+        dt = parse_row_date_for_inference(raw_date, year)
+        label = dt.isoformat() if dt else raw_date or f"row {number}"
+        if dt is None or dt.year != year or (month is not None and dt.month != month):
+            add(label, "Date", "invalid_date", f"Expected a valid date in {year}" +
+                (f" month {month}." if month else "."))
+        else:
+            dates[dt] += 1
+            if dates[dt] > 1:
+                add(label, "Date", "duplicate_date", "More than one entry exists for this date.")
+        if None in row or any(value is None for value in row.values()):
+            add(label, "CSV", "malformed_row", "CSV cells do not match the header columns.")
+        for field in required:
+            if not clean(row.get(field)):
+                add(label, field, "missing_field", "Required Daily Office content is missing.")
+        if clean(row.get("Liturgical Color")) not in {"White", "Green", "Purple", "Pink", "Red"}:
+            add(label, "Liturgical Color", "unknown_color", "Select a supported liturgical color.")
+        context = resolve_calendar_context(clean(row.get("Observance")), clean(row.get("Remembrance")), dt)
+        if dt is not None and infer_seasonal_blessing(context.primary_observance, dt, context=context) and not clean(row.get("Seasonal Blessing")):
+            add(label, "Seasonal Blessing", "missing_field", "The calendar calls for a seasonal blessing or Prayer over the People.")
+
+        if clean(row.get("Source Error")):
+            add(label, "Source Error", "source_error", clean(row.get("Source Error")))
+        remembrance = clean(row.get("Remembrance"))
+        special = clean(row.get("Special Collect"))
+        common_type = infer_common_type(remembrance, clean(row.get("Observance")))
+        if remembrance and common_type and not special:
+            add(label, "Special Collect", "missing_collect", "The commemoration has no selected proper or common collect.")
+        if remembrance and common_type == "common of any commemoration" and (
+            not special or flatten_whitespace(special) == flatten_whitespace(COMMON_PRAYERS[common_type])
+        ):
+            add(label, "Special Collect", "unknown_commemoration",
+                "No explicit commemoration category or reviewed proper collect is available.")
+        generic_collects = {flatten_whitespace(value) for value in COMMON_PRAYERS.values()}
+        generic_collects.update(flatten_whitespace(value) for value in REVIEWED_COMMEMORATION_COLLECTS.values())
+        active = [part for part in context.commemorations if infer_common_type(part, "")]
+        if len(active) > 1 and (not special or flatten_whitespace(special) in generic_collects):
+            add(label, "Special Collect", "ambiguous_commemorations",
+                "Select reviewed collects for the separate commemorations; do not combine their names into one prayer.")
+        name = remembrance.split(",")[0]
+        plural = re.search(r"\band\b|&|\b(martyrs|companions|bishops|monks|nuns|virgins)\b", name, re.IGNORECASE)
+        if plural and re.search(r"\bservant\b", special, re.IGNORECASE):
+            add(label, "Special Collect", "plural_collect",
+                "Review singular collect wording for multiple commemorated people.")
+        for field, value in row.items():
+            if not isinstance(value, str):
+                continue
+            if re.search(r"\b\w*PLACEHOLDER\w*\b", value, re.IGNORECASE):
+                add(label, field, "unresolved_placeholder", "Replace the unresolved placeholder with reviewed text.")
+            if re.search(r"\bN\.", value) and not (field == "Special Collect" and remembrance and not observance_is_temporal(remembrance)):
+                add(label, field, "unresolved_name", "The prayer name token has no unambiguous commemoration to substitute.")
+            if re.search(r"_{3,}", value):
+                add(label, field, "unfilled_blank", "Supply the missing prayer wording before publication.")
+            if field in {"Special Collect", "Seasonal Collect", "Seasonal Blessing"} and re.search(r"\[[^]]+\]|\bOr this:", value):
+                add(label, field, "editorial_choice", "Choose and review the appropriate prayer wording or alternative.")
+
+    months = [month] if month else range(1, 13) if full_year else sorted({dt.month for dt in dates})
+    for expected_month in months:
+        for day in range(1, calendar.monthrange(year, expected_month)[1] + 1):
+            dt = date(year, expected_month, day)
+            if dt not in dates:
+                add(dt.isoformat(), "Date", "missing_date", "No Daily Office entry exists for this date.")
+    return findings
+
+
+
+def validate_rendered_pages(
+    output_dir: Path, page_years: dict[str, int] | None = None,
+) -> list[ReviewFinding]:
+    """Check the final, decoded prayer text, including substituted saint names."""
+    findings = []
+    for page in sorted(output_dir.rglob('*.html')):
+        relative = page.relative_to(output_dir).as_posix()
+        year = (page_years or {}).get(relative)
+        text = html_module.unescape(page.read_text(encoding='utf-8'))
+        if re.search(r"\bN\.|_{3,}|\b\w*PLACEHOLDER\w*\b", text, re.IGNORECASE):
+            findings.append({"date": page.relative_to(output_dir).with_suffix('').as_posix(), "field": "Rendered HTML",
+                             "code": "rendered_placeholder", "year": year, "blocking": year != 2026,
+                             "message": "Final page still contains an unresolved name, blank, or placeholder."})
+    return findings
+
+def write_review_report(
+    path: Path, findings: list[ReviewFinding], year: int | None, month: int | None = None,
+    *, years: list[int] | None = None,
+) -> None:
+    import json
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    report = {"year": year, "month": month, "publishable": not any(item.get("blocking", True) for item in findings), "findings": findings}
+    if years is not None:
+        report["years"] = years
+    path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
 
 def process_rows(
     rows: list[dict[str, str]],
@@ -2161,6 +2388,12 @@ def process_rows(
     )
     delimiter = "\t" if fmt == "tsv" else ","
     write_rows(output_path, fieldnames, prepared_rows, delimiter=delimiter)
+    year = acna_year or generated_year_for_inference or (
+        infer_year_from_filename(source_path_for_inference) if source_path_for_inference else None
+    )
+    if year is not None:
+        findings = validate_rows(prepared_rows, year)
+        write_review_report(output_path.with_suffix('.review.json'), findings, year)
 
 
 def process(
@@ -2182,12 +2415,13 @@ def process(
     seasonal_blessing_mode: str,
     special_collect_mode: str,
     include_common_type: bool,
+    generated_year_for_inference: int | None = None,
 ) -> None:
     rows = read_rows(input_path)
     process_rows(
         rows=rows,
         source_path_for_inference=input_path,
-        generated_year_for_inference=None,
+        generated_year_for_inference=generated_year_for_inference,
         output_path=output_path,
         fmt=fmt,
         flatten=flatten,
@@ -2363,6 +2597,7 @@ def update_canonical_month(
 
     target_path = output_path if output_path is not None else canonical_path
     write_rows(target_path, list(CANONICAL_COLUMNS), merged_rows, delimiter=",")
+    write_review_report(target_path.with_suffix('.review.json'), validate_rows(merged_rows, year), year)
     return target_path
 
 
@@ -2378,7 +2613,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--year",
         type=int,
-        help="Generate month input rows internally for this year (requires --month).",
+        help="Calendar year: supplies input CSV date context, or generates a month with --month.",
     )
     parser.add_argument(
         "--month",
@@ -2494,7 +2729,6 @@ def parse_args() -> argparse.Namespace:
     args = parser.parse_args()
 
     has_input_csv = bool(args.input_csv)
-    has_month_generation_args = args.year is not None or args.month is not None
     has_update_canonical = bool(args.update_canonical)
 
     if has_update_canonical:
@@ -2510,14 +2744,16 @@ def parse_args() -> argparse.Namespace:
             parser.error("--include-common-type cannot be used with --update-canonical.")
         return args
 
-    if has_input_csv and has_month_generation_args:
-        parser.error("Use either --in or --year/--month, not both.")
+    if has_input_csv and args.month is not None:
+        parser.error("Use either --in or --month, not both. --year can supply input CSV date context.")
     if not has_input_csv and not (args.year is not None and args.month is not None):
         parser.error("Provide --in, or provide both --year and --month.")
     if args.month is not None and not (1 <= args.month <= 12):
         parser.error("--month must be between 1 and 12")
     if not args.output_csv:
         parser.error("--out is required unless --update-canonical is used.")
+    if has_input_csv and not (args.year or args.acna_year or infer_year_from_filename(Path(args.input_csv))):
+        parser.error("Input CSV needs year context: supply --year or include the year in its filename.")
 
     return args
 
@@ -2553,6 +2789,7 @@ def main() -> None:
     if args.input_csv:
         process(
             input_path=Path(args.input_csv),
+            generated_year_for_inference=args.year,
             output_path=Path(args.output_csv),
             fmt=args.fmt,
             flatten=args.flatten_whitespace,

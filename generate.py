@@ -9,10 +9,18 @@ import csv
 import os
 import re
 import shutil
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
+
+from bin.map_common_prayers import (
+    infer_year_from_filename,
+    validate_rendered_pages,
+    validate_rows,
+    write_review_report,
+)
 
 # Liturgical color mapping
 COLOR_MAP = {
@@ -296,6 +304,12 @@ def build_year_pages(days, output_dir, root_path='', year_links=()):
     generate_monthly_pages(env, days, output_dir)
     generate_about_page(env, output_dir, days[0]['date_obj'].year)
 
+    year = days[0]['date_obj'].year
+    pages = ['index.html', 'all.html', 'about.html']
+    pages.extend(f"{day['date_slug']}.html" for day in days)
+    pages.extend(f"all-{month}.html" for month in {day['date_obj'].strftime('%B').lower() for day in days})
+    return {page: year for page in pages}
+
 
 def build_site(days_by_year, output_dir, current_year):
     """Build the site for one or more years.
@@ -307,29 +321,33 @@ def build_site(days_by_year, output_dir, current_year):
     """
     output_dir.mkdir(parents=True, exist_ok=True)
     years = sorted(days_by_year)
+    page_years = {}
 
     if len(years) == 1:
-        build_year_pages(days_by_year[years[0]], output_dir)
+        page_years.update(build_year_pages(days_by_year[years[0]], output_dir))
     else:
         default_year = select_default_year(years, current_year)
-        build_year_pages(
+        page_years.update(build_year_pages(
             days_by_year[default_year],
             output_dir,
             year_links=build_year_links(years, default_year),
-        )
+        ))
         redirect_env = setup_jinja_env()
         for year in years:
-            build_year_pages(
+            yearly_pages = build_year_pages(
                 days_by_year[year],
                 output_dir / str(year),
                 root_path='../',
                 year_links=build_year_links(years, year, root_path='../'),
             )
+            page_years.update({f'{year}/{page}': owner for page, owner in yearly_pages.items()})
             if year != default_year:
                 for day in days_by_year[year]:
                     generate_day_redirect(redirect_env, day, output_dir)
+                    page_years[f"{day['date_slug']}.html"] = year
 
     copy_static_files(output_dir)
+    return page_years
 
 
 def main():
@@ -343,6 +361,9 @@ def main():
     parser.add_argument('--year', type=int, help='Calendar year to generate')
     parser.add_argument('--csv', type=Path, help='Input CSV (defaults to data/acna-prayers-YEAR.csv)')
     parser.add_argument('--output-dir', type=Path, default=base_dir / 'build')
+    parser.add_argument('--publish', action='store_true', help='Reject content with unresolved review findings')
+    parser.add_argument('--month', type=int, choices=range(1, 13), help='Validate a single complete month')
+    parser.add_argument('--review-report', type=Path, help='JSON report path (default: OUTPUT_DIR.review.json)')
     args = parser.parse_args()
     if args.year is not None and not 1 <= args.year <= 9999:
         parser.error('--year must be between 1 and 9999')
@@ -356,19 +377,57 @@ def main():
             parser.error('No yearly CSV found; provide --year or --csv')
     output_dir = args.output_dir
 
-    # Parse CSV data
-    days_by_year = {}
+    # Validate every selected year before rendering or replacing published output.
+    findings = []
+    source_years = []
     for csv_path in csv_paths:
+        year = args.year or infer_year_from_filename(csv_path)
+        if year is None:
+            parser.error('Specify --year or use a CSV filename containing its year')
+        source_years.append(year)
+        with csv_path.open(newline='', encoding='utf-8') as stream:
+            findings.extend(validate_rows(list(csv.DictReader(stream)), year, args.month, full_year=args.publish))
+    report_year = source_years[0] if len(source_years) == 1 else None
+    report_path = args.review_report or output_dir.with_suffix('.review.json')
+    report_years = sorted(set(source_years)) if len(source_years) > 1 else None
+    write_review_report(report_path, findings, report_year, args.month, years=report_years)
+    if args.publish and any(item.get('blocking', True) for item in findings):
+        parser.error(f'Publication blocked by {len(findings)} findings; see {report_path}')
+    print(f"Review findings: {len(findings)} ({report_path})")
+
+    days_by_year = {}
+    for csv_path, year in zip(csv_paths, source_years):
         print(f"Parsing {csv_path}...")
-        days = parse_csv(csv_path, year=args.year)
+        days = parse_csv(csv_path, year=year)
         if not days:
             parser.error(f'{csv_path} contains no valid dates')
-        days_by_year[days[0]['date_obj'].year] = days
+        days_by_year[year] = days
         print(f"Found {len(days)} days of liturgical data")
+
+    destination = output_dir
+    staging = None
+    if args.publish:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        staging = tempfile.TemporaryDirectory(prefix='daily-office-publish-', dir=destination.parent)
+        output_dir = Path(staging.name) / 'site'
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # Render the site
     print("Generating pages...")
-    build_site(days_by_year, output_dir, datetime.now(UTC).year)
+    page_years = build_site(days_by_year, output_dir, datetime.now(UTC).year)
+
+    findings.extend(validate_rendered_pages(output_dir, page_years))
+    write_review_report(report_path, findings, report_year, args.month, years=report_years)
+    if args.publish and any(item.get('blocking', True) for item in findings):
+        staging.cleanup()
+        parser.error(f'Publication blocked by rendered content; see {report_path}')
+
+    if staging is not None:
+        if destination.exists():
+            shutil.rmtree(destination)
+        shutil.move(str(output_dir), str(destination))
+        staging.cleanup()
+        output_dir = destination
 
     print("=" * 50)
     for year, days in sorted(days_by_year.items()):

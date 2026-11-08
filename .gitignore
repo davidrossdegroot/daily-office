@@ -1,5 +1,6 @@
 # Generated build directory
 build/
+/build.review.json
 
 # Python
 __pycache__/

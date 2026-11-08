@@ -93,5 +93,14 @@ class MultiYearSiteTests(unittest.TestCase):
         self.assertEqual(MODULE.select_default_year([2026, 2027], 2025), 2026)
 
 
+    def test_publication_review_checks_nondefault_year_pages(self):
+        days = {year: days_for(self.directory, year) for year in (2026, 2027)}
+        days[2027][0]['Seasonal Collect'] = 'Unresolved prayer for N&#46;'
+        MODULE.build_site(days, self.output, current_year=2026)
+        findings = MODULE.validate_rendered_pages(self.output)
+        self.assertTrue(any(item['date'] == '2027/2027-01-01' and
+                            item['code'] == 'rendered_placeholder' for item in findings))
+
+
 if __name__ == '__main__':
     unittest.main()
