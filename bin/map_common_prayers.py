@@ -231,6 +231,8 @@ for _missionary_name, _people in (
     ("Charles Henry Brent", "the people of the Philippines"),
     ("Vedanayagam Samuel Azariah", "the people of South India"),
     ("Kentigern", "the people of Strathclyde and Cumbria"),
+    ("George Augustus Selwyn", "the people of New Zealand"),
+    ("James Lloyd Breck", "the people of Wisconsin, Minnesota, and California"),
 ):
     REVIEWED_COMMEMORATION_COLLECTS[_missionary_name.lower()] = COMMON_PRAYERS[
         "common of a missionary or evangelist"
@@ -239,7 +241,7 @@ for _missionary_name, _people in (
 REVIEWED_COMMEMORATION_COLLECTS["john and charles wesley"] = COMMON_PRAYERS["common of a reformer of the church"].replace(
     "your servant N.", "your servants John and Charles Wesley"
 ).replace("became a burning and shining light", "became burning and shining lights")
-for _teacher_name in ("Gregory the Great", "Cyril", "Hilary of Poitiers", "Thomas Aquinas"):
+for _teacher_name in ("Gregory the Great", "Cyril", "Hilary of Poitiers", "Thomas Aquinas", "Anselm", "William Law"):
     REVIEWED_COMMEMORATION_COLLECTS[_teacher_name.lower()] = COMMON_PRAYERS[
         "common of a teacher of the faith"
     ].replace("N.", _teacher_name)
@@ -250,7 +252,7 @@ for _bishop_name in ("Robert Machray", "Wulfstan"):
 REVIEWED_COMMEMORATION_COLLECTS["anthony"] = COMMON_PRAYERS["common of a monastic or religious"].replace(
     "N.", "Anthony"
 )
-for _priest_name in ("James DeKoven", "John Donne"):
+for _priest_name in ("James DeKoven", "John Donne", "Henry Budd"):
     REVIEWED_COMMEMORATION_COLLECTS[_priest_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
         "N.", _priest_name
     ).replace("[Bishop and] ", "")
@@ -2006,7 +2008,11 @@ def infer_antiphon(observance: str, remembrance: str, current_date: date | None 
     if not text:
         return ""
 
-    if "presentation" in observance_text or "annunciation" in observance_text:
+    if (
+        "presentation" in observance_text
+        or "annunciation" in observance_text
+        or (current_date is not None and current_date == annunciation_transfer_date(current_date.year))
+    ):
         return SEASONAL_ANTIPHONS["presentation_annunciation"]
 
     if "transfiguration" in observance_text:

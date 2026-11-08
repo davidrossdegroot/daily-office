@@ -420,6 +420,22 @@ class AntiphonInferenceTests(unittest.TestCase):
                     MODULE.SEASONAL_ANTIPHONS[key],
                 )
 
+    def test_transferred_annunciation_keeps_its_antiphon(self) -> None:
+        self.assertEqual(
+            MODULE.infer_antiphon("The Second Monday of Easter", "The Annunciation", date(2027, 4, 5)),
+            MODULE.SEASONAL_ANTIPHONS["presentation_annunciation"],
+        )
+
+    def test_annunciation_antiphon_does_not_apply_outside_a_transfer(self) -> None:
+        self.assertEqual(
+            MODULE.infer_antiphon("Lent", "", date(2028, 4, 5)),
+            MODULE.SEASONAL_ANTIPHONS["lent"],
+        )
+        self.assertEqual(
+            MODULE.infer_antiphon("Maundy Thursday", "", date(2027, 3, 25)),
+            MODULE.SEASONAL_ANTIPHONS["lent"],
+        )
+
     def test_every_day_has_an_antiphon_across_years(self) -> None:
         for year in (2027, 2028):
             current = date(year, 1, 1)
