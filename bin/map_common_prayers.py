@@ -1365,6 +1365,14 @@ def fetch_calendar_day(
 
 def infer_common_type(remembrance: str, observance: str) -> str:
     """Infer common prayer category from remembrance/observance text."""
+    # A secondary calendar heading can describe the season rather than a saint.
+    # Ember and Rogation days have their own common prayers.
+    remembrance_text = clean(remembrance).lower()
+    if observance_is_temporal(remembrance) and not any(
+        token in remembrance_text for token in ("ember", "rogation")
+    ):
+        return ""
+
     text = f"{remembrance} {observance}".strip().lower()
     if not text:
         return ""

@@ -4,6 +4,7 @@ Daily Office Static Site Generator
 Parses liturgical CSV data and generates beautiful, printable HTML pages.
 """
 
+import argparse
 import csv
 import os
 import re
@@ -26,8 +27,13 @@ COLOR_MAP = {
 GA_MEASUREMENT_ID = os.environ.get('GA_MEASUREMENT_ID', 'G-RMEJ6VZKK0')
 
 
-def parse_csv(csv_path):
+def parse_csv(csv_path, year=None):
     """Parse the liturgical CSV file and return list of day dictionaries."""
+    if year is None:
+        match = re.search(r"(?<!\d)(\d{4})(?!\d)", Path(csv_path).name)
+        if match is None:
+            raise ValueError("Specify a year or use a CSV filename containing the year")
+        year = int(match.group(1))
     days = []
 
     with open(csv_path, 'r', encoding='utf-8') as f:
@@ -41,13 +47,11 @@ def parse_csv(csv_path):
             try:
                 # Try abbreviated month format first (Jan, Feb, etc.)
                 try:
-                    date_obj = datetime.strptime(row['Date'], '%b %d').replace(tzinfo=timezone.utc)
+                    date_obj = datetime.strptime(f"{row['Date']} {year}", '%b %d %Y').replace(tzinfo=timezone.utc)
                 except ValueError:
                     # Try full month format (January, February, etc.)
-                    date_obj = datetime.strptime(row['Date'], '%B %d').replace(tzinfo=timezone.utc)
+                    date_obj = datetime.strptime(f"{row['Date']} {year}", '%B %d %Y').replace(tzinfo=timezone.utc)
 
-                # Add year 2026
-                date_obj = date_obj.replace(year=2026)
                 row['date_obj'] = date_obj
                 row['date_formatted'] = date_obj.strftime('%B %d, %Y')
                 row['date_slug'] = date_obj.strftime('%Y-%m-%d')
@@ -169,6 +173,7 @@ def generate_index_page(env, days, output_dir):
     html = template.render(
         days=days,
         months=months,
+        year=days[0]['date_obj'].year,
         color_map=COLOR_MAP,
         ga_measurement_id=GA_MEASUREMENT_ID
     )
@@ -183,6 +188,7 @@ def generate_all_page(env, days, output_dir):
     template = env.get_template('all.html')
     html = template.render(
         days=days,
+        year=days[0]['date_obj'].year,
         color_map=COLOR_MAP,
         ga_measurement_id=GA_MEASUREMENT_ID
     )
@@ -222,10 +228,10 @@ def generate_monthly_pages(env, days, output_dir):
             f.write(html)
 
 
-def generate_about_page(env, output_dir):
+def generate_about_page(env, output_dir, year):
     """Generate the about page."""
     template = env.get_template('about.html')
-    html = template.render(ga_measurement_id=GA_MEASUREMENT_ID)
+    html = template.render(year=year, ga_measurement_id=GA_MEASUREMENT_ID)
 
     output_path = output_dir / 'about.html'
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -250,15 +256,33 @@ def main():
 
     # Paths
     base_dir = Path(__file__).parent
-    csv_path = base_dir / 'data' / 'acna-prayers-2026.csv'
-    output_dir = base_dir / 'build'
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--year', type=int, help='Calendar year to generate')
+    parser.add_argument('--csv', type=Path, help='Input CSV (defaults to data/acna-prayers-YEAR.csv)')
+    parser.add_argument('--output-dir', type=Path, default=base_dir / 'build')
+    args = parser.parse_args()
+    if args.year is not None and not 1 <= args.year <= 9999:
+        parser.error('--year must be between 1 and 9999')
+    if args.csv is not None:
+        csv_path = args.csv
+    elif args.year is not None:
+        csv_path = base_dir / 'data' / f'acna-prayers-{args.year}.csv'
+    else:
+        available = sorted((base_dir / 'data').glob('acna-prayers-[0-9][0-9][0-9][0-9].csv'))
+        if not available:
+            parser.error('No yearly CSV found; provide --year or --csv')
+        csv_path = available[-1]
+    output_dir = args.output_dir
 
     # Ensure output directory exists
-    output_dir.mkdir(exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # Parse CSV data
     print(f"Parsing {csv_path}...")
-    days = parse_csv(csv_path)
+    days = parse_csv(csv_path, year=args.year)
+    if not days:
+        parser.error('Input CSV contains no valid dates')
+    year = days[0]['date_obj'].year
     print(f"Found {len(days)} days of liturgical data")
 
     # Set up Jinja2
@@ -285,7 +309,7 @@ def main():
 
     # Generate about page
     print("Generating about page...")
-    generate_about_page(env, output_dir)
+    generate_about_page(env, output_dir, year)
 
     # Copy static files
     print("Copying static files...")
@@ -295,7 +319,7 @@ def main():
     print(f"✓ Generated {len(days)} day pages")
     print("✓ Generated index page")
     print("✓ Generated print-all page")
-    print("✓ Generated 12 monthly print pages")
+    print(f"✓ Generated {len({day['date_obj'].month for day in days})} monthly print pages")
     print("✓ Generated about page")
     print(f"\nOutput directory: {output_dir}")
     print("\nTo view:")

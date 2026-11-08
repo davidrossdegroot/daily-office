@@ -40,6 +40,23 @@ class ParseOfficeLineTests(unittest.TestCase):
 
 
 class InferCommonTypeTests(unittest.TestCase):
+    def test_temporal_remembrance_does_not_generate_saints_collect(self) -> None:
+        for remembrance in (
+            "The Tenth Day of Christmas",
+            "The Monday in the First Week After Epiphany",
+            "The Second Sunday of Easter",
+        ):
+            with self.subTest(remembrance=remembrance):
+                self.assertEqual(
+                    MODULE.infer_common_type(remembrance, "The Second Sunday of Christmas"),
+                    "",
+                )
+
+    def test_ember_day_keeps_its_common_prayer(self) -> None:
+        self.assertEqual(
+            MODULE.infer_common_type("Ember Day", "Advent"), "ember day"
+        )
+
     def test_bishop_and_teacher_prefers_pastor_common(self) -> None:
         remembrance = "Gregory the Great, Bishop of Rome and Teacher of the Faith, 604"
         self.assertEqual(MODULE.infer_common_type(remembrance, ""), "common of a pastor")
