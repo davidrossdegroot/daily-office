@@ -25,7 +25,15 @@ jobs:
 
       - name: Build site
         run: |
-          python generate.py
+          python generate.py --publish
+
+      - name: Upload content review report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: content-review
+          path: build.review.json
+          if-no-files-found: ignore
 
       - name: Setup SSH
         run: |

@@ -53,6 +53,17 @@ open build/index.html
 
 Or navigate to `build/index.html` in your web browser.
 
+## Content Review and Publication
+
+Draft generation produces a JSON review report next to its output. Use
+`python generate.py --publish` to enforce content validation before publishing;
+deployment uses this strict mode. Existing content with unresolved prayers will
+block deployment until reviewed. `--month` selects a complete month instead of
+a full year, and `--review-report` selects the report path.
+
+See [calendar inference and publication review](docs/calendar-inference.md) for
+local calendar policies, editorial findings, and reproducible 2027/2028 audits.
+
 ## Printing
 
 ### Print Individual Days

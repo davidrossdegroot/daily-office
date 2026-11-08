@@ -94,5 +94,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: pr-site-build
-          path: build
+          path: |
+            build
+            build.review.json
           if-no-files-found: error

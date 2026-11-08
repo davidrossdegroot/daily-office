@@ -9,10 +9,18 @@ import csv
 import os
 import re
 import shutil
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
+
+from bin.map_common_prayers import (
+    infer_year_from_filename,
+    validate_rendered_pages,
+    validate_rows,
+    write_review_report,
+)
 
 # Liturgical color mapping
 COLOR_MAP = {
@@ -260,6 +268,9 @@ def main():
     parser.add_argument('--year', type=int, help='Calendar year to generate')
     parser.add_argument('--csv', type=Path, help='Input CSV (defaults to data/acna-prayers-YEAR.csv)')
     parser.add_argument('--output-dir', type=Path, default=base_dir / 'build')
+    parser.add_argument('--publish', action='store_true', help='Reject content with unresolved review findings')
+    parser.add_argument('--month', type=int, choices=range(1, 13), help='Validate a single complete month')
+    parser.add_argument('--review-report', type=Path, help='JSON report path (default: OUTPUT_DIR.review.json)')
     args = parser.parse_args()
     if args.year is not None and not 1 <= args.year <= 9999:
         parser.error('--year must be between 1 and 9999')
@@ -274,16 +285,30 @@ def main():
         csv_path = available[-1]
     output_dir = args.output_dir
 
-    # Ensure output directory exists
-    output_dir.mkdir(parents=True, exist_ok=True)
-
     # Parse CSV data
     print(f"Parsing {csv_path}...")
-    days = parse_csv(csv_path, year=args.year)
+    year = args.year or infer_year_from_filename(csv_path)
+    if year is None:
+        parser.error('Specify --year or use a CSV filename containing its year')
+
+    with csv_path.open(newline='', encoding='utf-8') as stream:
+        findings = validate_rows(list(csv.DictReader(stream)), year, args.month, full_year=args.publish)
+    report_path = args.review_report or output_dir.with_suffix('.review.json')
+    write_review_report(report_path, findings, year, args.month)
+    if args.publish and findings:
+        parser.error(f'Publication blocked by {len(findings)} findings; see {report_path}')
+    print(f"Review findings: {len(findings)} ({report_path})")
+    days = parse_csv(csv_path, year=year)
     if not days:
         parser.error('Input CSV contains no valid dates')
-    year = days[0]['date_obj'].year
     print(f"Found {len(days)} days of liturgical data")
+    destination = output_dir
+    staging = None
+    if args.publish:
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        staging = tempfile.TemporaryDirectory(prefix='daily-office-publish-', dir=destination.parent)
+        output_dir = Path(staging.name) / 'site'
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     # Set up Jinja2
     env = setup_jinja_env()
@@ -314,6 +339,19 @@ def main():
     # Copy static files
     print("Copying static files...")
     copy_static_files(output_dir)
+
+    findings.extend(validate_rendered_pages(output_dir))
+    write_review_report(report_path, findings, year, args.month)
+    if args.publish and findings:
+        staging.cleanup()
+        parser.error(f'Publication blocked by rendered content; see {report_path}')
+
+    if staging is not None:
+        if destination.exists():
+            shutil.rmtree(destination)
+        shutil.move(str(output_dir), str(destination))
+        staging.cleanup()
+        output_dir = destination
 
     print("=" * 50)
     print(f"✓ Generated {len(days)} day pages")

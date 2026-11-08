@@ -1,0 +1,108 @@
+# Calendar inference and publication review
+
+The generator resolves a date's season separately from its primary observance
+and secondary commemorations. A shared calendar context feeds the opening
+sentences, antiphon, blessing, and color rules. A feast name is not a season:
+Matthias during Lent keeps Lenten office material, and the Nativity of John in
+June does not select Christmas opening sentences.
+
+## Local precedence and editorial policy
+
+- Use the calendar date for seasons, including movable Easter, Ash Wednesday,
+  Ascension, Pentecost, Trinity Sunday, and Advent boundaries. Heading-based
+  fallback remains available to callers without date context.
+- Apply known proper collects before selecting generic commons. Feast colors
+  and explicitly configured feast antiphons override seasonal defaults; an
+  optional commemoration cannot replace the primary day's seasonal antiphon.
+- Keep the existing local green policy for the Last Sunday of Epiphany, even
+  when its heading includes Transfiguration. Baptism of Our Lord and the
+  Epiphany feast are white. This preserves existing repository decisions;
+  changes to these conventions require an explicit editorial decision.
+- Retain the Lenten Prayer over the People on named feasts during Lent,
+  including Saint Matthias. The existing five prayers rotate from Ash
+  Wednesday. The Epiphany blessing belongs to January 6, not the whole season.
+  These separate blessings are not inferred from another site's Office grace.
+- Classify a commemoration from its own information, not words in the primary
+  observance. Temporal secondary headings do not generate saints' collects.
+- Preserve supplied special collects in `fill` mode. Explicit `overwrite`
+  recomputes them from the configured proper/common rules. It is intended for
+  regeneration before editorial corrections, not for preserving manual choices.
+- Generic commons remain visible in drafts. Missing ministry/place wording,
+  bracketed alternatives, unknown categories, plural people with singular
+  wording, and multiple commemorations sharing one common require review.
+  A complete reviewed proper collect can be supplied directly; prayer wording
+  is not invented to make validation pass.
+- **An antiphon is required every day**, as confirmed by the maintainer for
+  issue #50. Ordinary-day blanks without a configured mapping therefore block
+  publication. The [BCP Morning Prayer rubric](https://bcp2019.anglicanchurch.net/wp-content/uploads/2019/08/06-Daily-Morning-Prayer.pdf)
+  permits optional antiphons; this daily-summary requirement is a stricter
+  local content policy. A general-use antiphon rule still needs selection.
+
+## Drafts and publication
+
+CSV generation writes a sibling `*.review.json` report, including direct
+canonical month updates. Supply `--year` if an input filename has no year:
+
+```bash
+python bin/map_common_prayers.py --in month.csv --year 2027 --out draft-2027.csv
+```
+
+An ignored fetch error is persisted in an optional `Source Error` CSV column.
+It survives regeneration without fetching and blocks publication even if old
+readings are still populated. A successful refetch clears it. HTTP 200 responses
+without the required calendar data are also source failures.
+
+HTML generation creates a draft by default and writes `OUTPUT_DIR.review.json`.
+Its report includes final decoded HTML checks after name substitution. A raw
+`N.` token is allowed only where it can be resolved as a special-collect name;
+none may remain in the final pages. Underscore blanks and literal placeholders
+are rejected, and bracketed prayer alternatives require editorial review.
+
+```bash
+python generate.py --year 2027 --month 2 \
+  --csv data/drafts/acna-prayers-2027-02.csv \
+  --output-dir /tmp/february-preview
+
+# The same build with publication enforcement:
+python generate.py --publish --year 2027 --month 2 \
+  --csv data/drafts/acna-prayers-2027-02.csv \
+  --output-dir /tmp/february-published
+```
+
+`--publish` requires a full year unless `--month` explicitly selects a complete
+month. Missing/duplicate/invalid dates, malformed CSV rows, missing required
+readings or prayers, and unresolved review findings block publication. Special
+Collect, Remembrance, and Seasonal Blessing are not universally required:
+blessings are required when the configured calendar rules call for one, and
+commemorations require an appropriate selected collect.
+
+Publication builds in a temporary directory and checks final HTML before
+replacing the requested output directory. Rejected content leaves existing
+output untouched; successful publication removes stale preview pages.
+
+Deployment now runs `python generate.py --publish`. Existing canonical data is
+not exempt: the recorded check of the current 2026 CSV found 295 blockers,
+which will block subsequent deployments until reviewed. The already deployed site is not changed by a rejected build.
+PR preview builds remain drafts so the report and content can be inspected.
+
+## Reproducible annual checks
+
+Recorded source CSVs retain the fetched observances, colors, readings, psalms,
+primary collects, and secondary headings. The audit command recomputes local
+fields offline, builds yearly HTML previews, and reports every blocker:
+
+```bash
+python bin/audit_years.py \
+  tests/fixtures/calendar-source-2027.csv \
+  tests/fixtures/calendar-source-2028.csv \
+  --output-dir /tmp/daily-office-audit
+```
+
+Reports include a source SHA-256 and row count. The recorded reports in
+`docs/reports/` are reproducible from these fixtures. A finding count is not a
+day count: a prayer can have multiple findings, and aggregate HTML pages can
+repeat a placeholder already reported on an individual day.
+
+See [the February comparison](issue-50-february-comparison.md) for the comparison
+with PR #51. The annual checks report unresolved editorial choices; passing
+structural checks is not a full liturgical certification of every reading.

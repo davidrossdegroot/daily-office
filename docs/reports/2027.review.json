@@ -1,0 +1,2170 @@
+{
+  "year": 2027,
+  "month": null,
+  "publishable": false,
+  "findings": [
+    {
+      "date": "2027-01-02",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-01-02",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-13",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-14",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-01-14",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-17",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-01-17",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-19",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-26",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-01-26",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-01-26",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-27",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-01-27",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-28",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-03",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-02-03",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-04",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-02-04",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-05",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-02-13",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-14",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-02-14",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-02-14",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-15",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-02-15",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-17",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-02-17",
+      "field": "Special Collect",
+      "code": "unresolved_name",
+      "message": "The prayer name token has no unambiguous commemoration to substitute."
+    },
+    {
+      "date": "2027-02-19",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-20",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-21",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-02-21",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-02-27",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-01",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-03-01",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-02",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-03-02",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-03",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-03-07",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-03-08",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-03-08",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-10",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-03-10",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-12",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-17",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-03-17",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-18",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-20",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-03-20",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-22",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-23",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-03-23",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-03-31",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-04-02",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-04-03",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-04-03",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-04-10",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-04-11",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-04-11",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-04-21",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-02",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-03",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-04",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-05",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-08",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-05-08",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-09",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-16",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-05-17",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-18",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-19",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-05-19",
+      "field": "Special Collect",
+      "code": "unresolved_name",
+      "message": "The prayer name token has no unambiguous commemoration to substitute."
+    },
+    {
+      "date": "2027-05-20",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-21",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-21",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-05-21",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-22",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-22",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-24",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-05-24",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-25",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-26",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-05-26",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-05-27",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-28",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-29",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-30",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-05-31",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-02",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-06-03",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-06-06",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-06-06",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-07",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-08",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-09",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-06-09",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-10",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-11",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-12",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-13",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-14",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-16",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-17",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-19",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-06-19",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-20",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-21",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-23",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-24",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-25",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-26",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-27",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-28",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-06-29",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-06-30",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-01",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-01",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-07-01",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-02",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-03",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-04",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-04",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-07-04",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-05",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-06",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-07",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-08",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-09",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-10",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-11",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-13",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-14",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-15",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-15",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-07-15",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-07-15",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-16",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-17",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-19",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-21",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-22",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-23",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-24",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-25",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-26",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-26",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-07-26",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-28",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-29",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-29",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-07-29",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-07-30",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-07-31",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-01",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-01",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-08-01",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-02",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-03",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-04",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-08",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-09",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-11",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-12",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-13",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-14",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-15",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-16",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-17",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-18",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-19",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-22",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-23",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-24",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-25",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-25",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-08-25",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-26",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-27",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-27",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-08-27",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-28",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-29",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-08-29",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-08-29",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-08-31",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-08-31",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-01",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-02",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-09-03",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-04",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-09-04",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-05",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-06",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-09-06",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-07",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-08",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-09",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-09-10",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-09-10",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-11",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-13",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-14",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-15",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-09-15",
+      "field": "Special Collect",
+      "code": "unresolved_name",
+      "message": "The prayer name token has no unambiguous commemoration to substitute."
+    },
+    {
+      "date": "2027-09-16",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-09-16",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-17",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-09-17",
+      "field": "Special Collect",
+      "code": "unresolved_name",
+      "message": "The prayer name token has no unambiguous commemoration to substitute."
+    },
+    {
+      "date": "2027-09-17",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-18",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-18",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-19",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-21",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-22",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-23",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-24",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-25",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-26",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-27",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-09-27",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-09-28",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-29",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-30",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-09-30",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-09-30",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-01",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-10-01",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-02",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-04",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-05",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-07",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-08",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-09",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-10",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-10-10",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-11",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-10-11",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-10-11",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-13",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-13",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-10-13",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-14",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-15",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-16",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-10-18",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-19",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-10-19",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-10-20",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-21",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-22",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-23",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-24",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-25",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-26",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-27",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-28",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-30",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-10-31",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-02",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-02",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-11-02",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-03",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-04",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-05",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-05",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-11-05",
+      "field": "Special Collect",
+      "code": "plural_collect",
+      "message": "Review singular collect wording for multiple commemorated people."
+    },
+    {
+      "date": "2027-11-05",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-06",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-07",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-11-07",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-08",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-09",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-10",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-11",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-11-11",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-12",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-13",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-11-13",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-14",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-15",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-11-15",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-11-16",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-18",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-19",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-21",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-24",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-25",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-11-26",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-11-27",
+      "field": "Antiphon",
+      "code": "missing_field",
+      "message": "Required Daily Office content is missing."
+    },
+    {
+      "date": "2027-12-01",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-02",
+      "field": "Special Collect",
+      "code": "unfilled_blank",
+      "message": "Supply the missing prayer wording before publication."
+    },
+    {
+      "date": "2027-12-02",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-04",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-05",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-06",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-07",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-08",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-15",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-16",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-12-16",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-17",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-12-17",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-18",
+      "field": "Special Collect",
+      "code": "ambiguous_commemorations",
+      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
+    },
+    {
+      "date": "2027-12-18",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-19",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-12-19",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-20",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-12-20",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-22",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-12-22",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-23",
+      "field": "Special Collect",
+      "code": "unknown_commemoration",
+      "message": "No explicit commemoration category or reviewed proper collect is available."
+    },
+    {
+      "date": "2027-12-23",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-25",
+      "field": "Seasonal Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-12-31",
+      "field": "Special Collect",
+      "code": "editorial_choice",
+      "message": "Choose and review the appropriate prayer wording or alternative."
+    },
+    {
+      "date": "2027-01-02",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-01-14",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-01-26",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-01-27",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-02-03",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-02-14",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-02-15",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-02-21",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-03-01",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-03-02",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-03-08",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-03-17",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-03-20",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-03-23",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-04-03",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-04-11",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-05-24",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-05-26",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-06-06",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-06-09",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-06-19",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-08-31",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-09-04",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-09-06",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-09-10",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-09-16",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-09-27",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-10-01",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-10-10",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-10-11",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-10-19",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-11-07",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-11-13",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-11-15",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "2027-12-02",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-april",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-august",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-december",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-february",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-january",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-june",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-march",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-may",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-november",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-october",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all-september",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    },
+    {
+      "date": "all",
+      "field": "Rendered HTML",
+      "code": "rendered_placeholder",
+      "message": "Final page still contains an unresolved name, blank, or placeholder."
+    }
+  ],
+  "source": "calendar-source-2027.csv",
+  "source_sha256": "aaa163726e7c946cd70622528a840f6af6014e805b3e42b704c5865dc7455aa5",
+  "row_count": 365
+}
