@@ -40,6 +40,23 @@ class ParseOfficeLineTests(unittest.TestCase):
 
 
 class InferCommonTypeTests(unittest.TestCase):
+    def test_temporal_remembrance_does_not_generate_saints_collect(self) -> None:
+        for remembrance in (
+            "The Tenth Day of Christmas",
+            "The Monday in the First Week After Epiphany",
+            "The Second Sunday of Easter",
+        ):
+            with self.subTest(remembrance=remembrance):
+                self.assertEqual(
+                    MODULE.infer_common_type(remembrance, "The Second Sunday of Christmas"),
+                    "",
+                )
+
+    def test_ember_day_keeps_its_common_prayer(self) -> None:
+        self.assertEqual(
+            MODULE.infer_common_type("Ember Day", "Advent"), "ember day"
+        )
+
     def test_bishop_and_teacher_prefers_pastor_common(self) -> None:
         remembrance = "Gregory the Great, Bishop of Rome and Teacher of the Faith, 604"
         self.assertEqual(MODULE.infer_common_type(remembrance, ""), "common of a pastor")
@@ -323,3 +340,63 @@ class AntiphonInferenceTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class JanuarySeasonRegressionTests(unittest.TestCase):
+    def test_named_feasts_keep_seasonal_openings_across_years(self):
+        from datetime import date
+
+        for year in (2027, 2028):
+            for day, observance, season in (
+                (1, 'The Circumcision and Holy Name of Our Lord Jesus Christ', 'christmas'),
+                (18, 'Confession of Saint Peter', 'epiphany'),
+                (25, 'Conversion of Saint Paul', 'epiphany'),
+            ):
+                with self.subTest(year=year, day=day):
+                    dt = date(year, 1, day)
+                    self.assertEqual(
+                        MODULE.infer_mp_opening_sentence(observance, dt),
+                        MODULE.MP_OPENING_SENTENCES[season],
+                    )
+                    self.assertEqual(
+                        MODULE.infer_ep_opening_sentence(observance, dt),
+                        MODULE.EP_OPENING_SENTENCES[season],
+                    )
+
+    def test_epiphany_feast_color_and_blessing_across_years(self):
+        from datetime import date
+
+        for year in (2027, 2028):
+            heading = 'The Epiphany of Our Lord Jesus Christ'
+            dt = date(year, 1, 6)
+            self.assertEqual(MODULE.infer_liturgical_color(heading, dt), 'White')
+            self.assertEqual(
+                MODULE.infer_seasonal_blessing(heading, dt),
+                MODULE.SEASONAL_BLESSING_TEXT['epiphany_feast'],
+            )
+            self.assertEqual(
+                MODULE.infer_seasonal_blessing('The First Day After the Epiphany', date(year, 1, 7)),
+                '',
+            )
+
+    def test_baptism_color_follows_moving_sunday(self):
+        from datetime import date, timedelta
+
+        for year, expected_day in ((2027, 10), (2028, 9)):
+            epiphany = date(year, 1, 6)
+            baptism = epiphany + timedelta(days=(6 - epiphany.weekday()) % 7 or 7)
+            self.assertEqual(baptism.day, expected_day)
+            self.assertEqual(
+                MODULE.infer_liturgical_color(
+                    'The First Sunday of Epiphany (The Baptism of Our Lord Jesus Christ)', baptism
+                ),
+                'White',
+            )
+
+    def test_epiphany_season_ends_at_moving_ash_wednesday(self):
+        from datetime import timedelta
+
+        for year in (2027, 2028):
+            ash_wednesday = MODULE.easter_sunday(year) - timedelta(days=46)
+            self.assertEqual(MODULE.office_season(ash_wednesday - timedelta(days=1)), 'epiphany')
+            self.assertEqual(MODULE.office_season(ash_wednesday), 'lent')

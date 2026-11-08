@@ -36,7 +36,7 @@ import argparse
 import calendar
 import csv
 import re
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import ClassVar
@@ -742,7 +742,7 @@ SEASONAL_BLESSING_TEXT = {
 MP_OPENING_SENTENCES = {
     "advent": "In the wilderness prepare the way of the Lord; make straight in the desert a highway for our God. isaiah 40:3",
     "christmas": "Fear not, for behold, I bring you good news of great joy that will be for all the people. For unto you is born this day in the city of David a Savior, who is Christ the Lord. luke 2:10-11",
-    "epiphany": "EPIPHANY_PLACEHOLDER",
+    "epiphany": "From the rising of the sun to its setting my name will be great among the nations, and in every place incense will be offered to my name, and a pure offering. For my name will be great among the nations, says the Lord of hosts. malachi 1:11",
     "lent": "Repent, for the kingdom of heaven is at hand. matthew 3:2",
     "holy_week": "Is it nothing to you, all you who pass by? Look and see if there is any sorrow like my sorrow, which was brought upon me, which the Lord inflicted on the day of his fierce anger. lamentations 1:12",
     "easter": "If then you have been raised with Christ, seek the things that are above, where Christ is, seated at the right hand of God. colossians 3:1",
@@ -905,7 +905,7 @@ def flatten_whitespace(value: str) -> str:
 def parse_month_day(date_str: str, year: int) -> datetime:
     for fmt in ("%b %d", "%B %d"):
         try:
-            dt = datetime.strptime(f"{clean(date_str)} {year}", f"{fmt} %Y").replace(tzinfo=timezone.utc)
+            dt = datetime.strptime(f"{clean(date_str)} {year}", f"{fmt} %Y").replace(tzinfo=UTC)
             return dt
         except ValueError:
             continue
@@ -923,7 +923,7 @@ def parse_row_date_for_inference(date_str: str, fallback_year: int | None) -> da
     dated_formats = ("%Y-%m-%d", "%b %d, %Y", "%B %d, %Y", "%b %d %Y", "%B %d %Y")
     for fmt in dated_formats:
         try:
-            return datetime.strptime(text, fmt).replace(tzinfo=timezone.utc).date()
+            return datetime.strptime(text, fmt).replace(tzinfo=UTC).date()
         except ValueError:
             continue
 
@@ -932,7 +932,7 @@ def parse_row_date_for_inference(date_str: str, fallback_year: int | None) -> da
 
     for fmt in ("%b %d", "%B %d"):
         try:
-            return datetime.strptime(f"{text} {fallback_year}", f"{fmt} %Y").replace(tzinfo=timezone.utc).date()
+            return datetime.strptime(f"{text} {fallback_year}", f"{fmt} %Y").replace(tzinfo=UTC).date()
         except ValueError:
             continue
     return None
@@ -979,6 +979,45 @@ def easter_sunday(year: int) -> date:
     month = (h + weekday_offset - 7 * m + 114) // 31
     day = ((h + weekday_offset - 7 * m + 114) % 31) + 1
     return date(year, month, day)
+
+
+def office_season(current_date: date | None) -> str:
+    """Resolve the calendar season independently of a named feast's heading."""
+    if current_date is None:
+        return ""
+    year = current_date.year
+    easter = easter_sunday(year)
+    christmas = date(year, 12, 25)
+    advent_anchor = date(year, 11, 27)
+    advent = advent_anchor + timedelta(days=(6 - advent_anchor.weekday()) % 7)
+    if current_date >= christmas or current_date < date(year, 1, 6):
+        return "christmas"
+    if current_date < easter - timedelta(days=46):
+        return "epiphany"
+    if current_date < easter - timedelta(days=7):
+        return "lent"
+    if current_date < easter:
+        return "holy week"
+    if current_date < easter + timedelta(days=39):
+        return "easter"
+    if current_date < easter + timedelta(days=49):
+        return "ascension"
+    if current_date == easter + timedelta(days=49):
+        return "day of pentecost"
+    if current_date == easter + timedelta(days=56):
+        return "trinity sunday"
+    if current_date >= advent:
+        return "advent"
+    return ""
+
+
+def is_epiphany_feast(observance: str, current_date: date | None) -> bool:
+    text = normalize_for_match(observance)
+    if current_date is not None:
+        return (current_date.month, current_date.day) == (1, 6) and "epiphany" in text
+    return text in {"epiphany", "the epiphany"} or text.startswith((
+        "the epiphany of ", "the epiphany the ", "feast of the epiphany"
+    ))
 
 
 def is_holy_week_span(current_date: date | None) -> bool:
@@ -1365,6 +1404,14 @@ def fetch_calendar_day(
 
 def infer_common_type(remembrance: str, observance: str) -> str:
     """Infer common prayer category from remembrance/observance text."""
+    # A secondary calendar heading can describe the season rather than a saint.
+    # Ember and Rogation days have their own common prayers.
+    remembrance_text = clean(remembrance).lower()
+    if observance_is_temporal(remembrance) and not any(
+        token in remembrance_text for token in ("ember", "rogation")
+    ):
+        return ""
+
     text = f"{remembrance} {observance}".strip().lower()
     if not text:
         return ""
@@ -1565,6 +1612,9 @@ def infer_liturgical_color(observance: str, current_date: date | None = None) ->
     if "christmas" in text or "christmastide" in text:
         return "White"
 
+    if is_epiphany_feast(observance, current_date) or "baptism of our lord" in text:
+        return "White"
+
     if text == "epiphany":
         if current_date is not None and (current_date.month, current_date.day) == (1, 6):
             return "White"
@@ -1619,7 +1669,7 @@ def infer_seasonal_blessing(observance: str, current_date: date | None = None) -
         return SEASONAL_BLESSING_TEXT["nativity"]
 
     # Feast of Epiphany only, not the whole Epiphany season.
-    if text in {"epiphany", "the epiphany"} or "feast of the epiphany" in text:
+    if is_epiphany_feast(observance, current_date):
         return SEASONAL_BLESSING_TEXT["epiphany_feast"]
 
     # Lent prayers over the people: rotate daily when date context is available.
@@ -1660,7 +1710,7 @@ def infer_seasonal_blessing(observance: str, current_date: date | None = None) -
 
 def infer_mp_opening_sentence(observance: str, current_date: date | None = None) -> str:
     """Infer MP Opening Sentence of Scripture from observance text."""
-    text = clean(observance).lower()
+    text = f"{clean(observance).lower()} {office_season(current_date)}".strip()
 
     if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
         return MP_OPENING_SENTENCES["holy_week"]
@@ -1704,7 +1754,7 @@ def infer_mp_opening_sentence(observance: str, current_date: date | None = None)
 
 def infer_ep_opening_sentence(observance: str, current_date: date | None = None) -> str:
     """Infer EP Opening Sentence of Scripture from observance text."""
-    text = clean(observance).lower()
+    text = f"{clean(observance).lower()} {office_season(current_date)}".strip()
 
     if is_holy_week_span(current_date) or observance_is_holy_week_span(text):
         return EP_OPENING_SENTENCES["holy_week"]

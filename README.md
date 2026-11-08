@@ -32,6 +32,19 @@ This will:
 - Generate an all-in-one print page
 - Copy static assets to the build directory
 
+To build a specific year, use `python generate.py --year 2027`. This reads
+`data/acna-prayers-2027.csv`. Without arguments, the generator uses the latest
+yearly CSV in `data/`.
+
+To preview a draft in a separate output directory:
+
+```bash
+python generate.py --year 2027 --csv data/drafts/acna-prayers-2027-01.csv --output-dir /tmp/daily-office-2027-preview
+```
+
+The CSV filename supplies the year when `--year` is omitted. Use a separate
+output directory when switching years to avoid retaining older generated pages.
+
 ### 3. View the Site
 
 ```bash
