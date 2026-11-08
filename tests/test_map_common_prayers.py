@@ -58,9 +58,31 @@ class InferCommonTypeTests(unittest.TestCase):
             MODULE.infer_common_type("Ember Day", "Advent"), "ember day"
         )
 
-    def test_bishop_and_teacher_prefers_pastor_common(self) -> None:
-        remembrance = "Gregory the Great, Bishop of Rome and Teacher of the Faith, 604"
-        self.assertEqual(MODULE.infer_common_type(remembrance, ""), "common of a pastor")
+    def test_teacher_of_the_faith_title_prefers_teacher_common(self) -> None:
+        for remembrance in (
+            "Example Person, Bishop of Nowhere and Teacher of the Faith, 400",
+            "Example Person, Priest and Teacher of the Faith, 400",
+            "Example Person, Deacon and Teacher of the Faith, 400",
+        ):
+            with self.subTest(remembrance=remembrance):
+                self.assertEqual(
+                    MODULE.infer_common_type(remembrance, ""), "common of a teacher of the faith"
+                )
+
+    def test_earlier_categories_still_outrank_teacher_title(self) -> None:
+        self.assertEqual(
+            MODULE.infer_common_type("Justin, Teacher of the Faith and Martyr at Rome, c. 165", ""),
+            "common of a martyr",
+        )
+        self.assertEqual(
+            MODULE.infer_common_type("Example Person, Evangelist in Nowhere and Teacher of the Faith, 400", ""),
+            "common of a missionary or evangelist",
+        )
+
+    def test_bishop_without_teacher_title_stays_pastor_common(self) -> None:
+        self.assertEqual(
+            MODULE.infer_common_type("Example Person, Bishop of Nowhere, 400", ""), "common of a pastor"
+        )
 
     def test_teacher_without_pastoral_role_stays_teacher_common(self) -> None:
         remembrance = "Clive Staples Lewis, Teacher of the Faith, 1963"
@@ -76,7 +98,7 @@ class InferCommonTypeTests(unittest.TestCase):
                     "Date": "March 12",
                     "Observance": "Lent",
                     "Remembrance": (
-                        "Example Person, Bishop and Teacher of the Faith, 400"
+                        "Example Person, Bishop of Nowhere, 400"
                     ),
                 }
             ],

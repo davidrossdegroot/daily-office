@@ -617,8 +617,91 @@ class PrayerPipelineTests(unittest.TestCase):
                     findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
                     self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
 
+    def test_teacher_title_default_has_no_collect_findings(self):
+        source = self.source_row('May 9', 'Easter', 'Example Person, Bishop of Nowhere and Teacher of the Faith, 400')
+        for year in (2027, 2028):
+            rows, target = self.regenerate([source], year=year)
+            self.assertIn('special gifts of grace to understand and teach', rows[0]['Special Collect'])
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_women_renewers_use_her_across_years(self):
+        selections = {
+            'Josephine Butler, Renewer of Society, 1906': 'Josephine Butler',
+            'Mary Sumner, Founder of the Mothers’ Union and Renewer of Society, 1921': 'Mary Sumner',
+            'Mother Teresa of Calcutta, Renewer of Society, 1997': 'Mother Teresa of Calcutta',
+            'Elizabeth of Hungary, Renewer of Society, 1231': 'Elizabeth of Hungary',
+        }
+        for year in (2027, 2028):
+            for remembrance, name in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('May 30', 'Ordinary', remembrance)], year=year)
+                    prayer = rows[0]['Special Collect']
+                    self.assertIn(f'in the heart of your servant {name} to manifest', prayer)
+                    self.assertIn('give thanks for her righteous zeal may profit by her example', prayer)
+                    self.assertNotIn(' his ', prayer)
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_unreviewed_renewer_keeps_bcp_wording(self):
+        source = self.source_row('May 30', 'Ordinary', 'Example Person, Renewer of Society, 1900')
+        rows, _ = self.regenerate([source])
+        self.assertIn('give thanks for his righteous zeal may profit by his example', rows[0]['Special Collect'])
+
+    def test_reviewed_rogation_collect_selects_first_prayer_across_years(self):
+        source = self.source_row('May 3', 'Easter', 'Rogation Day')
+        for year in (2027, 2028):
+            rows, target = self.regenerate([source], year=year)
+            prayer = rows[0]['Special Collect']
+            self.assertIn('the harvests of the land and of the seas', prayer)
+            self.assertNotIn('Or this', prayer)
+            self.assertNotIn('shared our toil', prayer)
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_may_collects_persist_across_years(self):
+        selections = {
+            'The Martyrs of the Sudan, 2011': ('your servants the Martyrs of the Sudan boldness',),
+            'Julian of Norwich, Anchoress, c. 1417': ('inspired by the devotion of your servant Julian of Norwich, may seek',),
+            'Jackson Kemper, First Missionary Bishop in the United States, 1870': (
+                'your servant Jackson Kemper to preach the Gospel to the people of the American West:',
+            ),
+            'Augustine, First Archbishop of Canterbury and Missionary, 605': (
+                'your servant Augustine to preach the Gospel to the English people:',
+            ),
+            'Dunstan, Archbishop of Canterbury and Reformer of the Church, 988 / Ember Day': (
+                'Dunstan: O God, by your grace your servant Dunstan, kindled', 'Ember Day: Almighty God, the giver of all good gifts',
+            ),
+            'Helena, Mother of Constantine, Protector of the Holy Places, 330 / Ember Day': (
+                'Helena: Almighty God, you have surrounded us', 'your servant Helena, may persevere',
+                'with her, we attain', 'Ember Day: Almighty God, the giver of all good gifts',
+            ),
+        }
+        for year in (2027, 2028):
+            for remembrance, phrases in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('May 19', 'Ordinary', remembrance)], year=year)
+                    prayer = rows[0]['Special Collect']
+                    for phrase in phrases:
+                        self.assertIn(phrase, prayer)
+                    self.assertNotIn('Or this', prayer)
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_augustine_of_canterbury_approval_does_not_cover_augustine_of_hippo(self):
+        source = self.source_row('Aug 28', 'Ordinary', 'Augustine, Bishop of Hippo and Teacher of the Faith, 430')
+        rows, _ = self.regenerate([source])
+        self.assertIn('special gifts of grace to understand and teach', rows[0]['Special Collect'])
+        self.assertNotIn('the English people', rows[0]['Special Collect'])
+
+    def test_helena_with_a_different_shared_day_still_requires_review(self):
+        source = self.source_row('May 21', 'Ordinary', 'Helena, Mother of Constantine, 330 / Example Person, Bishop of Nowhere, 400')
+        _, target = self.regenerate([source])
+        findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+        self.assertTrue(any(item['code'] == 'ambiguous_commemorations' for item in findings))
+
     def test_approval_for_one_cyril_does_not_cover_another(self):
-        source = self.source_row('Mar 9', 'Lent', 'Cyril of Alexandria, Bishop and Teacher of the Faith, 444')
+        source = self.source_row('Mar 9', 'Lent', 'Cyril of Nowhere, Bishop of Nowhere, 444')
         rows, target = self.regenerate([source])
         self.assertNotIn('your servant Cyril special gifts', rows[0]['Special Collect'])
         findings = json.loads(target.with_suffix('.review.json').read_text())['findings']

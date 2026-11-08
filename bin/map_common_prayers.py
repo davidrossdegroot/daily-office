@@ -233,6 +233,7 @@ for _missionary_name, _people in (
     ("Kentigern", "the people of Strathclyde and Cumbria"),
     ("George Augustus Selwyn", "the people of New Zealand"),
     ("James Lloyd Breck", "the people of Wisconsin, Minnesota, and California"),
+    ("Jackson Kemper", "the people of the American West"),
 ):
     REVIEWED_COMMEMORATION_COLLECTS[_missionary_name.lower()] = COMMON_PRAYERS[
         "common of a missionary or evangelist"
@@ -265,9 +266,40 @@ REVIEWED_COMMEMORATION_COLLECTS["lydia"] = COMMON_PRAYERS["common of any commemo
     " Or this:", 1
 )[0].replace("your servant N.", "your servants Lydia, Dorcas, and Phoebe").replace("with him", "with them")
 
+REVIEWED_COMMEMORATION_COLLECTS["rogation day"] = COMMON_PRAYERS["rogation day"].split(" Or this:", 1)[0]
+for _woman_renewer in ("Josephine Butler", "Mary Sumner", "Mother Teresa of Calcutta", "Elizabeth of Hungary"):
+    REVIEWED_COMMEMORATION_COLLECTS[_woman_renewer.lower()] = COMMON_PRAYERS["common of a renewer of society"].replace(
+        "N.", _woman_renewer
+    ).replace("his righteous zeal", "her righteous zeal").replace("his example", "her example")
+
+# Two commemorations are both "Augustine"; this key is resolved by commemoration_identity.
+REVIEWED_COMMEMORATION_COLLECTS["augustine of canterbury"] = COMMON_PRAYERS[
+    "common of a missionary or evangelist"
+].replace("N.", "Augustine").replace("the people of _________ [or to the __________ people]", "the English people")
+REVIEWED_COMMEMORATION_COLLECTS["the martyrs of the sudan"] = COMMON_PRAYERS["common of a martyr"].replace(
+    "your servant N.", "your servants the Martyrs of the Sudan"
+)
+REVIEWED_COMMEMORATION_COLLECTS["julian of norwich"] = COMMON_PRAYERS["common of a monastic or religious"].replace(
+    "N.", "Julian of Norwich"
+)
+REVIEWED_COMMEMORATION_COLLECTS["dunstan"] = COMMON_PRAYERS["common of a reformer of the church"].replace(
+    "N.", "Dunstan"
+)
+REVIEWED_COMMEMORATION_COLLECTS["helena"] = COMMON_PRAYERS["common of any commemoration"].split(
+    " Or this:", 1
+)[0].replace("N.", "Helena").replace("with him", "with her")
+
 REVIEWED_COMMEMORATION_GROUPS = {
     ("ember day", "janani luwum"): (
         "Janani Luwum: " + REVIEWED_COMMEMORATION_COLLECTS["janani luwum"]
+        + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
+    ),
+    ("dunstan", "ember day"): (
+        "Dunstan: " + REVIEWED_COMMEMORATION_COLLECTS["dunstan"]
+        + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
+    ),
+    ("ember day", "helena"): (
+        "Helena: " + REVIEWED_COMMEMORATION_COLLECTS["helena"]
         + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
     ),
 }
@@ -284,9 +316,17 @@ def without_temporal_headings(remembrance: str) -> str:
     )
 
 
+def commemoration_identity(commemoration: str) -> str:
+    """Key a commemoration by its name, separating people who share one."""
+    identity = normalize_for_match(commemoration.split(",")[0])
+    if identity == "augustine" and "canterbury" in commemoration.lower():
+        return "augustine of canterbury"
+    return identity
+
+
 def reviewed_commemoration_collect(remembrance: str) -> str | None:
     identities = tuple(sorted(
-        normalize_for_match(part.split(",")[0])
+        commemoration_identity(part)
         for part in without_temporal_headings(remembrance).split(" / ")
     ))
     if len(identities) == 1:
@@ -1590,12 +1630,13 @@ def infer_common_type(remembrance: str, observance: str) -> str:
     if any(hint in text for hint in renewer_hints):
         return "common of a renewer of society"
 
+    # Maintainer-approved category rule: a title naming a teacher outranks holy orders.
+    if "teacher of the faith" in text or "doctor of the church" in text:
+        return "common of a teacher of the faith"
+
     pastor_hints = ("bishop", "priest", "pastor", "archbishop", "deacon")
     if any(hint in text for hint in pastor_hints):
         return "common of a pastor"
-
-    if "teacher of the faith" in text or "doctor of the church" in text:
-        return "common of a teacher of the faith"
 
     if "rogation" in text:
         return "rogation day"
