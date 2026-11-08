@@ -36,7 +36,7 @@ import argparse
 import calendar
 import csv
 import re
-from datetime import date, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
 from typing import ClassVar
@@ -905,7 +905,7 @@ def flatten_whitespace(value: str) -> str:
 def parse_month_day(date_str: str, year: int) -> datetime:
     for fmt in ("%b %d", "%B %d"):
         try:
-            dt = datetime.strptime(f"{clean(date_str)} {year}", f"{fmt} %Y").replace(tzinfo=timezone.utc)
+            dt = datetime.strptime(f"{clean(date_str)} {year}", f"{fmt} %Y").replace(tzinfo=UTC)
             return dt
         except ValueError:
             continue
@@ -923,7 +923,7 @@ def parse_row_date_for_inference(date_str: str, fallback_year: int | None) -> da
     dated_formats = ("%Y-%m-%d", "%b %d, %Y", "%B %d, %Y", "%b %d %Y", "%B %d %Y")
     for fmt in dated_formats:
         try:
-            return datetime.strptime(text, fmt).replace(tzinfo=timezone.utc).date()
+            return datetime.strptime(text, fmt).replace(tzinfo=UTC).date()
         except ValueError:
             continue
 
@@ -932,7 +932,7 @@ def parse_row_date_for_inference(date_str: str, fallback_year: int | None) -> da
 
     for fmt in ("%b %d", "%B %d"):
         try:
-            return datetime.strptime(f"{text} {fallback_year}", f"{fmt} %Y").replace(tzinfo=timezone.utc).date()
+            return datetime.strptime(f"{text} {fallback_year}", f"{fmt} %Y").replace(tzinfo=UTC).date()
         except ValueError:
             continue
     return None

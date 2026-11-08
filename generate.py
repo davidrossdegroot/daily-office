@@ -9,7 +9,7 @@ import csv
 import os
 import re
 import shutil
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -47,10 +47,10 @@ def parse_csv(csv_path, year=None):
             try:
                 # Try abbreviated month format first (Jan, Feb, etc.)
                 try:
-                    date_obj = datetime.strptime(f"{row['Date']} {year}", '%b %d %Y').replace(tzinfo=timezone.utc)
+                    date_obj = datetime.strptime(f"{row['Date']} {year}", '%b %d %Y').replace(tzinfo=UTC)
                 except ValueError:
                     # Try full month format (January, February, etc.)
-                    date_obj = datetime.strptime(f"{row['Date']} {year}", '%B %d %Y').replace(tzinfo=timezone.utc)
+                    date_obj = datetime.strptime(f"{row['Date']} {year}", '%B %d %Y').replace(tzinfo=UTC)
 
                 row['date_obj'] = date_obj
                 row['date_formatted'] = date_obj.strftime('%B %d, %Y')
