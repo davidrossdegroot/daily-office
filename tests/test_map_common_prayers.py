@@ -1,5 +1,6 @@
 import importlib.util
 import unittest
+from datetime import date
 from pathlib import Path
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "bin" / "map_common_prayers.py"
@@ -68,14 +69,14 @@ class InferCommonTypeTests(unittest.TestCase):
             "common of a teacher of the faith",
         )
 
-    def test_prepare_rows_exposes_gregory_common_type_and_collect(self) -> None:
+    def test_prepare_rows_exposes_unreviewed_bishop_common_type_and_collect(self) -> None:
         fieldnames, rows = MODULE.prepare_rows(
             rows=[
                 {
                     "Date": "March 12",
                     "Observance": "Lent",
                     "Remembrance": (
-                        "Gregory the Great, Bishop of Rome and Teacher of the Faith, 604"
+                        "Hilary of Poitiers, Bishop and Teacher of the Faith, 367"
                     ),
                 }
             ],
@@ -254,6 +255,19 @@ class LiturgicalColorInferenceTests(unittest.TestCase):
         )
 
         self.assertEqual(rows[0]["Liturgical Color"], "Purple")
+
+    def test_annunciation_transfer_date_covers_holy_week_and_easter_week(self) -> None:
+        expected = {
+            2008: date(2008, 3, 31),  # Easter Week
+            2016: date(2016, 4, 4),  # Good Friday
+            2024: date(2024, 4, 8),  # Monday of Holy Week
+            2027: date(2027, 4, 5),  # Maundy Thursday
+            2026: None,
+            2028: None,
+        }
+        for year, transfer in expected.items():
+            with self.subTest(year=year):
+                self.assertEqual(MODULE.annunciation_transfer_date(year), transfer)
 
     def test_secondary_holy_day_in_lent_can_override_with_white(self) -> None:
         _, rows = MODULE.prepare_rows(

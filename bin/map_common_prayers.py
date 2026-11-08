@@ -218,6 +218,37 @@ for _pastor_name in ("Absalom Jones", "George Herbert"):
 REVIEWED_COMMEMORATION_COLLECTS["janani luwum"] = COMMON_PRAYERS["common of a martyr"].replace(
     "N.", "Janani Luwum"
 )
+REVIEWED_COMMEMORATION_COLLECTS["perpetua and her companions"] = COMMON_PRAYERS["common of a martyr"].replace(
+    "your servant N.", "your servants Perpetua and her companions"
+)
+for _missionary_name, _people in (
+    ("David", "the people of Wales"),
+    ("Chad", "the people of Mercia"),
+    ("Felix", "the people of East Anglia"),
+    ("Patrick", "the Irish people"),
+    ("Cuthbert", "the people of Northumbria"),
+    ("Gregory the Illuminator", "the Armenian people"),
+    ("Charles Henry Brent", "the people of the Philippines"),
+):
+    REVIEWED_COMMEMORATION_COLLECTS[_missionary_name.lower()] = COMMON_PRAYERS[
+        "common of a missionary or evangelist"
+    ].replace("N.", _missionary_name).replace("the people of _________ [or to the __________ people]", _people)
+
+REVIEWED_COMMEMORATION_COLLECTS["john and charles wesley"] = COMMON_PRAYERS["common of a reformer of the church"].replace(
+    "your servant N.", "your servants John and Charles Wesley"
+).replace("became a burning and shining light", "became burning and shining lights")
+for _teacher_name in ("Gregory the Great", "Cyril"):
+    REVIEWED_COMMEMORATION_COLLECTS[_teacher_name.lower()] = COMMON_PRAYERS[
+        "common of a teacher of the faith"
+    ].replace("N.", _teacher_name)
+REVIEWED_COMMEMORATION_COLLECTS["robert machray"] = COMMON_PRAYERS["common of a pastor"].replace(
+    "N.", "Robert Machray"
+).replace("[Bishop and] ", "Bishop and ")
+for _priest_name in ("James DeKoven", "John Donne"):
+    REVIEWED_COMMEMORATION_COLLECTS[_priest_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
+        "N.", _priest_name
+    ).replace("[Bishop and] ", "")
+
 REVIEWED_COMMEMORATION_GROUPS = {
     ("ember day", "janani luwum"): (
         "Janani Luwum: " + REVIEWED_COMMEMORATION_COLLECTS["janani luwum"]
@@ -226,9 +257,21 @@ REVIEWED_COMMEMORATION_GROUPS = {
 }
 
 
+def without_temporal_headings(remembrance: str) -> str:
+    """Drop seasonal secondary headings, keeping Ember and Rogation days and commemorations."""
+    parts = (clean(part) for part in remembrance.split(" / "))
+    return " / ".join(
+        part for part in parts
+        if part and (not observance_is_temporal(part) or any(
+            token in part.lower() for token in ("ember", "rogation")
+        ))
+    )
+
+
 def reviewed_commemoration_collect(remembrance: str) -> str | None:
     identities = tuple(sorted(
-        normalize_for_match(part.split(",")[0]) for part in remembrance.split(" / ")
+        normalize_for_match(part.split(",")[0])
+        for part in without_temporal_headings(remembrance).split(" / ")
     ))
     if len(identities) == 1:
         return REVIEWED_COMMEMORATION_COLLECTS.get(identities[0])
@@ -1487,14 +1530,8 @@ def infer_common_type(remembrance: str, observance: str) -> str:
     """Infer common prayer category from remembrance/observance text."""
     # A secondary calendar heading can describe the season rather than a saint.
     # Ember and Rogation days have their own common prayers.
-    remembrance_text = clean(remembrance).lower()
-    if observance_is_temporal(remembrance) and not any(
-        token in remembrance_text for token in ("ember", "rogation")
-    ):
-        return ""
-
     # Classify the commemoration itself; the primary day's title is not its role.
-    text = clean(remembrance).lower()
+    text = without_temporal_headings(remembrance).lower()
     if not text:
         return ""
 
@@ -1596,6 +1633,43 @@ def observance_is_temporal(observance: str) -> bool:
     return any(token in text for token in temporal_tokens)
 
 
+def annunciation_transfer_date(year: int) -> date | None:
+    """Return the Annunciation's transferred date when March 25 falls in Holy Week or Easter Week."""
+    easter = easter_sunday(year)
+    if easter - timedelta(days=7) <= date(year, 3, 25) < easter + timedelta(days=7):
+        return easter + timedelta(days=8)
+    return None
+
+
+def apply_transferred_annunciation(
+    row: dict[str, str], row_date: date, *, include_common_type: bool,
+) -> bool | None:
+    """Apply a maintainer-approved transfer; None means the date is unaffected."""
+    transfer_date = annunciation_transfer_date(row_date.year)
+    if transfer_date is None:
+        return None
+
+    proper = FIXED_HOLY_DAY_PROPERS[(3, 25)]
+    if row_date == transfer_date:
+        row["Remembrance"] = str(proper["heading"])
+        row["Special Collect"] = str(proper["collect"])
+        if include_common_type:
+            row["Common Type"] = "fixed holy day proper"
+        return True
+
+    if (row_date.month, row_date.day) != (3, 25):
+        return None
+
+    aliases = tuple(str(alias) for alias in proper["aliases"])
+    for field in ("Observance", "Remembrance"):
+        row[field] = " / ".join(
+            part for part in (clean(piece) for piece in clean(row.get(field)).split("/"))
+            if part and not text_matches_any_alias(part, aliases)
+        )
+    row["Special Collect"] = ""
+    return False
+
+
 def apply_fixed_holy_day_proper(
     row: dict[str, str],
     row_date: date | None,
@@ -1604,6 +1678,10 @@ def apply_fixed_holy_day_proper(
 ) -> bool:
     if row_date is None:
         return False
+
+    transferred = apply_transferred_annunciation(row, row_date, include_common_type=include_common_type)
+    if transferred is not None:
+        return transferred
 
     proper = FIXED_HOLY_DAY_PROPERS.get((row_date.month, row_date.day))
     if proper is None:

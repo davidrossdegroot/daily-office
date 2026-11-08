@@ -146,6 +146,36 @@ independent of year, before the generic common fallback:
 These are reviewed adaptations of the existing commons, not newly sourced
 proper collects. Unapproved commemorations retain their review findings.
 
+## Approved March selections and precedence
+
+- Optional commemorations stay in the draft on Sundays and in Holy Week and
+  Easter Week. They are added beside the day's own collect and do not replace its
+  fixed propers (BCP 2019, pp. 689–690).
+- A commemoration listed after a seasonal heading, such as Easter Eve, receives
+  its own collect and review.
+- When March 25 falls in Holy Week or Easter Week, the Annunciation moves to the
+  Monday after the Second Sunday of Easter. BCP 2019 forbids replacing those
+  weeks' fixed propers but names no transfer date, and the source calendar does
+  not move the feast. The date is a maintainer choice following older Anglican
+  custom. Other holy days are not covered by this choice.
+- Perpetua and Her Companions: the martyr common with plural servants.
+- Missionary common, naming each person and people. David: the people of Wales.
+  Patrick: the Irish people. Gregory the Illuminator: the Armenian people.
+  Charles Henry Brent: the people of the Philippines. These follow the BCP 2019
+  calendar titles. Felix: the people of East Anglia, narrower than the title's
+  "the Angles" because he was first bishop of the East Angles. Chad: the people
+  of Mercia. Cuthbert: the people of Northumbria. Their titles name only Lichfield
+  and Lindisfarne, so the wider region of their ministry was chosen. The history
+  behind the last three comes from secondary summaries, not a direct reading of Bede.
+- John and Charles Wesley: the reformer common, fully plural ("your servants",
+  "burning and shining lights").
+- Gregory the Great and Cyril of Jerusalem: the Teacher of the Faith common, which
+  their BCP titles name, rather than the pastor common. This covers only these
+  two, not every bishop titled a teacher; Cyril of Alexandria is a separate identity.
+- Robert Machray: the pastor common with "Bishop and". His BCP title says only
+  "First Primate of Canada"; he was consecrated Bishop of Rupert's Land in 1865.
+- James DeKoven and John Donne: the pastor common without bishop wording.
+
 ## Agent workflow
 
 The repository skill at `.agents/skills/generate-daily-office/SKILL.md` defines

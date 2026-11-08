@@ -476,6 +476,111 @@ class PrayerPipelineTests(unittest.TestCase):
                     findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
                     self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
 
+    def source_row(self, day, observance, remembrance):
+        return dict(self.february[0], **{
+            'Date': day, 'Observance': observance, 'Remembrance': remembrance, 'Special Collect': '',
+        })
+
+    def test_reviewed_perpetua_collect_is_plural_across_years(self):
+        source = self.source_row(
+            'Mar 7', 'The Fourth Sunday in Lent (Laetare Sunday)',
+            'Perpetua and Her Companions, Martyrs at Carthage, 203',
+        )
+        for year in (2027, 2028):
+            rows, target = self.regenerate([source], year=year)
+            self.assertIn('your servants Perpetua and her companions boldness', rows[0]['Special Collect'])
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_march_missionary_collects_name_people_across_years(self):
+        selections = {
+            'David, Bishop and Apostle of Wales, 601': ('David', 'the people of Wales'),
+            'Chad, Bishop of Lichfield and Missionary, 672': ('Chad', 'the people of Mercia'),
+            'Felix, Bishop and Missionary to the Angles, 647': ('Felix', 'the people of East Anglia'),
+            'Patrick, Bishop and Apostle to the Irish, 461': ('Patrick', 'the Irish people'),
+            'Cuthbert, Bishop-Abbot of Lindisfarne and Missionary, 687': ('Cuthbert', 'the people of Northumbria'),
+            'Gregory the Illuminator, Missionary to Armenia, 333': ('Gregory the Illuminator', 'the Armenian people'),
+            'Charles Henry Brent, Bishop and Missionary to the Philippines, 1929': (
+                'Charles Henry Brent', 'the people of the Philippines',
+            ),
+            'Easter Eve / Charles Henry Brent, Bishop and Missionary to the Philippines, 1929': (
+                'Charles Henry Brent', 'the people of the Philippines',
+            ),
+        }
+        for year in (2027, 2028):
+            for remembrance, (name, people) in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    source = self.source_row('Mar 9', 'Lent', remembrance)
+                    rows, target = self.regenerate([source], year=year)
+                    prayer = rows[0]['Special Collect']
+                    self.assertIn(f'your servant {name} to preach the Gospel to {people}:', prayer)
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_march_final_batch_persists_across_years(self):
+        selections = {
+            'John and Charles Wesley, Priests and Reformers of the Church, 1791, 1788': (
+                'your servants John and Charles Wesley, kindled', 'became burning and shining lights in your Church',
+            ),
+            'Gregory the Great, Bishop of Rome and Teacher of the Faith, 604': (
+                'your servant Gregory the Great special gifts of grace', 'teach the truth',
+            ),
+            'Cyril, Bishop of Jerusalem and Teacher of the Faith, 386': (
+                'your servant Cyril special gifts of grace', 'teach the truth',
+            ),
+            'Robert Machray, First Primate of Canada, 1904': (
+                'your faithful servant Robert Machray to be a Bishop and pastor in your Church',
+            ),
+            'James DeKoven, Priest, 1879': ('your faithful servant James DeKoven to be a pastor in your Church',),
+            'John Donne, Priest and Poet, 1631': ('your faithful servant John Donne to be a pastor in your Church',),
+        }
+        for year in (2027, 2028):
+            for remembrance, phrases in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('Mar 9', 'Lent', remembrance)], year=year)
+                    for phrase in phrases:
+                        self.assertIn(phrase, rows[0]['Special Collect'])
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_approval_for_one_cyril_does_not_cover_another(self):
+        source = self.source_row('Mar 9', 'Lent', 'Cyril of Alexandria, Bishop and Teacher of the Faith, 444')
+        rows, target = self.regenerate([source])
+        self.assertNotIn('your servant Cyril special gifts', rows[0]['Special Collect'])
+        findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+        self.assertTrue(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_unreviewed_companions_still_require_plural_review(self):
+        source = self.source_row('Mar 9', 'Lent', 'Example and Her Companions, Martyrs at Nowhere, 200')
+        _, target = self.regenerate([source])
+        findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+        self.assertTrue(any(item['code'] == 'plural_collect' for item in findings))
+
+    def test_commemoration_after_temporal_heading_gets_its_common_and_review(self):
+        source = self.source_row(
+            'Mar 27', 'Holy Saturday', 'Easter Eve / Example Person, Bishop and Missionary to Nowhere, 1900',
+        )
+        rows, target = self.regenerate([source])
+        self.assertIn('to preach the Gospel', rows[0]['Special Collect'])
+        findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+        self.assertTrue(any(item['code'] == 'unfilled_blank' for item in findings))
+
+    def test_annunciation_in_holy_week_moves_after_second_sunday_of_easter(self):
+        rows, _ = self.regenerate([
+            self.source_row('Mar 25', 'Maundy Thursday', 'The Annunciation of Our Lord Jesus Christ'),
+            self.source_row('Apr 5', 'The Second Monday of Easter', ''),
+        ])
+        self.assertEqual(rows[0]['Observance'], 'Maundy Thursday')
+        self.assertEqual(rows[0]['Remembrance'], '')
+        self.assertEqual(rows[0]['Special Collect'], '')
+        self.assertEqual(rows[1]['Remembrance'], 'The Annunciation')
+        self.assertIn('announced by an angel to the Virgin Mary', rows[1]['Special Collect'])
+
+    def test_annunciation_outside_holy_week_stays_on_its_date(self):
+        rows, _ = self.regenerate([self.source_row('Mar 25', 'Lent', 'The Annunciation')], year=2028)
+        self.assertEqual(rows[0]['Remembrance'], 'The Annunciation')
+        self.assertIn('announced by an angel to the Virgin Mary', rows[0]['Special Collect'])
+
     def test_reviewed_pastor_collects_omit_bishop_for_jones_and_herbert(self):
         for year in (2027, 2028):
             for day, name in (('Feb 13', 'Absalom Jones'), ('Feb 27', 'George Herbert')):
