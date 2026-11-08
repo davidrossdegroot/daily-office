@@ -184,6 +184,54 @@ COMMON_PRAYERS = {
     ),
 }
 
+# Maintainer-reviewed choices are keyed by commemoration identity, not year/date.
+REVIEWED_COMMEMORATION_COLLECTS = {
+    "ember day": COMMON_PRAYERS["ember day"].split(" Or this:", 1)[0].replace("[now] ", ""),
+    "william billy graham": COMMON_PRAYERS["common of a missionary or evangelist"].replace(
+        "N.", "Billy Graham"
+    ).replace("the people of _________ [or to the __________ people]", "the peoples of the world"),
+    "cornelius the centurion": COMMON_PRAYERS["common of any commemoration"].split(
+        " Or this:", 1
+    )[0].replace("N.", "Cornelius the Centurion"),
+    "martyrs of japan": COMMON_PRAYERS["common of a martyr"].replace(
+        "your servant N.", "your servants the martyrs of Japan"
+    ),
+    "thomas bray": COMMON_PRAYERS["common of a pastor"].replace(
+        "N.", "Thomas Bray"
+    ).replace("[Bishop and] ", ""),
+    "cyril and methodius": COMMON_PRAYERS["common of a missionary or evangelist"].replace(
+        "your servant N.", "your servants Cyril and Methodius"
+    ).replace("the people of _________ [or to the __________ people]", "the Slavic people"),
+    "anskar": COMMON_PRAYERS["common of a missionary or evangelist"].replace(
+        "N.", "Anskar"
+    ).replace("the people of _________ [or to the __________ people]", "the people of Denmark and Sweden"),
+}
+
+for _pastor_name in ("Absalom Jones", "George Herbert"):
+    REVIEWED_COMMEMORATION_COLLECTS[_pastor_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
+        "N.", _pastor_name
+    ).replace("[Bishop and] ", "")
+
+REVIEWED_COMMEMORATION_COLLECTS["janani luwum"] = COMMON_PRAYERS["common of a martyr"].replace(
+    "N.", "Janani Luwum"
+)
+REVIEWED_COMMEMORATION_GROUPS = {
+    ("ember day", "janani luwum"): (
+        "Janani Luwum: " + REVIEWED_COMMEMORATION_COLLECTS["janani luwum"]
+        + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
+    ),
+}
+
+
+def reviewed_commemoration_collect(remembrance: str) -> str | None:
+    identities = tuple(sorted(
+        normalize_for_match(part.split(",")[0]) for part in remembrance.split(" / ")
+    ))
+    if len(identities) == 1:
+        return REVIEWED_COMMEMORATION_COLLECTS.get(identities[0])
+    return REVIEWED_COMMEMORATION_GROUPS.get(identities)
+
+
 FIXED_HOLY_DAY_PROPERS: dict[tuple[int, int], dict[str, object]] = {
     (1, 1): {
         "heading": "The Circumcision and Holy Name of Our Lord Jesus Christ",
@@ -2145,7 +2193,7 @@ def prepare_rows(
             pass
         elif remembrance:
             common_type = infer_common_type(remembrance, observance)
-            common_prayer = COMMON_PRAYERS.get(common_type, "")
+            common_prayer = reviewed_commemoration_collect(remembrance) or COMMON_PRAYERS.get(common_type, "")
 
             if include_common_type:
                 row["Common Type"] = common_type
@@ -2233,6 +2281,7 @@ def validate_rows(
             add(label, "Special Collect", "unknown_commemoration",
                 "No explicit commemoration category or reviewed proper collect is available.")
         generic_collects = {flatten_whitespace(value) for value in COMMON_PRAYERS.values()}
+        generic_collects.update(flatten_whitespace(value) for value in REVIEWED_COMMEMORATION_COLLECTS.values())
         active = [part for part in context.commemorations if infer_common_type(part, "")]
         if len(active) > 1 and (not special or flatten_whitespace(special) in generic_collects):
             add(label, "Special Collect", "ambiguous_commemorations",

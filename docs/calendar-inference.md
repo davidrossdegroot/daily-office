@@ -108,3 +108,23 @@ repeat a placeholder already reported on an individual day.
 See [the February comparison](issue-50-february-comparison.md) for the comparison
 with PR #51. The annual checks report unresolved editorial choices; passing
 structural checks is not a full liturgical certification of every reading.
+
+## Approved February collect selections
+
+Maintainer-approved selections are keyed by normalized commemoration name,
+independent of year, before the generic common fallback:
+
+- Anskar: missionary common, naming the people of Denmark and Sweden.
+- Cyril and Methodius: missionary common, plural servants, naming the Slavic people.
+- Thomas Bray: pastor common without the optional bishop wording.
+- Billy Graham: missionary common adapted to name the peoples of the world.
+- Cornelius the Centurion: the first commemoration common, naming Cornelius.
+- Martyrs of Japan: the martyr common with plural servants.
+- Absalom Jones and George Herbert: pastor common without bishop wording.
+- Ember Day: the first common, without optional “now” or the second alternative.
+- Janani Luwum with Ember Day: two complete, separately labeled collects, using
+  the named martyr common followed by the selected Ember common. An individual
+  reviewed collect cannot approve an unreviewed combination of commemorations.
+
+These are reviewed adaptations of the existing commons, not newly sourced
+proper collects. Unapproved commemorations retain their review findings.

@@ -19,6 +19,12 @@ class PrayerPipelineTests(unittest.TestCase):
         with FIXTURE.open(newline='') as stream:
             self.february = list(csv.DictReader(stream))
 
+    def save_rows(self, target, rows):
+        with target.open('w', newline='') as stream:
+            writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+            writer.writeheader()
+            writer.writerows(rows)
+
     def regenerate(self, rows, year=2027):
         source = self.work / f'source-{year}.csv'
         target = self.work / f'draft-{year}.csv'
@@ -57,7 +63,9 @@ class PrayerPipelineTests(unittest.TestCase):
         )
 
     def test_draft_reports_unfilled_collects_and_publication_blocks_them(self):
-        _, target = self.regenerate(self.february)
+        rows, target = self.regenerate(self.february)
+        rows[20]['Special Collect'] = 'Grant peace to the people of _________. Amen.'
+        self.save_rows(target, rows)
         output = self.work / 'preview'
         command = [sys.executable, str(ROOT / 'generate.py'), '--year', '2027',
                    '--csv', str(target), '--month', '2', '--output-dir', str(output)]
@@ -68,7 +76,7 @@ class PrayerPipelineTests(unittest.TestCase):
         report = json.loads(report_path.read_text())
         blanks = [finding for finding in report['findings'] if finding['code'] == 'unfilled_blank']
         self.assertEqual({finding['date'] for finding in blanks},
-                         {'2027-02-03', '2027-02-14', '2027-02-15', '2027-02-21'})
+                         {'2027-02-21'})
         published = self.work / 'published'
         result = subprocess.run(command[:-1] + [str(published), '--publish'],
                                 cwd=ROOT, capture_output=True, text=True, check=False)
@@ -80,7 +88,7 @@ class PrayerPipelineTests(unittest.TestCase):
         for row in rows:
             if row['Date'] == 'Feb 14':
                 row['Special Collect'] = row['Special Collect'].replace(
-                    'the people of _________ [or to the __________ people]', 'the Slavs')
+                    'your servants Cyril and Methodius', 'your servant Cyril and Methodius')
         with target.open('w', newline='') as stream:
             writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
             writer.writeheader()
@@ -228,7 +236,9 @@ class PrayerPipelineTests(unittest.TestCase):
         self.assertTrue(any(item['code'] == 'rendered_placeholder' for item in findings))
 
     def test_multiple_commemorations_require_review_instead_of_one_combined_saint_name(self):
-        _, target = self.regenerate(self.february)
+        source = [dict(row) for row in self.february]
+        source[16]['Remembrance'] += ' / An Additional Bishop'
+        _, target = self.regenerate(source)
         findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
         self.assertTrue(any(item['date'] == '2027-02-17' and
                             item['code'] == 'ambiguous_commemorations' for item in findings))
@@ -254,7 +264,9 @@ class PrayerPipelineTests(unittest.TestCase):
         )
 
     def test_generic_collect_alternatives_are_explicit_editorial_findings(self):
-        _, target = self.regenerate(self.february)
+        source = [dict(row) for row in self.february]
+        source[12]['Remembrance'] = 'An Unreviewed Priest'
+        _, target = self.regenerate(source)
         findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
         self.assertTrue(any(item['date'] == '2027-02-13' and
                             item['code'] == 'editorial_choice' for item in findings))
@@ -298,7 +310,9 @@ class PrayerPipelineTests(unittest.TestCase):
         workflow = (ROOT / '.github' / 'workflows' / 'deploy.yml').read_text()
         build_command = next(line.strip() for line in workflow.splitlines()
                              if line.strip().startswith('python generate.py'))
-        _, target = self.regenerate(self.february)
+        rows, target = self.regenerate(self.february)
+        rows[20]['Special Collect'] = 'Grant peace to the people of _________. Amen.'
+        self.save_rows(target, rows)
         output = self.work / 'deployment-site'
         command = [sys.executable] + shlex.split(build_command)[1:] + [
             '--csv', str(target), '--month', '2', '--output-dir', str(output)]
@@ -415,3 +429,95 @@ class PrayerPipelineTests(unittest.TestCase):
         self.assertTrue(any(item['date'].startswith('2028-') and
                             item['code'] == 'unresolved_placeholder' for item in report['findings']))
         self.assertFalse(output.exists())
+
+    def test_reviewed_anskar_collect_names_ministry_without_blanks_in_future_years(self):
+        source = next(row for row in self.february if row['Date'] == 'Feb 3')
+        for year in (2027, 2028):
+            rows, target = self.regenerate([source], year=year)
+            prayer = rows[0]['Special Collect']
+            self.assertIn('your servant Anskar', prayer)
+            self.assertIn('the people of Denmark and Sweden', prayer)
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_cyril_and_methodius_collect_is_plural_and_names_slavic_people(self):
+        source = next(row for row in self.february if row['Date'] == 'Feb 14')
+        for year in (2027, 2028):
+            rows, target = self.regenerate([source], year=year)
+            prayer = rows[0]['Special Collect']
+            self.assertIn('your servants Cyril and Methodius', prayer)
+            self.assertIn('to the Slavic people', prayer)
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_thomas_bray_collect_uses_pastor_without_bishop(self):
+        source = next(row for row in self.february if row['Date'] == 'Feb 15')
+        for year in (2027, 2028):
+            rows, target = self.regenerate([source], year=year)
+            prayer = rows[0]['Special Collect']
+            self.assertIn('your faithful servant Thomas Bray to be a pastor', prayer)
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_second_batch_collects_persist_across_years(self):
+        selections = {
+            'Feb 4': ('your servant Cornelius the Centurion', 'great cloud of witnesses'),
+            'Feb 5': ('your servants the martyrs of Japan', 'courage to die for this faith'),
+            'Feb 21': ('your servant Billy Graham', 'to the peoples of the world'),
+        }
+        for year in (2027, 2028):
+            for day, phrases in selections.items():
+                with self.subTest(year=year, day=day):
+                    source = next(row for row in self.february if row['Date'] == day)
+                    rows, target = self.regenerate([source], year=year)
+                    prayer = rows[0]['Special Collect']
+                    for phrase in phrases:
+                        self.assertIn(phrase, prayer)
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_pastor_collects_omit_bishop_for_jones_and_herbert(self):
+        for year in (2027, 2028):
+            for day, name in (('Feb 13', 'Absalom Jones'), ('Feb 27', 'George Herbert')):
+                source = next(row for row in self.february if row['Date'] == day)
+                rows, target = self.regenerate([source], year=year)
+                self.assertIn(f'your faithful servant {name} to be a pastor', rows[0]['Special Collect'])
+                findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_reviewed_ember_collect_selects_first_prayer_without_now(self):
+        for year in (2027, 2028):
+            rows, target = self.regenerate([{'Date': 'Feb 19', 'Observance': 'Lent',
+                                             'Remembrance': 'Ember Day'}], year=year)
+            prayer = rows[0]['Special Collect']
+            self.assertTrue(prayer.startswith('Almighty God, the giver of all good gifts'))
+            self.assertIn('all who are called', prayer)
+            self.assertNotIn('Or this:', prayer)
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_janani_and_ember_day_receive_two_complete_labeled_collects(self):
+        source = next(row for row in self.february if row['Date'] == 'Feb 17')
+        for year in (2027, 2028):
+            rows, target = self.regenerate([source], year=year)
+            prayer = rows[0]['Special Collect']
+            self.assertIn('Janani Luwum: Almighty God,', prayer)
+            self.assertIn('your servant Janani Luwum', prayer)
+            self.assertIn('Ember Day: Almighty God, the giver of all good gifts', prayer)
+            self.assertIn('all who are called', prayer)
+            findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+            self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_single_reviewed_collect_does_not_approve_a_two_commemoration_day(self):
+        rows, target = self.regenerate(self.february)
+        rows[16]['Special Collect'] = rows[16]['Special Collect'].split(' Ember Day:', 1)[0].removeprefix('Janani Luwum: ')
+        self.save_rows(target, rows)
+        output = self.work / 'incomplete-pair'
+        result = subprocess.run(
+            [sys.executable, str(ROOT / 'generate.py'), '--csv', str(target), '--month', '2',
+             '--publish', '--output-dir', str(output)],
+            cwd=ROOT, capture_output=True, text=True, check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        findings = json.loads(output.with_suffix('.review.json').read_text())['findings']
+        self.assertTrue(any(item['code'] == 'ambiguous_commemorations' for item in findings))

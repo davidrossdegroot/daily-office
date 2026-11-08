@@ -88,114 +88,6 @@
       "message": "Choose and review the appropriate prayer wording or alternative."
     },
     {
-      "date": "2027-02-03",
-      "field": "Special Collect",
-      "code": "unfilled_blank",
-      "message": "Supply the missing prayer wording before publication."
-    },
-    {
-      "date": "2027-02-03",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-04",
-      "field": "Special Collect",
-      "code": "unknown_commemoration",
-      "message": "No explicit commemoration category or reviewed proper collect is available."
-    },
-    {
-      "date": "2027-02-04",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-05",
-      "field": "Special Collect",
-      "code": "plural_collect",
-      "message": "Review singular collect wording for multiple commemorated people."
-    },
-    {
-      "date": "2027-02-13",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-14",
-      "field": "Special Collect",
-      "code": "plural_collect",
-      "message": "Review singular collect wording for multiple commemorated people."
-    },
-    {
-      "date": "2027-02-14",
-      "field": "Special Collect",
-      "code": "unfilled_blank",
-      "message": "Supply the missing prayer wording before publication."
-    },
-    {
-      "date": "2027-02-14",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-15",
-      "field": "Special Collect",
-      "code": "unfilled_blank",
-      "message": "Supply the missing prayer wording before publication."
-    },
-    {
-      "date": "2027-02-15",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-17",
-      "field": "Special Collect",
-      "code": "ambiguous_commemorations",
-      "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer."
-    },
-    {
-      "date": "2027-02-17",
-      "field": "Special Collect",
-      "code": "unresolved_name",
-      "message": "The prayer name token has no unambiguous commemoration to substitute."
-    },
-    {
-      "date": "2027-02-19",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-20",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-21",
-      "field": "Special Collect",
-      "code": "unfilled_blank",
-      "message": "Supply the missing prayer wording before publication."
-    },
-    {
-      "date": "2027-02-21",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
-      "date": "2027-02-27",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
       "date": "2027-03-01",
       "field": "Special Collect",
       "code": "unfilled_blank",
@@ -458,12 +350,6 @@
       "field": "Antiphon",
       "code": "missing_field",
       "message": "Required Daily Office content is missing."
-    },
-    {
-      "date": "2027-05-22",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
     },
     {
       "date": "2027-05-24",
@@ -1258,12 +1144,6 @@
       "message": "Required Daily Office content is missing."
     },
     {
-      "date": "2027-09-18",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
       "date": "2027-09-19",
       "field": "Special Collect",
       "code": "editorial_choice",
@@ -1780,12 +1660,6 @@
       "message": "Choose and review the appropriate prayer wording or alternative."
     },
     {
-      "date": "2027-12-15",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative."
-    },
-    {
       "date": "2027-12-16",
       "field": "Special Collect",
       "code": "unknown_commemoration",
@@ -1901,30 +1775,6 @@
     },
     {
       "date": "2027-01-27",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "2027-02-03",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "2027-02-14",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "2027-02-15",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "2027-02-21",
       "field": "Rendered HTML",
       "code": "rendered_placeholder",
       "message": "Final page still contains an unresolved name, blank, or placeholder."
@@ -2105,12 +1955,6 @@
     },
     {
       "date": "all-december",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "all-february",
       "field": "Rendered HTML",
       "code": "rendered_placeholder",
       "message": "Final page still contains an unresolved name, blank, or placeholder."
