@@ -76,7 +76,7 @@ class InferCommonTypeTests(unittest.TestCase):
                     "Date": "March 12",
                     "Observance": "Lent",
                     "Remembrance": (
-                        "Hilary of Poitiers, Bishop and Teacher of the Faith, 367"
+                        "Example Person, Bishop and Teacher of the Faith, 400"
                     ),
                 }
             ],

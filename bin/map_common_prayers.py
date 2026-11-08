@@ -229,6 +229,8 @@ for _missionary_name, _people in (
     ("Cuthbert", "the people of Northumbria"),
     ("Gregory the Illuminator", "the Armenian people"),
     ("Charles Henry Brent", "the people of the Philippines"),
+    ("Vedanayagam Samuel Azariah", "the people of South India"),
+    ("Kentigern", "the people of Strathclyde and Cumbria"),
 ):
     REVIEWED_COMMEMORATION_COLLECTS[_missionary_name.lower()] = COMMON_PRAYERS[
         "common of a missionary or evangelist"
@@ -237,17 +239,29 @@ for _missionary_name, _people in (
 REVIEWED_COMMEMORATION_COLLECTS["john and charles wesley"] = COMMON_PRAYERS["common of a reformer of the church"].replace(
     "your servant N.", "your servants John and Charles Wesley"
 ).replace("became a burning and shining light", "became burning and shining lights")
-for _teacher_name in ("Gregory the Great", "Cyril"):
+for _teacher_name in ("Gregory the Great", "Cyril", "Hilary of Poitiers", "Thomas Aquinas"):
     REVIEWED_COMMEMORATION_COLLECTS[_teacher_name.lower()] = COMMON_PRAYERS[
         "common of a teacher of the faith"
     ].replace("N.", _teacher_name)
-REVIEWED_COMMEMORATION_COLLECTS["robert machray"] = COMMON_PRAYERS["common of a pastor"].replace(
-    "N.", "Robert Machray"
-).replace("[Bishop and] ", "Bishop and ")
+for _bishop_name in ("Robert Machray", "Wulfstan"):
+    REVIEWED_COMMEMORATION_COLLECTS[_bishop_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
+        "N.", _bishop_name
+    ).replace("[Bishop and] ", "Bishop and ")
+REVIEWED_COMMEMORATION_COLLECTS["anthony"] = COMMON_PRAYERS["common of a monastic or religious"].replace(
+    "N.", "Anthony"
+)
 for _priest_name in ("James DeKoven", "John Donne"):
     REVIEWED_COMMEMORATION_COLLECTS[_priest_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
         "N.", _priest_name
     ).replace("[Bishop and] ", "")
+
+REVIEWED_COMMEMORATION_COLLECTS["timothy and titus"] = COMMON_PRAYERS["common of a pastor"].replace(
+    "your faithful servant N. to be a [Bishop and] pastor", "your faithful servants Timothy and Titus to be pastors"
+)
+# The identity is the text before the first comma: "Lydia, Dorcas and Phoebe, Helpers of the Apostles".
+REVIEWED_COMMEMORATION_COLLECTS["lydia"] = COMMON_PRAYERS["common of any commemoration"].split(
+    " Or this:", 1
+)[0].replace("your servant N.", "your servants Lydia, Dorcas, and Phoebe").replace("with him", "with them")
 
 REVIEWED_COMMEMORATION_GROUPS = {
     ("ember day", "janani luwum"): (
