@@ -36,7 +36,18 @@ June does not select Christmas opening sentences.
   issue #50. Ordinary-day blanks without a configured mapping therefore block
   publication. The [BCP Morning Prayer rubric](https://bcp2019.anglicanchurch.net/wp-content/uploads/2019/08/06-Daily-Morning-Prayer.pdf)
   permits optional antiphons; this daily-summary requirement is a stricter
-  local content policy. A general-use antiphon rule still needs selection.
+  local content policy.
+- **Antiphons after Pentecost** (maintainer choice, issue #56). Seasonal antiphons
+  still come first. The BCP 2019 (p. 30) gives "The Lord is glorious in his saints"
+  for "All Saints' and other Major Saints' Days" without listing those days. Locally
+  it is used on All Saints' Day, the Visitation, Barnabas, the Nativity of John the
+  Baptist, Peter and Paul, Mary Magdalene, James, Mary the Virgin, Bartholomew,
+  Matthew, Michael and All Angels, Luke, James of Jerusalem, Simon and Jude, and
+  Andrew in years when November 30 comes before Advent.
+  Every other day after Pentecost, including Holy Cross Day and optional
+  commemorations, rotates the three general antiphons on BCP 2019 p. 14 in printed
+  order, one per calendar day, counted from the Monday after Pentecost. Feast days
+  interrupt the display without shifting the count.
 
 ## Drafts and publication
 

@@ -901,6 +901,18 @@ SEASONAL_ANTIPHONS = {
     "all_saints_major": "The Lord is glorious in his saints: * O come, let us adore him.",
 }
 
+# BCP 2019 p. 14, in printed order. Rotated daily after Pentecost by maintainer choice (#56).
+ORDINARY_ANTIPHONS = (
+    "The earth is the Lord’s for he made it: * O come, let us adore him.",
+    "Worship the Lord in the beauty of holiness: * O come, let us adore him.",
+    "The mercy of the Lord is everlasting: * O come, let us adore him.",
+)
+# Maintainer-approved "major saints' days" after Pentecost (#56). Holy Cross is excluded.
+MAJOR_SAINTS_ANTIPHON_DAYS = frozenset({
+    (5, 31), (6, 11), (6, 24), (6, 29), (7, 22), (7, 25), (8, 15),
+    (8, 24), (9, 21), (9, 29), (10, 18), (10, 23), (10, 28), (11, 30),
+})
+
 
 class LiturgicalDayPageParser(HTMLParser):
     """Extract basic heading/content blocks from a liturgical calendar day page."""
@@ -1976,7 +1988,6 @@ def infer_antiphon(observance: str, remembrance: str, current_date: date | None 
     """Infer seasonal antiphon from observance/remembrance text."""
     context = context or resolve_calendar_context(observance, remembrance, current_date)
     observance_text = context.primary_observance.lower()
-    remembrance_text = clean(remembrance).lower()
     text = context.seasonal_heading
     if not text:
         return ""
@@ -2023,19 +2034,12 @@ def infer_antiphon(observance: str, remembrance: str, current_date: date | None 
     if "all saints" in observance_text:
         return SEASONAL_ANTIPHONS["all_saints_major"]
 
-    major_saint_hints = (
-        "apostle",
-        "evangelist",
-        "martyr",
-        "bishop",
-        "priest",
-        "missionary",
-        "teacher of the faith",
-    )
-    if any(hint in remembrance_text for hint in major_saint_hints):
+    if current_date is None:
+        return ""
+    if (current_date.month, current_date.day) in MAJOR_SAINTS_ANTIPHON_DAYS:
         return SEASONAL_ANTIPHONS["all_saints_major"]
-
-    return ""
+    monday_after_pentecost = easter_sunday(current_date.year) + timedelta(days=50)
+    return ORDINARY_ANTIPHONS[(current_date - monday_after_pentecost).days % len(ORDINARY_ANTIPHONS)]
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:

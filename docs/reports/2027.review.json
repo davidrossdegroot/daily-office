@@ -236,22 +236,6 @@
       "blocking": true
     },
     {
-      "date": "2027-05-17",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-05-18",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-05-19",
       "field": "Special Collect",
       "code": "ambiguous_commemorations",
@@ -268,22 +252,6 @@
       "blocking": true
     },
     {
-      "date": "2027-05-20",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-05-21",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-05-21",
       "field": "Special Collect",
       "code": "ambiguous_commemorations",
@@ -296,14 +264,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-05-22",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -348,46 +308,6 @@
       "blocking": true
     },
     {
-      "date": "2027-05-27",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-05-28",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-05-29",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-05-30",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-05-31",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-06-02",
       "field": "Special Collect",
       "code": "plural_collect",
@@ -416,14 +336,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-07",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -460,50 +372,10 @@
       "blocking": true
     },
     {
-      "date": "2027-06-11",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-12",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-13",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-06-14",
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-16",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-17",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -524,54 +396,6 @@
       "blocking": true
     },
     {
-      "date": "2027-06-20",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-21",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-23",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-24",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-25",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-26",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-06-27",
       "field": "Special Collect",
       "code": "editorial_choice",
@@ -588,30 +412,6 @@
       "blocking": true
     },
     {
-      "date": "2027-06-29",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-30",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-01",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-07-01",
       "field": "Special Collect",
       "code": "unknown_commemoration",
@@ -628,30 +428,6 @@
       "blocking": true
     },
     {
-      "date": "2027-07-02",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-03",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-04",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-07-04",
       "field": "Special Collect",
       "code": "unknown_commemoration",
@@ -664,70 +440,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-05",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-06",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-07",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-08",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-09",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-10",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-11",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-13",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -736,14 +448,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-15",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -772,14 +476,6 @@
       "blocking": true
     },
     {
-      "date": "2027-07-16",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-07-17",
       "field": "Special Collect",
       "code": "editorial_choice",
@@ -796,30 +492,6 @@
       "blocking": true
     },
     {
-      "date": "2027-07-21",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-22",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-23",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-07-24",
       "field": "Special Collect",
       "code": "editorial_choice",
@@ -828,22 +500,6 @@
       "blocking": true
     },
     {
-      "date": "2027-07-25",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-26",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-07-26",
       "field": "Special Collect",
       "code": "unknown_commemoration",
@@ -856,22 +512,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-28",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-29",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -892,30 +532,6 @@
       "blocking": true
     },
     {
-      "date": "2027-07-30",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-07-31",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-01",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-08-01",
       "field": "Special Collect",
       "code": "unknown_commemoration",
@@ -928,30 +544,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-02",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-03",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-04",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -960,22 +552,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-09",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-11",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -996,86 +572,6 @@
       "blocking": true
     },
     {
-      "date": "2027-08-14",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-15",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-16",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-17",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-18",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-19",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-22",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-23",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-24",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-25",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-08-25",
       "field": "Special Collect",
       "code": "unknown_commemoration",
@@ -1088,22 +584,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-26",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-27",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1133,14 +613,6 @@
     },
     {
       "date": "2027-08-29",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-08-29",
       "field": "Special Collect",
       "code": "unknown_commemoration",
       "message": "No explicit commemoration category or reviewed proper collect is available.",
@@ -1172,14 +644,6 @@
       "blocking": true
     },
     {
-      "date": "2027-09-01",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-09-02",
       "field": "Special Collect",
       "code": "plural_collect",
@@ -1188,14 +652,6 @@
       "blocking": true
     },
     {
-      "date": "2027-09-03",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-09-04",
       "field": "Special Collect",
       "code": "unfilled_blank",
@@ -1212,14 +668,6 @@
       "blocking": true
     },
     {
-      "date": "2027-09-05",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-09-06",
       "field": "Special Collect",
       "code": "unfilled_blank",
@@ -1232,22 +680,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-07",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-08",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1276,26 +708,10 @@
       "blocking": true
     },
     {
-      "date": "2027-09-11",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-09-13",
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-14",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1356,58 +772,10 @@
       "blocking": true
     },
     {
-      "date": "2027-09-18",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-09-19",
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-21",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-22",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-23",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-24",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-25",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1432,30 +800,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-28",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-29",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-09-30",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1488,46 +832,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-02",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-04",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-05",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-07",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-08",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1581,14 +885,6 @@
     },
     {
       "date": "2027-10-13",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-13",
       "field": "Special Collect",
       "code": "unknown_commemoration",
       "message": "No explicit commemoration category or reviewed proper collect is available.",
@@ -1612,26 +908,10 @@
       "blocking": true
     },
     {
-      "date": "2027-10-15",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-10-16",
       "field": "Special Collect",
       "code": "plural_collect",
       "message": "Review singular collect wording for multiple commemorated people.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-18",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1648,102 +928,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-20",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-21",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-22",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-23",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-24",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-25",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-26",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-27",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-28",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-30",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-10-31",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-02",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1768,22 +952,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-04",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-05",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1836,22 +1004,6 @@
       "blocking": true
     },
     {
-      "date": "2027-11-08",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-09",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-11-10",
       "field": "Special Collect",
       "code": "editorial_choice",
@@ -1872,14 +1024,6 @@
       "field": "Special Collect",
       "code": "editorial_choice",
       "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-12",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
@@ -1924,66 +1068,10 @@
       "blocking": true
     },
     {
-      "date": "2027-11-16",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-18",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-19",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-21",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-24",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-11-25",
       "field": "Special Collect",
       "code": "ambiguous_commemorations",
       "message": "Select reviewed collects for the separate commemorations; do not combine their names into one prayer.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-26",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-11-27",
-      "field": "Antiphon",
-      "code": "missing_field",
-      "message": "Required Daily Office content is missing.",
       "year": 2027,
       "blocking": true
     },
