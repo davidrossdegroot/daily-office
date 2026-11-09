@@ -4,78 +4,6 @@
   "publishable": false,
   "findings": [
     {
-      "date": "2027-06-02",
-      "field": "Special Collect",
-      "code": "plural_collect",
-      "message": "Review singular collect wording for multiple commemorated people.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-03",
-      "field": "Special Collect",
-      "code": "plural_collect",
-      "message": "Review singular collect wording for multiple commemorated people.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-06",
-      "field": "Special Collect",
-      "code": "unfilled_blank",
-      "message": "Supply the missing prayer wording before publication.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-06",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-08",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-09",
-      "field": "Special Collect",
-      "code": "unfilled_blank",
-      "message": "Supply the missing prayer wording before publication.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-09",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-19",
-      "field": "Special Collect",
-      "code": "unfilled_blank",
-      "message": "Supply the missing prayer wording before publication.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
-      "date": "2027-06-19",
-      "field": "Special Collect",
-      "code": "editorial_choice",
-      "message": "Choose and review the appropriate prayer wording or alternative.",
-      "year": 2027,
-      "blocking": true
-    },
-    {
       "date": "2027-07-01",
       "field": "Special Collect",
       "code": "unknown_commemoration",
@@ -812,30 +740,6 @@
       "blocking": true
     },
     {
-      "date": "2027-06-06",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "year": 2027,
-      "blocking": true,
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "2027-06-09",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "year": 2027,
-      "blocking": true,
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "2027-06-19",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "year": 2027,
-      "blocking": true,
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
       "date": "2027-08-31",
       "field": "Rendered HTML",
       "code": "rendered_placeholder",
@@ -957,14 +861,6 @@
     },
     {
       "date": "all-december",
-      "field": "Rendered HTML",
-      "code": "rendered_placeholder",
-      "year": 2027,
-      "blocking": true,
-      "message": "Final page still contains an unresolved name, blank, or placeholder."
-    },
-    {
-      "date": "all-june",
       "field": "Rendered HTML",
       "code": "rendered_placeholder",
       "year": 2027,
