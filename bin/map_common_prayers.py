@@ -237,6 +237,20 @@ for _missionary_name, _people in (
     ("William Grant Broughton", "the people of Australia"),
     ("Columba", "the people of Scotland"),
     ("Sundar Singh", "the people of India and Tibet"),
+    ("Aidan", "the people of Northumbria"),
+    ("Birinus", "the people of Wessex"),
+    ("Allen Gardiner", "the people of South America"),
+    ("Alexander Crummell", "the people of Liberia"),
+    ("Ninian", "the Pictish people"),
+    ("Wilson Carlile", "the people of England"),
+    ("Remigius", "the Frankish people"),
+    ("Paulinus", "the people of Northumbria"),
+    ("Philip", "the people of Samaria"),
+    ("Henry Martyn", "the people of India and Persia"),
+    ("Willibrord", "the people of Frisia"),
+    ("Charles Simeon", "the people of Cambridge"),
+    ("Herman", "the Native people of Alaska"),
+    ("Channing Moore Williams", "the people of China and Japan"),
 ):
     REVIEWED_COMMEMORATION_COLLECTS[_missionary_name.lower()] = COMMON_PRAYERS[
         "common of a missionary or evangelist"
@@ -245,11 +259,17 @@ for _missionary_name, _people in (
 REVIEWED_COMMEMORATION_COLLECTS["john and charles wesley"] = COMMON_PRAYERS["common of a reformer of the church"].replace(
     "your servant N.", "your servants John and Charles Wesley"
 ).replace("became a burning and shining light", "became burning and shining lights")
-for _teacher_name in ("Gregory the Great", "Cyril", "Hilary of Poitiers", "Thomas Aquinas", "Anselm", "William Law"):
+for _teacher_name in (
+    "Gregory the Great", "Cyril", "Hilary of Poitiers", "Thomas Aquinas", "Anselm", "William Law",
+    "Jerome", "John Wyclif", "Edward Bouverie Pusey",
+):
     REVIEWED_COMMEMORATION_COLLECTS[_teacher_name.lower()] = COMMON_PRAYERS[
         "common of a teacher of the faith"
     ].replace("N.", _teacher_name)
-for _bishop_name in ("Robert Machray", "Wulfstan", "Thomas Ken"):
+for _bishop_name in (
+    "Robert Machray", "Wulfstan", "Thomas Ken", "William White", "Charles Inglis", "Theodore of Tarsus",
+    "Robert Grosseteste", "Samuel Isaac Joseph Schereschewsky", "Nicholas", "Martin",
+):
     REVIEWED_COMMEMORATION_COLLECTS[_bishop_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
         "N.", _bishop_name
     ).replace("[Bishop and] ", "Bishop and ")
@@ -270,7 +290,7 @@ REVIEWED_COMMEMORATION_COLLECTS["lydia"] = COMMON_PRAYERS["common of any commemo
 )[0].replace("your servant N.", "your servants Lydia, Dorcas, and Phoebe").replace("with him", "with them")
 
 REVIEWED_COMMEMORATION_COLLECTS["rogation day"] = COMMON_PRAYERS["rogation day"].split(" Or this:", 1)[0]
-for _woman_renewer in ("Josephine Butler", "Mary Sumner", "Mother Teresa of Calcutta", "Elizabeth of Hungary"):
+for _woman_renewer in ("Josephine Butler", "Mary Sumner", "Mother Teresa of Calcutta", "Elizabeth of Hungary", "Hannah More"):
     REVIEWED_COMMEMORATION_COLLECTS[_woman_renewer.lower()] = COMMON_PRAYERS["common of a renewer of society"].replace(
         "N.", _woman_renewer
     ).replace("his righteous zeal", "her righteous zeal").replace("his example", "her example")
@@ -298,6 +318,86 @@ REVIEWED_COMMEMORATION_COLLECTS["helena"] = COMMON_PRAYERS["common of any commem
     " Or this:", 1
 )[0].replace("N.", "Helena").replace("with him", "with her")
 
+REVIEWED_COMMEMORATION_COLLECTS["consecration of samuel seabury"] = COMMON_PRAYERS["common of a pastor"].replace(
+    "N.", "Samuel Seabury"
+).replace("[Bishop and] ", "Bishop and ")
+for _monastic_name in ("Dominic", "Nicholas Ferrar"):
+    REVIEWED_COMMEMORATION_COLLECTS[_monastic_name.lower()] = COMMON_PRAYERS[
+        "common of a monastic or religious"
+    ].replace("N.", _monastic_name)
+for _martyr_key, _martyr_name in (
+    ("cyprian", "Cyprian"),
+    ("catherine of alexandria", "Catherine of Alexandria"),
+    ("the beheading of john the baptist", "John the Baptist"),
+):
+    REVIEWED_COMMEMORATION_COLLECTS[_martyr_key] = COMMON_PRAYERS["common of a martyr"].replace("N.", _martyr_name)
+for _martyrs_key, _martyrs_name in (
+    ("the martyrs of papua new guinea", "the Martyrs of Papua New Guinea"),
+    ("constance and her companions", "Constance and her companions"),
+    ("hugh latimer and nicholas ridley", "Hugh Latimer and Nicholas Ridley"),
+    ("john coleridge patteson", "John Coleridge Patteson and his companions"),
+    ("james hannington", "James Hannington and his companions"),
+):
+    REVIEWED_COMMEMORATION_COLLECTS[_martyrs_key] = COMMON_PRAYERS["common of a martyr"].replace(
+        "your servant N.", f"your servants {_martyrs_name}"
+    )
+_FIRST_COMMEMORATION_PRAYER = COMMON_PRAYERS["common of any commemoration"].split(" Or this:", 1)[0]
+for _group_key, _group_name in (
+    ("olga and vladimir", "Olga and Vladimir"),
+    ("the parents of the virgin mary", "the Parents of the Virgin Mary"),
+    ("lazarus", "Lazarus, Mary, and Martha of Bethany"),
+    ("elizabeth and zechariah", "Elizabeth and Zechariah"),
+):
+    REVIEWED_COMMEMORATION_COLLECTS[_group_key] = _FIRST_COMMEMORATION_PRAYER.replace(
+        "your servant N.", f"your servants {_group_name}"
+    ).replace("with him", "with them")
+for _commemorated_name in ("Joseph of Arimathea", "Louis", "Edward the Confessor"):
+    REVIEWED_COMMEMORATION_COLLECTS[_commemorated_name.lower()] = _FIRST_COMMEMORATION_PRAYER.replace(
+        "N.", _commemorated_name
+    )
+REVIEWED_COMMEMORATION_COLLECTS["monica"] = _FIRST_COMMEMORATION_PRAYER.replace("N.", "Monica").replace(
+    "with him", "with her"
+)
+
+# BCP 2019 national-day collects (pp. 636-637); occasional prayer 114 (p. 679) for All Souls.
+_THANKSGIVING_DAY_COLLECT = (
+    "Most merciful Father, we humbly thank you for all your gifts so freely bestowed upon us: for life and "
+    "health and safety, for strength to work and leisure to rest, for all that is beautiful in creation and in "
+    "human life; but above all we thank you for our spiritual mercies in Christ Jesus our Lord; who with you "
+    "and the Holy Spirit lives and reigns, one God, for ever and ever. Amen."
+)
+_REMEMBRANCE_DAY_COLLECT = (
+    "O King and Judge of the nations: We remember before you with grateful hearts the men and women of our "
+    "armed forces, who in the day of decision ventured much for the liberties we now enjoy; grant that we may "
+    "not rest until all the people of this land share the benefits of true freedom and gladly accept its "
+    "disciplines; through Jesus Christ our Lord, who with you and the Holy Spirit lives and reigns, now and "
+    "for ever. Amen."
+)
+REVIEWED_COMMEMORATION_COLLECTS.update({
+    "canada day canada": (
+        "Almighty God, whose wisdom and love are over all: Accept the prayers we offer for Canada, and give "
+        "integrity to its citizens and wisdom to those in authority, that harmony and justice may be secured in "
+        "obedience to your will; through Jesus Christ our Lord, who lives and reigns with you and the Holy "
+        "Spirit, one God, for ever and ever. Amen."
+    ),
+    "independence day united states": (
+        "Lord God, by your providence our founders won their liberties of old: Grant that we and all the people "
+        "of this land may have grace to exercise these liberties in righteousness and peace; through Jesus "
+        "Christ our Lord, who lives and reigns with you and the Holy Spirit, one God, for ever and ever. Amen."
+    ),
+    "thanksgiving day canada": _THANKSGIVING_DAY_COLLECT,
+    "thanksgiving day united states": _THANKSGIVING_DAY_COLLECT,
+    "remembrance day canada": _REMEMBRANCE_DAY_COLLECT,
+    "commemoration of the faithful departed all souls' day": (
+        "Almighty God, with whom the souls of the faithful who have departed this life are in joy and felicity: "
+        "We praise and magnify your holy Name for all your servants who have finished their course in your faith "
+        "and fear; and we most humbly pray that, at the day of resurrection, we and all who are members of the "
+        "mystical body of your Son may be set on his right hand, and hear his most joyful voice: \u201cCome, you "
+        "who are blessed by my Father, inherit the kingdom prepared for you from the foundation of the world.\u201d "
+        "Grant this, O merciful Father, for the sake of Jesus Christ, our only Mediator and Advocate. Amen."
+    ),
+})
+
 REVIEWED_COMMEMORATION_GROUPS = {
     ("ember day", "janani luwum"): (
         "Janani Luwum: " + REVIEWED_COMMEMORATION_COLLECTS["janani luwum"]
@@ -311,6 +411,33 @@ REVIEWED_COMMEMORATION_GROUPS = {
         "Helena: " + REVIEWED_COMMEMORATION_COLLECTS["helena"]
         + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
     ),
+    ("cyprian", "ember day"): (
+        "Cyprian: " + REVIEWED_COMMEMORATION_COLLECTS["cyprian"]
+        + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
+    ),
+    ("edward bouverie pusey", "ember day"): (
+        "Edward Bouverie Pusey: " + REVIEWED_COMMEMORATION_COLLECTS["edward bouverie pusey"]
+        + "\n\nEmber Day: " + REVIEWED_COMMEMORATION_COLLECTS["ember day"]
+    ),
+    ("philip", "thanksgiving day canada"): (
+        "Philip: " + REVIEWED_COMMEMORATION_COLLECTS["philip"]
+        + "\n\nThanksgiving Day: " + _THANKSGIVING_DAY_COLLECT
+    ),
+    ("martin", "remembrance day canada"): (
+        "Martin: " + REVIEWED_COMMEMORATION_COLLECTS["martin"]
+        + "\n\nRemembrance Day: " + _REMEMBRANCE_DAY_COLLECT
+    ),
+    ("catherine of alexandria", "thanksgiving day united states"): (
+        "Catherine of Alexandria: " + REVIEWED_COMMEMORATION_COLLECTS["catherine of alexandria"]
+        + "\n\nThanksgiving Day: " + _THANKSGIVING_DAY_COLLECT
+    ),
+}
+
+
+# The BCP calendar lists these Advent antiphons beside commemorations; they name no person.
+GREAT_O_ANTIPHONS = {
+    "o sapientia", "o adonai", "o radix jesse", "o clavis david",
+    "o oriens", "o rex gentium", "o emmanuel", "o virgo virginum",
 }
 
 
@@ -319,9 +446,11 @@ def without_temporal_headings(remembrance: str) -> str:
     parts = (clean(part) for part in remembrance.split(" / "))
     return " / ".join(
         part for part in parts
-        if part and (not observance_is_temporal(part) or any(
-            token in part.lower() for token in ("ember", "rogation")
-        ))
+        # Only the name is checked: a title can say "Eastern" or "Sunday Schools".
+        if part and normalize_for_match(part) not in GREAT_O_ANTIPHONS and (
+            not observance_is_temporal(part.split(",")[0])
+            or any(token in part.lower() for token in ("ember", "rogation"))
+        )
     )
 
 
@@ -2342,6 +2471,9 @@ def prepare_rows(
             ):
                 row["Seasonal Blessing"] = inferred_blessing
 
+        if row_date and (row_date.month, row_date.day) == (12, 25):
+            row["Seasonal Collect"] = clean(row.get("Seasonal Collect")).replace("[this day]", "this day")
+
         remembrance = clean(row.get("Remembrance"))
         observance = clean(row.get("Observance"))
         if applied_fixed_holy_day:
@@ -2443,7 +2575,9 @@ def validate_rows(
             add(label, "Special Collect", "ambiguous_commemorations",
                 "Select reviewed collects for the separate commemorations; do not combine their names into one prayer.")
         name = remembrance.split(",")[0]
-        plural = re.search(r"\band\b|&|\b(martyrs|companions|bishops|monks|nuns|virgins)\b", name, re.IGNORECASE)
+        plural = re.search(r"\band\b|&|\b(martyrs|companions|bishops|monks|nuns|virgins)\b", name, re.IGNORECASE) or (
+            re.search(r"\b(his|her) companions\b", remembrance, re.IGNORECASE)
+        )
         if plural and re.search(r"\bservant\b", special, re.IGNORECASE):
             add(label, "Special Collect", "plural_collect",
                 "Review singular collect wording for multiple commemorated people.")

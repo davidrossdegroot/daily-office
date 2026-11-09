@@ -257,6 +257,47 @@ month's report so it can be vetoed. Other decisions still need an explicit answe
     "Scotland" covers both.
   - Sundar Singh: the people of India and Tibet, from secondary sources.
 
+## July to December selections
+
+The maintainer asked for July through December to be completed on the agent's
+recommendations and reviewed as one set, rather than in batches. Every entry remains
+open to veto. Other than the BCP texts named below, these are adaptations of the BCP
+commons, not proper collects.
+
+- **BCP texts used as printed.** Canada Day, Independence Day, Thanksgiving Day, and
+  Remembrance Day use the national-day collects (pp. 636-637). All Souls' Day uses
+  occasional prayer 114, "For all faithful departed" (p. 679), as the BCP has no
+  collect for that day; the choice of that prayer is editorial.
+- **Great O Antiphons** (Dec 16-23). These name no person, so they take no commemoration
+  collect. The heading stays on the page, the Advent collect stands, and on Ember Days the
+  selected Ember collect is the only special collect.
+- **Christmas Day** says "this day" for the BCP's optional "[this day]".
+- **Shared days** use two complete, labeled collects: Cyprian, Edward Bouverie Pusey with
+  Ember Day; Philip with Canadian Thanksgiving; Martin with Remembrance Day; Catherine of
+  Alexandria with United States Thanksgiving.
+- **Plural martyrs:** the Martyrs of Papua New Guinea, Constance and her companions, Hugh
+  Latimer and Nicholas Ridley, John Coleridge Patteson and his companions, James Hannington
+  and his companions.
+- **Pastor common with "Bishop and":** William White, Charles Inglis, Theodore of Tarsus,
+  Robert Grosseteste, Samuel Isaac Joseph Schereschewsky, Samuel Seabury (for his
+  Consecration), Nicholas, Martin.
+- **Monastic or religious common:** Dominic, founder of a religious order, and Nicholas
+  Ferrar, whose Little Gidding household kept a strict life of prayer without vows or a rule.
+- **Teacher of the Faith common:** the Bible translators Jerome and John Wyclif.
+- **Martyr common:** The Beheading of John the Baptist, from the Gospel's account of his
+  death at Herod's order.
+- **First commemoration common:** Olga and Vladimir, the Parents of the Virgin Mary, Lazarus,
+  Mary, and Martha of Bethany, and Elizabeth and Zechariah (plural, "with them"); Joseph of
+  Arimathea, Louis, and Edward the Confessor; Monica ("with her").
+- **Renewer common with "her":** Hannah More.
+- **Delegated place wording,** from BCP titles and secondary sources: Aidan and Paulinus,
+  the people of Northumbria; Birinus, the people of Wessex; Allen Gardiner, the people of
+  South America; Alexander Crummell, the people of Liberia; Ninian, the Pictish people;
+  Wilson Carlile, the people of England; Remigius, the Frankish people; Philip, the people of
+  Samaria (Acts 8:5); Henry Martyn, the people of India and Persia; Willibrord, the people of
+  Frisia; Charles Simeon, the people of Cambridge, where he spent his ministry; Herman, the
+  Native people of Alaska; Channing Moore Williams, the people of China and Japan.
+
 ## Agent workflow
 
 The repository skill at `.agents/skills/generate-daily-office/SKILL.md` defines

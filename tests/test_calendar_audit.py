@@ -12,6 +12,29 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class CalendarAuditTests(unittest.TestCase):
     def test_full_year_audit_is_reproducible_from_a_source_snapshot(self):
+        # 2028 still has unreviewed pairings, so the audit must report them.
+        source = ROOT / 'tests' / 'fixtures' / 'calendar-source-2028.csv'
+        with tempfile.TemporaryDirectory() as directory:
+            result = subprocess.run(
+                [sys.executable, str(ROOT / 'bin' / 'audit_years.py'), str(source),
+                 '--output-dir', directory],
+                cwd=ROOT, capture_output=True, text=True, check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads((Path(directory) / '2028.review.json').read_text())
+            self.assertEqual(len(list((Path(directory) / '2028-site').glob('2028-*.html'))), 366)
+            self.assertTrue(any(item['code'] == 'rendered_placeholder' for item in report['findings']))
+            with (Path(directory) / '2028.csv').open(newline='') as stream:
+                rows = list(csv.DictReader(stream))
+        self.assertEqual(len(rows), 366)
+        self.assertFalse(report['publishable'])
+        self.assertTrue(report['source_sha256'])
+        self.assertTrue(all(item['date'] and item['field'] and item['message']
+                            for item in report['findings']))
+        self.assertFalse(any(item['code'] in {'missing_date', 'duplicate_date'}
+                             for item in report['findings']))
+
+    def test_2027_snapshot_has_no_remaining_findings(self):
         source = ROOT / 'tests' / 'fixtures' / 'calendar-source-2027.csv'
         with tempfile.TemporaryDirectory() as directory:
             result = subprocess.run(
@@ -21,17 +44,8 @@ class CalendarAuditTests(unittest.TestCase):
             )
             self.assertEqual(result.returncode, 0, result.stderr)
             report = json.loads((Path(directory) / '2027.review.json').read_text())
-            self.assertEqual(len(list((Path(directory) / '2027-site').glob('2027-*.html'))), 365)
-            self.assertTrue(any(item['code'] == 'rendered_placeholder' for item in report['findings']))
-            with (Path(directory) / '2027.csv').open(newline='') as stream:
-                rows = list(csv.DictReader(stream))
-        self.assertEqual(len(rows), 365)
-        self.assertFalse(report['publishable'])
-        self.assertTrue(report['source_sha256'])
-        self.assertTrue(all(item['date'] and item['field'] and item['message']
-                            for item in report['findings']))
-        self.assertFalse(any(item['code'] in {'missing_date', 'duplicate_date'}
-                             for item in report['findings']))
+        self.assertEqual(report['findings'], [])
+        self.assertTrue(report['publishable'])
 
     def test_2028_leap_day_and_moving_seasons_survive_full_year_generation(self):
         source = ROOT / 'tests' / 'fixtures' / 'calendar-source-2028.csv'
