@@ -719,6 +719,160 @@ class PrayerPipelineTests(unittest.TestCase):
                     findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
                     self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
 
+    def test_reviewed_july_to_december_collects_persist_across_years(self):
+        missionaries = {
+            'Aidan, Abbot-Bishop of Lindisfarne, Missionary to Northumbria, 651': ('Aidan', 'the people of Northumbria'),
+            'Birinus, Bishop of Dorchester and Evangelist to Wessex, 650': ('Birinus', 'the people of Wessex'),
+            'Allen Gardiner, Missionary and Founder of SAMS, 1851': ('Allen Gardiner', 'the people of South America'),
+            'Alexander Crummell, Priest and Missionary to Liberia, 1898': ('Alexander Crummell', 'the people of Liberia'),
+            'Ninian, Bishop of Galloway and Missionary to the Picts, 432': ('Ninian', 'the Pictish people'),
+            'Wilson Carlile, Evangelist and Founder of the Church Army, 1942': ('Wilson Carlile', 'the people of England'),
+            'Remigius, Bishop of Reims and Missionary to the Franks, 533': ('Remigius', 'the Frankish people'),
+            'Paulinus, Bishop of York and Missionary, 644': ('Paulinus', 'the people of Northumbria'),
+            'Philip, Deacon and Evangelist': ('Philip', 'the people of Samaria'),
+            'Henry Martyn, Priest and Missionary to India and Persia, 1812': ('Henry Martyn', 'the people of India and Persia'),
+            'Willibrord, Archbishop of Utrecht and Missionary to Frisia, 739': ('Willibrord', 'the people of Frisia'),
+            'Charles Simeon, Priest and Evangelist, 1836': ('Charles Simeon', 'the people of Cambridge'),
+            'Herman, Monk and Missionary to the Native Alaskans, 1837': ('Herman', 'the Native people of Alaska'),
+            'Channing Moore Williams, Missionary Bishop in China and Japan, 1910': (
+                'Channing Moore Williams', 'the people of China and Japan',
+            ),
+        }
+        selections = {
+            title: (f'your servant {name} to preach the Gospel to {people}:',)
+            for title, (name, people) in missionaries.items()
+        }
+        ember = 'Ember Day: Almighty God, the giver of all good gifts'
+        selections.update({
+            'William White, Bishop of Pennsylvania and First Presiding Bishop of the Church in the USA, 1836': (
+                'your faithful servant William White to be a Bishop and pastor',
+            ),
+            'Charles Inglis, First Bishop of Canada, 1787': ('your faithful servant Charles Inglis to be a Bishop and pastor',),
+            'Theodore of Tarsus, Archbishop of Canterbury, 690': (
+                'your faithful servant Theodore of Tarsus to be a Bishop and pastor',
+            ),
+            'Robert Grosseteste, Bishop of Lincoln, 1253': ('your faithful servant Robert Grosseteste to be a Bishop and pastor',),
+            'Samuel Isaac Joseph Schereschewsky, Bishop of Shanghai, 1906': (
+                'your faithful servant Samuel Isaac Joseph Schereschewsky to be a Bishop and pastor',
+            ),
+            'Consecration of Samuel Seabury, First Bishop in the United States, 1784': (
+                'your faithful servant Samuel Seabury to be a Bishop and pastor',
+            ),
+            'Nicholas, Bishop of Myra, c. 326': ('your faithful servant Nicholas to be a Bishop and pastor',),
+            'Dominic, Priest and Friar, 1221': ('inspired by the devotion of your servant Dominic, may seek',),
+            'Nicholas Ferrar, Deacon and Founder of the Little Gidding Community, 1637': (
+                'inspired by the devotion of your servant Nicholas Ferrar, may seek',
+            ),
+            'Jerome, Monk of Bethlehem and Translator of the Bible, 420': (
+                'your servant Jerome special gifts of grace to understand',
+            ),
+            'John Wyclif, Priest and Translator of the Bible into English, 1384': (
+                'your servant John Wyclif special gifts of grace to understand',
+            ),
+            'The Beheading of John the Baptist': ('your servant John the Baptist boldness to confess',),
+            'The Martyrs of Papua New Guinea, 1901 and 1942': ('your servants the Martyrs of Papua New Guinea boldness',),
+            'Constance and Her Companions, Martyrs of Memphis, 1878': ('your servants Constance and her companions boldness',),
+            'Hugh Latimer and Nicholas Ridley, Bishops and Martyrs, 1555': (
+                'your servants Hugh Latimer and Nicholas Ridley boldness',
+            ),
+            'John Coleridge Patteson, Bishop of Melanesia and His Companions, Martyrs, 1871': (
+                'your servants John Coleridge Patteson and his companions boldness',
+            ),
+            'James Hannington, Bishop of Eastern Equatorial Africa and His Companions, Martyrs, 1885': (
+                'your servants James Hannington and his companions boldness',
+            ),
+            'Hannah More, Renewer of Society and Founder of Sunday Schools, 1833': (
+                'heart of your servant Hannah More to manifest', 'her righteous zeal may profit by her example',
+            ),
+            'Olga and Vladimir, Patrons of the Church in Russia, 969, 1016': (
+                'example of your servants Olga and Vladimir, may persevere', 'with them, we attain',
+            ),
+            'The Parents of the Virgin Mary': (
+                'example of your servants the Parents of the Virgin Mary, may persevere', 'with them, we attain',
+            ),
+            'Lazarus, Mary and Martha of Bethany, Companions of Our Lord': (
+                'example of your servants Lazarus, Mary, and Martha of Bethany, may persevere', 'with them, we attain',
+            ),
+            'Elizabeth and Zechariah, Parents of John the Baptist': (
+                'example of your servants Elizabeth and Zechariah, may persevere', 'with them, we attain',
+            ),
+            'Joseph of Arimathea': ('example of your servant Joseph of Arimathea, may persevere', 'with him, we attain',),
+            'Louis, King of France, 1270': ('example of your servant Louis, may persevere', 'with him, we attain',),
+            'Edward the Confessor, King of England, 1066': (
+                'example of your servant Edward the Confessor, may persevere', 'with him, we attain',
+            ),
+            'Monica, Mother of Augustine of Hippo, 387': ('example of your servant Monica, may persevere', 'with her, we attain',),
+            'Canada Day (Canada)': ('Accept the prayers we offer for Canada',),
+            'Independence Day (United States)': ('by your providence our founders won their liberties',),
+            'Commemoration of the Faithful Departed (All Souls’ Day)': ('with whom the souls of the faithful',),
+            'Cyprian, Bishop of Carthage and Martyr, 258 / Ember Day': (
+                'Cyprian: Almighty God, you gave your servant Cyprian boldness', ember,
+            ),
+            'Edward Bouverie Pusey, Priest and Teacher of the Faith, 1882 / Ember Day': (
+                'Edward Bouverie Pusey: Almighty God, you gave your servant Edward Bouverie Pusey special gifts', ember,
+            ),
+            'Philip, Deacon and Evangelist / Thanksgiving Day (Canada)': (
+                'Philip: Almighty and everlasting God, you called your servant Philip to preach the Gospel to the people of Samaria',
+                'Thanksgiving Day: Most merciful Father',
+            ),
+            'Martin, Bishop of Tours, 397 (Martinmas) / Remembrance Day (Canada)': (
+                'Martin: O God, our heavenly Father, you raised up your faithful servant Martin to be a Bishop and pastor',
+                'Remembrance Day: O King and Judge of the nations',
+            ),
+            'Catherine of Alexandria, Martyr, c. 305 / Thanksgiving Day (United States)': (
+                'Catherine of Alexandria: Almighty God, you gave your servant Catherine of Alexandria boldness',
+                'Thanksgiving Day: Most merciful Father',
+            ),
+            'O Adonai / Ember Day': ('Almighty God, the giver of all good gifts',),
+            'O Radix Jesse / Ember Day': ('Almighty God, the giver of all good gifts',),
+        })
+        for year in (2027, 2028):
+            for remembrance, phrases in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('Sep 9', 'Ordinary', remembrance)], year=year)
+                    prayer = rows[0]['Special Collect']
+                    for phrase in phrases:
+                        self.assertIn(phrase, prayer)
+                    self.assertNotIn('Or this', prayer)
+                    self.assertNotIn('[', prayer)
+                    self.assertNotIn('____', prayer)
+                    self.assertNotRegex(prayer, r'\bN\.')
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_great_o_antiphons_are_not_commemorations(self):
+        for antiphon in ('O Sapientia', 'O Clavis David', 'O Oriens', 'O Emmanuel', 'O Virgo Virginum'):
+            with self.subTest(antiphon=antiphon):
+                rows, target = self.regenerate([self.source_row('Dec 16', 'The Third Thursday of Advent', antiphon)])
+                self.assertEqual(rows[0]['Special Collect'], '')
+                self.assertEqual(rows[0]['Remembrance'], antiphon)
+                findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
+    def test_season_words_in_a_title_do_not_hide_the_commemoration(self):
+        for title in (
+            'Example Person, Bishop of Eastern Nowhere and Martyr, 1900',
+            'Example Person, Martyr and Founder of Sunday Schools, 1900',
+        ):
+            with self.subTest(title=title):
+                rows, _ = self.regenerate([self.source_row('Sep 7', 'Ordinary', title)])
+                self.assertIn('boldness to confess', rows[0]['Special Collect'])
+
+    def test_unreviewed_companions_in_a_title_are_flagged_plural(self):
+        source = self.source_row('Sep 20', 'Ordinary', 'Example Person, Bishop of Nowhere and His Companions, Martyrs, 1900')
+        _, target = self.regenerate([source])
+        findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+        self.assertTrue(any(item['code'] == 'plural_collect' for item in findings))
+
+    def test_christmas_day_collect_says_this_day(self):
+        source = self.source_row('Dec 25', 'The Nativity of Our Lord Jesus Christ (Christmas Day)', '')
+        source['Seasonal Collect'] = 'Almighty God, you have given your Son to be born [this day] of a pure virgin. Amen.'
+        rows, target = self.regenerate([source])
+        self.assertIn('to be born this day of a pure virgin', rows[0]['Seasonal Collect'])
+        self.assertNotIn('[', rows[0]['Seasonal Collect'])
+        findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+        self.assertFalse(any(item['field'] == 'Seasonal Collect' for item in findings))
+
     def test_augustine_of_canterbury_approval_does_not_cover_augustine_of_hippo(self):
         source = self.source_row('Aug 28', 'Ordinary', 'Augustine, Bishop of Hippo and Teacher of the Faith, 430')
         rows, _ = self.regenerate([source])
