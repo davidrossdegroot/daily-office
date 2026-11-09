@@ -688,6 +688,37 @@ class PrayerPipelineTests(unittest.TestCase):
                     findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
                     self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
 
+    def test_reviewed_june_collects_persist_across_years(self):
+        selections = {
+            'Blandina and Her Companions, Martyrs at Lyons, 177': (
+                'your servants Blandina and her companions boldness',
+            ),
+            'The Martyrs of Uganda, 1886, 1977': ('your servants the Martyrs of Uganda boldness',),
+            'William Grant Broughton, Bishop and Missionary to Australia, 1853': (
+                'your servant William Grant Broughton to preach the Gospel to the people of Australia:',
+            ),
+            'Thomas Ken, Bishop of Bath and Wells, Non-juror, 1711': (
+                'your faithful servant Thomas Ken to be a Bishop and pastor in your Church',
+            ),
+            'Columba, Abbot of Iona and Missionary to the Scots, 597': (
+                'your servant Columba to preach the Gospel to the people of Scotland:',
+            ),
+            'Sundar Singh, Evangelist in India and Teacher of the Faith, 1929': (
+                'your servant Sundar Singh to preach the Gospel to the people of India and Tibet:',
+            ),
+        }
+        for year in (2027, 2028):
+            for remembrance, phrases in selections.items():
+                with self.subTest(year=year, remembrance=remembrance):
+                    rows, target = self.regenerate([self.source_row('Jun 9', 'Ordinary', remembrance)], year=year)
+                    prayer = rows[0]['Special Collect']
+                    for phrase in phrases:
+                        self.assertIn(phrase, prayer)
+                    self.assertNotIn('[', prayer)
+                    self.assertNotIn('____', prayer)
+                    findings = json.loads(target.with_suffix('.review.json').read_text())['findings']
+                    self.assertFalse(any(item['field'] == 'Special Collect' for item in findings))
+
     def test_augustine_of_canterbury_approval_does_not_cover_augustine_of_hippo(self):
         source = self.source_row('Aug 28', 'Ordinary', 'Augustine, Bishop of Hippo and Teacher of the Faith, 430')
         rows, _ = self.regenerate([source])

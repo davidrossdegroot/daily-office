@@ -61,6 +61,14 @@ of combined commemorations:
    previous examples clean. Avoid silent auto-approval or editing validators merely
    to suppress a real finding.
 
+**Standing delegation: the people a missionary was sent to.** Do not ask the
+maintainer about the "people of ___" clause in the missionary common. Always apply
+your recommended wording, grounded in the evidence from step 1, and encode, document,
+and test it as in steps 4 and 5. Disclose secondary or inaccessible sources and list
+each phrase in the month's report so it can be vetoed afterward. This covers only that
+clause. Which common applies, plural wording, pronouns, and shared days still go
+through the batches above.
+
 Repeat until requested findings are resolved or explicitly awaiting a decision.
 Do not independently choose the remaining editorial answers to finish faster.
 

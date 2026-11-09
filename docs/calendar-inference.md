@@ -239,6 +239,24 @@ proper collects. Unapproved commemorations retain their review findings.
 "people of" clause without a separate approval, based on evidence and listed in each
 month's report so it can be vetoed. Other decisions still need an explicit answer.
 
+## Approved June selections
+
+- Blandina and Her Companions: the martyr common with plural servants, as for
+  Perpetua and her companions.
+- The Martyrs of Uganda: the martyr common with plural servants, capitalized from the
+  BCP title.
+- Thomas Ken: the pastor common with "Bishop and"; he was Bishop of Bath and Wells
+  until his removal as a non-juror.
+- Sundar Singh: the missionary common, since his title puts "Evangelist in India"
+  before "Teacher of the Faith".
+- Delegated place wording:
+  - William Grant Broughton: the people of Australia, from the BCP title. The
+    Australian Dictionary of Biography entry could not be read.
+  - Columba: the people of Scotland. The title says "the Scots", but secondary sources
+    describe a mission to the Picts from the Gaelic kingdom of Dál Riata, and
+    "Scotland" covers both.
+  - Sundar Singh: the people of India and Tibet, from secondary sources.
+
 ## Agent workflow
 
 The repository skill at `.agents/skills/generate-daily-office/SKILL.md` defines

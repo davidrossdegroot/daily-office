@@ -234,6 +234,9 @@ for _missionary_name, _people in (
     ("George Augustus Selwyn", "the people of New Zealand"),
     ("James Lloyd Breck", "the people of Wisconsin, Minnesota, and California"),
     ("Jackson Kemper", "the people of the American West"),
+    ("William Grant Broughton", "the people of Australia"),
+    ("Columba", "the people of Scotland"),
+    ("Sundar Singh", "the people of India and Tibet"),
 ):
     REVIEWED_COMMEMORATION_COLLECTS[_missionary_name.lower()] = COMMON_PRAYERS[
         "common of a missionary or evangelist"
@@ -246,7 +249,7 @@ for _teacher_name in ("Gregory the Great", "Cyril", "Hilary of Poitiers", "Thoma
     REVIEWED_COMMEMORATION_COLLECTS[_teacher_name.lower()] = COMMON_PRAYERS[
         "common of a teacher of the faith"
     ].replace("N.", _teacher_name)
-for _bishop_name in ("Robert Machray", "Wulfstan"):
+for _bishop_name in ("Robert Machray", "Wulfstan", "Thomas Ken"):
     REVIEWED_COMMEMORATION_COLLECTS[_bishop_name.lower()] = COMMON_PRAYERS["common of a pastor"].replace(
         "N.", _bishop_name
     ).replace("[Bishop and] ", "Bishop and ")
@@ -278,6 +281,12 @@ REVIEWED_COMMEMORATION_COLLECTS["augustine of canterbury"] = COMMON_PRAYERS[
 ].replace("N.", "Augustine").replace("the people of _________ [or to the __________ people]", "the English people")
 REVIEWED_COMMEMORATION_COLLECTS["the martyrs of the sudan"] = COMMON_PRAYERS["common of a martyr"].replace(
     "your servant N.", "your servants the Martyrs of the Sudan"
+)
+REVIEWED_COMMEMORATION_COLLECTS["blandina and her companions"] = COMMON_PRAYERS["common of a martyr"].replace(
+    "your servant N.", "your servants Blandina and her companions"
+)
+REVIEWED_COMMEMORATION_COLLECTS["the martyrs of uganda"] = COMMON_PRAYERS["common of a martyr"].replace(
+    "your servant N.", "your servants the Martyrs of Uganda"
 )
 REVIEWED_COMMEMORATION_COLLECTS["julian of norwich"] = COMMON_PRAYERS["common of a monastic or religious"].replace(
     "N.", "Julian of Norwich"
