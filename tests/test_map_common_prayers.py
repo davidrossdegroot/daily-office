@@ -373,6 +373,24 @@ class AntiphonInferenceTests(unittest.TestCase):
             MODULE.SEASONAL_ANTIPHONS["lent"],
         )
 
+    def test_annunciation_sunday_keeps_advent_antiphon(self) -> None:
+        # "Annunciation Sunday" names Advent 4, not the Annunciation feast.
+        for current in (date(2026, 12, 20), date(2027, 12, 19), date(2028, 12, 24)):
+            with self.subTest(current=current):
+                self.assertEqual(
+                    MODULE.infer_antiphon(
+                        "The Fourth Sunday in Advent (Annunciation Sunday)", "", current,
+                    ),
+                    MODULE.SEASONAL_ANTIPHONS["advent"],
+                )
+        self.assertEqual(
+            MODULE.infer_antiphon(
+                "The Annunciation of Our Lord Jesus Christ to the Virgin Mary (Lady Day)",
+                "", date(2027, 4, 5),
+            ),
+            MODULE.SEASONAL_ANTIPHONS["presentation_annunciation"],
+        )
+
     def test_ordinary_antiphons_rotate_from_the_monday_after_pentecost(self) -> None:
         for monday in (date(2027, 5, 17), date(2028, 6, 5)):
             with self.subTest(monday=monday):
