@@ -6,10 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACNA Daily Office - {{ day.date_formatted }}</title>
     <link rel="icon" href="{{ root_path }}static/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ root_path }}static/office.css">
     <link rel="stylesheet" href="{{ root_path }}static/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" media="screen">
 
     {% include 'analytics.html' %}
 </head>
@@ -17,6 +15,7 @@
     <nav class="navigation no-print">
         <a href="index.html">← Calendar</a>
         <a href="all.html">Print</a>
+        <span class="nav-spacer"></span>
         {% if prev_day %}
         <a href="{{ prev_day.date_slug }}.html">← {{ prev_day.Date }}</a>
         {% endif %}
@@ -25,7 +24,7 @@
         {% endif %}
     </nav>
 
-    <main class="daily-office">
+    <main class="daily-office office">
         {{ macros.daily_office_content(day, color_map) }}
     </main>
 

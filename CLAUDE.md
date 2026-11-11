@@ -82,7 +82,9 @@ daily-office/
 │   ├── index.html              # Calendar index
 │   ├── about.html              # About page
 │   └── analytics.html          # Google Analytics partial
-├── static/style.css            # Styles (screen + print)
+├── static/office.css           # Daily Office typography, fonts, print page (shared with the Book)
+├── static/style.css            # Site layout: navigation, calendar, screen sheet, print pages
+├── static/fonts/               # Bundled EB Garamond (SIL OFL)
 ├── generate.py                 # Build script
 ├── .env.example                # Example environment configuration
 └── build/                      # Generated site
@@ -174,19 +176,21 @@ When modifying the site:
 
 1. **Data changes**: Edit `data/acna-prayers-2026.csv` then run `python generate.py`
 2. **Template changes**: Edit files in `templates/` then run `python generate.py`
-3. **Style changes**: Edit `static/style.css` then run `python generate.py`
+3. **Style changes**: Edit `static/office.css` (prayer content, shared with the Book) or `static/style.css` (site layout), then run `python generate.py`
 4. **Build script changes**: Edit `generate.py` then run it
 
 The build directory (`build/`) is regenerated each time, so never edit files there directly.
 
 ## Print Optimization
 
-The CSS includes special print styles that:
-- Target single-page printing (8.5x11")
-- Use serif fonts for better print readability
-- Remove navigation and screen-only elements
-- Optimize spacing to fit content on one page
-- Add page breaks between days in the all-days view
+Printing uses the same page as the personal Book, defined once in `static/office.css`:
+- Letter paper, one day per page, with 1.2 in side margins for hole punching
+- EB Garamond at 11.5pt with dark red small-caps headings
+- Navigation and other screen-only elements hidden
+- Page breaks between days in the all-days and monthly views
+
+Every day must fit on one page. After changing the content or print styles, print
+`all.html` for each published year and confirm the PDF has one page per day.
 
 ## Key Features
 
@@ -214,19 +218,21 @@ Each day page includes:
 
 ## Design System
 
-### Color Palette
+The site, its printouts and the Book share one prayer-book look (issue #68). Tokens
+live in `:root` in `static/office.css`:
 ```css
---color-text: #2c3e50          /* Main text */
---color-text-light: #7f8c8d    /* Secondary text */
---color-border: #e0e0e0         /* Borders and dividers */
---color-background: #ffffff     /* Page background */
---color-accent: #3498db         /* Links and highlights */
+--ink: #1f1c18      /* Text */
+--rubric: #8b1a1a   /* Dark red headings and links, as prayer books print rubrics */
+--muted: #5f5a52    /* Secondary text */
+--rule: #ddd5c6     /* Borders and dividers */
+--paper: #f6f2ea    /* Screen background */
+--sheet: #fffdf8    /* Day "sheet" and calendar cells */
 ```
 
 ### Typography
-- **Screen**: System font stack (San Francisco, Segoe UI, Roboto)
-- **Print**: Serif fonts (Georgia, Times New Roman) for better readability
-- **Font sizes**: 10-11pt for print, 16px base for screen
+- **Prayer text and headings**: EB Garamond, bundled in `static/fonts/` (no Google Fonts)
+- **Controls** (navigation, calendar grid, year links): the system UI font, for legibility at small sizes
+- **Sizes**: 1.25rem on screen (1.15rem on phones), 11.5pt in print
 
 ### Liturgical Colors
 ```python
@@ -241,8 +247,8 @@ COLOR_MAP = {
 
 ### Responsive Design
 - Desktop: Full calendar grid (7 columns)
-- Mobile: Smaller day cells, condensed text
-- Breakpoint: 768px
+- Phones: smaller day cells, condensed text, full-width day sheet
+- Breakpoint: 640px
 
 ## Template Structure
 
@@ -283,10 +289,9 @@ This attribution is required and should not be removed.
 4. Run `python generate.py`
 
 ### Changing Colors/Fonts
-Edit `static/style.css`:
-- `:root` variables for global colors
-- `body` for base typography
-- `@media print` for print-specific styles
+- Colors, fonts and the Daily Office content (on screen and in print): `static/office.css`.
+  The Book uses this file too, so rebuild it with `--pdf` to confirm every day still fits.
+- Site layout and the calendar: `static/style.css`
 
 ### Modifying Calendar Layout
 The calendar is organized in `generate_index_page()`:
@@ -324,9 +329,9 @@ dates has a review finding. The 2026 site exemption does not apply to the Book.
 any day spills past one Letter page.
 
 Output goes to the git-ignored `book/` directory. The Book is a personal copy: never
-commit, deploy, or publish its HTML or PDF. Its template is `templates/book.html`, and
-its stylesheet and bundled EB Garamond fonts (SIL OFL) are in `book_static/`, which the
-website build does not copy.
+commit, deploy, or publish its HTML or PDF. Its template is `templates/book.html`. It
+uses the site's `static/office.css` and fonts, plus Book-only styles (title page and
+on-screen page view) in `book_static/book.css`, which the website build does not copy.
 
 ## Prayer generation workflow
 

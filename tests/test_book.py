@@ -93,7 +93,8 @@ class BookDataTests(unittest.TestCase):
         html_path, pdf_path = MODULE.build_book(2026, self.data, output)
         html = html_path.read_text(encoding='utf-8')
         self.assertIsNone(pdf_path)
-        self.assertEqual(html.count('<article class="book-day">'), 364)
+        self.assertEqual(html.count('<article class="book-day office">'), 364)
+        self.assertTrue((html_path.parent / 'static' / 'office.css').exists())
         self.assertIn('Daily Office 2026–27', html)
         self.assertIn('2027 Liturgical Year', html)
         self.assertIn('The Book of Common Prayer (2019)', html)
@@ -121,3 +122,25 @@ class BookOutputTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class SharedStyleTests(unittest.TestCase):
+    """The site and the Book share one Daily Office stylesheet and bundled fonts."""
+
+    def test_no_template_loads_google_fonts(self):
+        for template in (ROOT / 'templates').glob('*.html'):
+            with self.subTest(template=template.name):
+                self.assertNotIn('fonts.googleapis.com', template.read_text(encoding='utf-8'))
+
+    def test_site_pages_use_the_shared_office_stylesheet(self):
+        with tempfile.TemporaryDirectory() as directory:
+            days = MODULE.parse_csv(ROOT / 'data' / 'acna-prayers-2027.csv', year=2027)
+            output = Path(directory)
+            MODULE.build_site({2027: days}, output, 2027)
+            for page in ('index.html', '2027-12-19.html', 'all.html', 'all-may.html', 'about.html'):
+                with self.subTest(page=page):
+                    html = (output / page).read_text(encoding='utf-8')
+                    self.assertLess(html.index('static/office.css'), html.index('static/style.css'))
+            self.assertTrue((output / 'static' / 'fonts' / 'EBGaramond-wght.ttf').exists())
+            self.assertTrue((output / 'static' / 'fonts' / 'OFL.txt').exists())
+            self.assertIn('class="daily-office office"', (output / '2027-12-19.html').read_text(encoding='utf-8'))

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ title }}</title>
+    <link rel="stylesheet" href="static/office.css">
     <link rel="stylesheet" href="static/book.css">
 </head>
 <body class="book">
@@ -21,7 +22,7 @@
     </section>
 
     {% for day in days %}
-    <article class="book-day">
+    <article class="book-day office">
         {{ macros.daily_office_content(day, color_map) }}
     </article>
     {% endfor %}

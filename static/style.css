@@ -1,523 +1,272 @@
 /* ===================================
-   Daily Office - Modern Minimalist Styles
+   Daily Office website.
+   The prayer typography, fonts, colors and print page come from office.css,
+   which the personal Book shares. This file styles the site around it:
+   navigation, the calendar, the screen "sheet", and the print pages.
+   Controls use the reader's system font so they stay legible at small sizes.
    =================================== */
 
-/* ===================================
-   RESET & BASE STYLES
-   =================================== */
-
-* {
-    margin: 0;
-    padding: 0;
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
-:root {
-    --color-text: #2c3e50;
-    --color-text-light: #7f8c8d;
-    --color-border: #e0e0e0;
-    --color-background: #ffffff;
-    --color-accent: #3498db;
-    --color-sacred: #d4af37;
-    --color-mystery: #1a1a2e;
-    --color-twilight: #16213e;
-    --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-serif: Georgia, "Times New Roman", Times, serif;
-    --font-liturgical: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    --font-display: 'Playfair Display', Georgia, serif;
+html {
+    background: var(--paper);
 }
 
 body {
-    font-family: var(--font-liturgical);
-    font-size: 18px;
-    line-height: 1.7;
-    color: var(--color-text);
-    background-color: #f8f9fa;
+    margin: 0;
+    font-family: var(--font-text);
+    color: var(--ink);
+    background: var(--paper);
+    -webkit-text-size-adjust: 100%;
 }
 
-body.day-page {
-    background: linear-gradient(180deg, rgba(26, 26, 46, 1) 0%, rgba(22, 33, 62, 1) 50%, rgba(15, 32, 39, 1) 100%);
-    background-attachment: fixed;
-    min-height: 100vh;
+a {
+    color: var(--rubric);
+}
+
+a:focus-visible {
+    outline: 2px solid var(--rubric);
+    outline-offset: 2px;
 }
 
 /* ===================================
    NAVIGATION
    =================================== */
 
-.navigation {
-    background: linear-gradient(135deg, var(--color-mystery) 0%, var(--color-twilight) 100%);
-    padding: 1rem 2rem;
-    border-bottom: 2px solid var(--color-sacred);
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.navigation a {
-    color: var(--color-sacred);
-    text-decoration: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 4px;
-    border: 1px solid transparent;
-    transition: all 0.3s ease;
-    font-family: var(--font-sans);
-    font-weight: 500;
-}
-
-.navigation a:hover {
-    background-color: rgba(212, 175, 55, 0.15);
-    border-color: var(--color-sacred);
-}
-
-/* Month navigation bar (all.html and all-month.html) */
+.navigation,
 .month-nav {
-    background: rgba(255, 255, 255, 0.92);
-    padding: 0.75rem 2rem;
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
-    border-bottom: 1px solid rgba(44, 62, 80, 0.25);
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    padding: 0.6rem 1.25rem;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    background: var(--sheet);
+    border-bottom: 1px solid var(--rule);
 }
 
+.navigation a,
 .month-nav a {
-    color: var(--color-mystery);
+    color: var(--ink);
     text-decoration: none;
-    padding: 0.4rem 0.9rem;
+    padding: 0.35rem 0.65rem;
     border-radius: 4px;
-    border: 1px solid rgba(44, 62, 80, 0.25);
-    background-color: rgba(255, 255, 255, 0.65);
-    transition: all 0.3s ease;
-    font-family: var(--font-sans);
+}
+
+.navigation a:hover,
+.month-nav a:hover {
+    color: var(--rubric);
+    background: var(--tint);
+}
+
+.navigation .nav-spacer {
+    flex: 1;
+}
+
+.navigation .site-name {
+    font-family: var(--font-text);
+    font-size: 1.15rem;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    color: var(--rubric);
+}
+
+.month-nav {
+    justify-content: center;
     font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.month-nav a:hover,
-.month-nav a:focus-visible {
-    color: var(--color-mystery);
-    background-color: #e8edf3;
-    border-color: var(--color-mystery);
-}
-
-.month-nav a:focus-visible {
-    outline: 2px solid var(--color-mystery);
-    outline-offset: 2px;
-}
-
-.month-nav a:active {
-    background-color: #dde5ee;
 }
 
 /* ===================================
-   DAY PAGE
+   DAY PAGES: a sheet of paper on the page
    =================================== */
 
 .daily-office {
-    max-width: 800px;
+    max-width: 44rem;
     margin: 2rem auto;
-    background: rgba(255, 255, 255, 0.97);
-    padding: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 1px rgba(212, 175, 55, 0.5);
-    border-radius: 8px;
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 2.5rem 3rem 2rem;
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    box-shadow: 0 1px 3px rgba(60, 40, 20, 0.08);
 }
 
-@supports (backdrop-filter: blur(10px)) {
-    .daily-office {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-    }
+.daily-office p a {
+    color: var(--rubric);
 }
 
-.page-header {
+/* About page prose */
+.about .office-section p {
+    margin-bottom: 0.7em;
+}
+
+.page-footer {
     text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 3px solid var(--color-border);
-    position: relative;
-}
-
-.liturgical-banner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding: 1.5rem 0 0.5rem;
-    margin-top: 1.5rem;
-    border-top: 1px solid rgba(212, 175, 55, 0.2);
-    font-family: var(--font-sans);
-}
-
-.liturgical-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--color-text-light);
-    font-weight: 600;
-}
-
-.liturgical-seal {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.seal-ornament {
-    color: var(--color-sacred);
-    font-size: 0.9rem;
-    opacity: 0.6;
-}
-
-.color-swatch {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 3px solid var(--color-sacred);
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.15),
-        inset 0 0 0 2px rgba(255, 255, 255, 0.5),
-        0 0 20px rgba(212, 175, 55, 0.2);
-    position: relative;
-}
-
-.color-swatch::after {
-    content: '';
-    position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    border: 1px solid rgba(212, 175, 55, 0.3);
-    pointer-events: none;
-}
-
-.color-name {
+    padding: 0.5rem 1rem 2.5rem;
+    font-family: var(--font-ui);
     font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-text);
-    letter-spacing: 0.05em;
+    color: var(--muted);
 }
 
-/* Legacy support: allow templates using .liturgical-color to
-   render using the same visual language as the new liturgical
-   color seal/banner components. */
-.liturgical-color {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.15rem 0.5rem;
-    border-radius: 999px;
-    border: 1px solid var(--color-border);
-    background-color: rgba(255, 255, 255, 0.9);
-}
-.page-header h1 {
-    font-family: var(--font-display);
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-top: 0.5rem;
-    color: var(--color-text);
+.page-footer p {
+    margin: 0.3rem 0;
 }
 
-.page-header h2.observance {
-    font-family: var(--font-display);
-    font-size: 1.2rem;
-    font-weight: 400;
-    color: var(--color-text-light);
-    margin-top: 0.5rem;
+.attribution a {
+    color: var(--rubric);
 }
 
-/* ===================================
-   OFFICE SECTIONS
-   =================================== */
-
-.office-section {
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.office-section:last-of-type {
-    border-bottom: none;
-}
-
-.office-section h3 {
-    font-family: var(--font-display);
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--color-text);
-}
-
-.office-section h4 {
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--color-text-light);
-    margin-top: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.opening-sentence,
-.antiphon,
-.reading,
-.collect {
-    margin-bottom: 1rem;
-}
-
-.scripture,
-.lesson-ref,
-.psalm-ref {
-    font-style: italic;
-    color: var(--color-text);
-    line-height: 1.7;
-}
-
-.collect p {
-    line-height: 1.8;
-    text-align: left;
-}
-
-/* ===================================
-   INDEX PAGE
-   =================================== */
-
-.index-header {
-    position: relative;
+/* Print pages: instructions above the stack of days */
+.print-header {
+    max-width: 44rem;
+    margin: 2rem auto 0;
+    padding: 0 1rem;
     text-align: center;
-    padding: 2rem;
-    min-height: 80vh; /* Fallback for older browsers */
-    min-height: 80dvh; /* Dynamic viewport height for modern browsers */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f2027 100%);
-    background-attachment: fixed;
-    color: #f5f5f5;
-    overflow: hidden;
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    color: var(--muted);
 }
 
-.index-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(ellipse at 50% 30%, rgba(212, 175, 55, 0.12) 0%, transparent 50%);
-    pointer-events: none;
-    opacity: 0.5;
+.print-header h1 {
+    font-family: var(--font-text);
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0 0 0.5rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .index-header::before {
-        animation: subtle-shimmer 20s ease-in-out infinite;
-    }
+.print-header p {
+    margin: 0.3rem 0;
 }
 
-@keyframes subtle-shimmer {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
+/* ===================================
+   HOME PAGE
+   =================================== */
+
+.site-intro {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 3.5rem 1.25rem 1.5rem;
+    text-align: center;
 }
 
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
-    opacity: 0.5;
+.site-intro .cross {
+    font-size: 1.8rem;
+    color: var(--rubric);
+    margin: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .hero-overlay {
-        animation: divine-glow 8s ease-in-out infinite;
-    }
+.site-intro h1 {
+    font-size: 2.8rem;
+    font-weight: 500;
+    line-height: 1.1;
+    margin: 0.4rem 0 0.5rem;
 }
 
-@keyframes divine-glow {
-    0%, 100% { opacity: 0.4; }
-    50% { opacity: 0.7; }
+.site-intro .tagline {
+    font-size: 1.15rem;
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
+    color: var(--rubric);
+    margin: 0 0 1.2rem;
 }
 
-.hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-}
-
-.sacred-symbol {
-    font-size: 3rem;
-    color: var(--color-sacred);
-    opacity: 0.9;
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-    .sacred-symbol {
-        animation: gentle-pulse 4s ease-in-out infinite;
-    }
-}
-
-@keyframes gentle-pulse {
-    0%, 100% { transform: scale(1); opacity: 0.9; }
-    50% { transform: scale(1.05); opacity: 1; }
-}
-
-.index-header h1 {
-    font-family: var(--font-display);
-    font-size: 3.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #f5f5f5;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 175, 55, 0.3);
-}
-
-
-.hero-nav {
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    z-index: 10;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.nav-link-print {
-    font-family: var(--font-sans);
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--color-sacred);
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border: 2px solid var(--color-sacred);
-    border-radius: 4px;
-    background: rgba(212, 175, 55, 0.1);
-    transition: all 0.3s ease;
-    display: inline-block;
-    will-change: transform;
-}
-
-@supports (backdrop-filter: blur(10px)) {
-    .nav-link-print {
-        backdrop-filter: blur(10px);
-    }
-}
-
-.nav-link-print:hover {
-    background: rgba(212, 175, 55, 0.2);
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
-    transform: translateY(-2px);
+.site-intro .site-description {
+    font-size: 1.2rem;
+    line-height: 1.55;
+    margin: 0;
 }
 
 .year-switcher {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
+    gap: 0.5rem;
+    margin-top: 1.6rem;
+    font-family: var(--font-ui);
 }
 
 .year-link {
-    font-family: var(--font-sans);
     font-size: 0.9rem;
     font-weight: 600;
-    letter-spacing: 0.05em;
-    color: var(--color-sacred);
+    color: var(--ink);
     text-decoration: none;
-    padding: 0.5rem 1.25rem;
-    border: 2px solid var(--color-sacred);
-    border-radius: 4px;
-    background: rgba(212, 175, 55, 0.1);
+    padding: 0.4rem 1.1rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    background: var(--sheet);
 }
 
 a.year-link:hover {
-    background: rgba(212, 175, 55, 0.2);
+    border-color: var(--rubric);
+    color: var(--rubric);
 }
 
 .year-link-current {
-    background: rgba(212, 175, 55, 0.35);
-    color: #f5f5f5;
+    background: var(--rubric);
+    border-color: var(--rubric);
+    color: #ffffff;
 }
 
-@media print {
-    .year-switcher {
-        display: none;
-    }
-}
-
-.tagline {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-style: italic;
-    color: var(--color-sacred);
-    margin-bottom: 2rem;
-    letter-spacing: 0.02em;
-}
-
-.site-description {
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    line-height: 1.8;
-    color: rgba(245, 245, 245, 0.9);
-    max-width: 700px;
-    margin: 0 auto 2.5rem;
-    padding: 0 1rem;
-}
-
+/* ===================================
+   CALENDAR
+   =================================== */
 
 .calendar {
-    max-width: 1200px;
+    max-width: 70rem;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem 1.25rem 2rem;
 }
 
 .month {
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
 }
 
 .month h2 {
-    font-family: var(--font-display);
-    font-size: 2.2rem;
+    font-size: 1.7rem;
     font-weight: 600;
-    margin-bottom: 1.5rem;
-    color: var(--color-text);
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
     text-align: center;
+    color: var(--rubric);
+    margin: 0 0 0.8rem;
 }
 
 .calendar-grid {
-    background: white;
-    border-radius: 8px;
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: var(--font-ui);
+}
+
+.calendar-header,
+.calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .calendar-header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background: linear-gradient(135deg, var(--color-mystery) 0%, var(--color-twilight) 100%);
-    color: var(--color-sacred);
-    border-bottom: 2px solid var(--color-sacred);
+    background: var(--tint);
+    border-bottom: 1px solid var(--rule);
 }
 
 .weekday-header {
-    padding: 1rem;
+    padding: 0.5rem;
     text-align: center;
+    font-size: 0.75rem;
     font-weight: 600;
-    font-size: 0.9rem;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--muted);
 }
 
 .calendar-week {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--rule);
 }
 
 .calendar-week:last-child {
@@ -525,13 +274,13 @@ a.year-link:hover {
 }
 
 .calendar-day {
-    min-height: 120px;
-    padding: 0.75rem;
-    border-right: 1px solid var(--color-border);
     position: relative;
-    background: white;
     display: flex;
     flex-direction: column;
+    min-height: 6.5rem;
+    padding: 0.6rem 0.6rem 0.5rem;
+    border-right: 1px solid var(--rule);
+    background: var(--sheet);
 }
 
 .calendar-day:nth-child(7) {
@@ -539,19 +288,17 @@ a.year-link:hover {
 }
 
 .calendar-day.empty {
-    background: #f8f9fa;
+    background: #f1ece2;
 }
 
 .calendar-day.has-data {
+    color: var(--ink);
     text-decoration: none;
-    color: var(--color-text);
-    transition: background-color 0.2s, transform 0.1s;
-    cursor: pointer;
+    transition: background-color 0.15s;
 }
 
 .calendar-day.has-data:hover {
-    background-color: #f0f7ff;
-    transform: scale(1.02);
+    background: #f8f1e3;
 }
 
 .liturgical-indicator {
@@ -559,367 +306,173 @@ a.year-link:hover {
     top: 0;
     left: 0;
     width: 100%;
-    height: 3px;
+    height: 4px;
+}
+
+.color-white .liturgical-indicator {
+    box-shadow: inset 0 -1px 0 var(--rule);
 }
 
 .calendar-day .day-number {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--color-text);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.calendar-day:nth-child(7n+1).has-data .day-number {
+    color: var(--rubric);
 }
 
 .calendar-day .observance {
-    font-family: var(--font-display);
-    font-size: 0.85rem;
-    color: var(--color-text);
-    line-height: 1.4;
+    font-size: 0.78rem;
+    line-height: 1.3;
+    color: var(--muted);
     overflow: hidden;
-    text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
 
-/* Sunday styling */
-.calendar-day:nth-child(7n+1).has-data .day-number {
-    color: var(--color-sacred);
-}
-
 /* ===================================
-   FOOTER
+   HOME FOOTER
    =================================== */
 
 .index-footer {
-    font-family: var(--font-liturgical);
     text-align: center;
-    padding: 2rem;
-    background: white;
-    border-top: 1px solid var(--color-border);
+    padding: 1.5rem 1rem 2.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
 }
 
-.legend {
-    margin-top: 2rem;
+.index-footer p {
+    margin: 0.3rem 0;
 }
 
 .legend h3 {
-    font-family: var(--font-liturgical);
-    font-size: 1.1rem;
+    font-family: var(--font-text);
+    font-size: 1.2rem;
     font-weight: 600;
-    margin-bottom: 1rem;
-    color: var(--color-text-light);
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
+    color: var(--rubric);
+    margin: 1.2rem 0 0.6rem;
 }
 
 .color-legend {
     display: flex;
     justify-content: center;
-    gap: 2rem;
     flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
 }
 
 .legend-item {
-    font-family: var(--font-liturgical);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .color-dot {
-    width: 16px;
-    height: 16px;
+    width: 0.9rem;
+    height: 0.9rem;
     border-radius: 50%;
-    border: 1px solid #ddd;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
 }
 
-.page-footer {
-    text-align: center;
-    padding: 2rem;
-    color: rgba(245, 245, 245, 0.7);
-    font-size: 0.9rem;
-    background: transparent;
-}
-
-.page-footer a {
-    color: var(--color-sacred);
-}
-
-.attribution {
+.index-footer .attribution {
     margin-top: 1rem;
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-}
-
-.attribution a {
-    color: var(--color-accent);
-    text-decoration: none;
-}
-
-.attribution a:hover {
-    text-decoration: underline;
 }
 
 /* ===================================
-   PRINT STYLES
+   PHONES
    =================================== */
 
-@media print {
-    /* Hide screen-only elements */
-    .no-print,
-    .navigation,
-    .page-footer,
-    .print-header {
-        display: none !important;
-    }
-
-    /* Reset page styles for print */
-    body {
-        font-family: var(--font-serif);
-        font-size: 10pt;
-        line-height: 1.32;
-        color: #000;
-        background: white;
-        margin: 0;
-        padding: 0;
-    }
-
-    body.day-page,
-    body.all-days-page {
-        background: white !important;
-        min-height: auto;
-    }
-
-    /* Page setup */
-    @page {
-        size: letter;
-        margin: 0.4in 0.5in;
-    }
-
-    /* Daily office page */
-    .daily-office {
-        max-width: 100%;
-        margin: 0;
-        padding: 0;
-        box-shadow: none;
-        border-radius: 0;
-        background: white;
-        backdrop-filter: none;
-    }
-
-    .page-header {
-        margin-bottom: 0.35rem;
-        padding-bottom: 0.35rem;
-        border-bottom: 2px solid #000;
-    }
-
-    .liturgical-banner {
-        padding: 0.3rem 0 0.1rem;
-        margin-top: 0.35rem;
-    }
-
-    .liturgical-label {
-        font-size: 7pt;
-    }
-
-    .color-swatch {
-        width: 24px;
-        height: 24px;
-        border-width: 2px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-    }
-
-    .color-swatch::after {
-        display: none;
-    }
-
-    .seal-ornament {
-        font-size: 8pt;
-    }
-
-    .color-name {
-        font-size: 8pt;
-    }
-
-    .page-header h1 {
-        font-size: 14pt;
-        margin-top: 0;
-    }
-
-    .page-header h2.observance {
-        font-size: 11pt;
-        margin-top: 0.15rem;
-    }
-
-    /* Sections */
-    .office-section {
-        margin-bottom: 0.35rem;
-        padding-bottom: 0.3rem;
-        border-bottom: 1px solid #ccc;
-        page-break-inside: avoid;
-    }
-
-    .office-section h3 {
-        font-size: 12pt;
-        margin-bottom: 0.2rem;
-    }
-
-    .office-section h4 {
-        font-size: 9pt;
-        margin-top: 0.2rem;
-        margin-bottom: 0.1rem;
-    }
-
-    .opening-sentence,
-    .antiphon,
-    .reading,
-    .collect {
-        margin-bottom: 0.25rem;
-        page-break-inside: avoid;
-    }
-
-    .scripture,
-    .lesson-ref,
-    .psalm-ref,
-    .collect p {
-        font-size: 10pt;
-        line-height: 1.24;
-    }
-
-    /* Compact readings */
-    .readings {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.35rem 0.45rem;
-    }
-
-    .collects {
-        page-break-inside: avoid;
-    }
-
-    /* Page breaks for all-days page */
-    .page-break {
-        page-break-after: always;
-    }
-
-    .page-break:last-child {
-        page-break-after: auto;
-    }
-
-    /* Ensure sections stay together */
-    .morning-prayer,
-    .evening-prayer,
-    .collects {
-        page-break-inside: avoid;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    .daily-office {
-        margin: 1rem;
-        padding: 1.5rem;
-    }
-
+@media screen and (max-width: 640px) {
     .navigation {
-        padding: 0.75rem 1rem;
+        padding: 0.5rem 0.75rem;
     }
 
-    .liturgical-banner {
-        flex-direction: column;
-        gap: 0.5rem;
-        padding: 1rem 0;
+    .daily-office {
+        margin: 0;
+        padding: 1.75rem 1.1rem 1.5rem;
+        border-left: none;
+        border-right: none;
+        border-radius: 0;
     }
 
-    .liturgical-seal {
-        gap: 0.5rem;
+    .office {
+        font-size: 1.15rem;
     }
 
-    .color-swatch {
-        width: 50px;
-        height: 50px;
+    .site-intro {
+        padding-top: 2.5rem;
     }
 
-    .liturgical-label,
-    .color-name {
-        font-size: 0.7rem;
-    }
-
-    .index-header {
-        padding: 4rem 1.5rem;
-        min-height: 100vh;
-        min-height: 100dvh;
-    }
-
-    .hero-nav {
-        position: absolute;
-        top: 1rem;
-        left: 1rem;
-    }
-
-    .nav-link-print {
-        font-size: 0.75rem;
-        padding: 0.6rem 1rem;
-    }
-
-    .index-header h1 {
-        font-size: 2.5rem;
-    }
-
-    .tagline {
-        font-size: 1rem;
-    }
-
-    .site-description {
-        font-size: 0.95rem;
-        padding: 0 0.5rem;
-    }
-
-    .sacred-symbol {
-        font-size: 2rem;
-        margin-bottom: 1.5rem;
+    .site-intro h1 {
+        font-size: 2.2rem;
     }
 
     .calendar {
-        padding: 1rem 0.5rem;
-    }
-
-    .calendar-grid {
-        /* Ensure grid doesn't overflow on mobile */
-        width: 100%;
-        overflow-x: auto;
-    }
-
-    .calendar-header {
-        /* Match the week grid columns for proper alignment */
-        grid-template-columns: repeat(7, minmax(0, 1fr));
-    }
-
-    .calendar-week {
-        /* Use minmax to prevent columns from becoming too narrow */
-        grid-template-columns: repeat(7, minmax(0, 1fr));
+        padding: 0.5rem 0.4rem 1.5rem;
     }
 
     .calendar-day {
-        /* Consistent minimum height; allow expansion if needed */
-        min-height: 85px;
+        min-height: 4.75rem;
         padding: 0.4rem 0.3rem;
     }
 
     .calendar-day .day-number {
-        font-size: 1rem;
-        margin-bottom: 0.25rem;
+        font-size: 0.9rem;
     }
 
     .calendar-day .observance {
-        font-size: 0.65rem;
+        font-size: 0.62rem;
         line-height: 1.2;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 3;
     }
 
     .weekday-header {
-        padding: 0.6rem 0.2rem;
-        font-size: 0.7rem;
+        padding: 0.4rem 0.1rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.02em;
+    }
+}
+
+/* ===================================
+   PRINT: each day prints exactly as it does in the Book
+   =================================== */
+
+@media print {
+    .no-print,
+    .navigation,
+    .month-nav,
+    .page-footer,
+    .print-header,
+    .year-switcher {
+        display: none !important;
     }
 
-    .month h2 {
-        font-size: 1.5rem;
+    html,
+    body {
+        background: #ffffff;
+    }
+
+    .daily-office {
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .page-break {
+        break-after: page;
+    }
+
+    .page-break:last-of-type {
+        break-after: auto;
     }
 }

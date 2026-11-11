@@ -351,6 +351,7 @@ def build_site(days_by_year, output_dir, current_year):
     return page_years
 
 
+SITE_STATIC_DIR = Path(__file__).parent / 'static'
 BOOK_STATIC_DIR = Path(__file__).parent / 'book_static'
 CHROME_CANDIDATES = (
     'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome',
@@ -473,6 +474,8 @@ def build_book(advent_year, data_dir, output_dir, *, pdf=False, chrome=None):
     if book_dir.exists():
         shutil.rmtree(book_dir)
     shutil.copytree(BOOK_STATIC_DIR, book_dir / 'static')
+    shutil.copytree(SITE_STATIC_DIR / 'fonts', book_dir / 'static' / 'fonts')
+    shutil.copy(SITE_STATIC_DIR / 'office.css', book_dir / 'static' / 'office.css')
     html = setup_jinja_env().get_template('book.html').render(
         days=days,
         title=f'Daily Office {book_name(advent_year)}',

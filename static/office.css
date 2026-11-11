@@ -1,0 +1,191 @@
+/* ===================================
+   Daily Office content: shared by the website and the personal Book.
+   Prayer text is set in EB Garamond with dark red small-caps headings.
+   In print, every page is one day on Letter paper with the Book's margins.
+   =================================== */
+
+@font-face {
+    font-family: 'EB Garamond';
+    src: url('fonts/EBGaramond-wght.ttf') format('truetype');
+    font-weight: 400 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'EB Garamond';
+    src: url('fonts/EBGaramond-Italic-wght.ttf') format('truetype');
+    font-weight: 400 800;
+    font-style: italic;
+    font-display: swap;
+}
+
+:root {
+    --ink: #1f1c18;
+    --rubric: #8b1a1a;
+    --muted: #5f5a52;
+    --rule: #ddd5c6;
+    --paper: #f6f2ea;
+    --sheet: #fffdf8;
+    --tint: #efe8da;
+    --font-text: 'EB Garamond', Georgia, 'Times New Roman', serif;
+    --font-ui: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Wide margins on both sides, so pages can be punched whether printed single- or double-sided. */
+@page {
+    size: letter;
+    margin: 0.85in 1.2in 0.8in 1.2in;
+}
+
+.office {
+    font-family: var(--font-text);
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--ink);
+}
+
+.office .page-header {
+    text-align: center;
+    padding-bottom: 0.6em;
+    margin-bottom: 0.6em;
+    border-bottom: 1px solid var(--rubric);
+}
+
+.office .page-header h1 {
+    font-size: 1.4em;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.office .page-header .observance {
+    font-size: 1.13em;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.3;
+    margin: 0.1em 0;
+}
+
+.office .liturgical-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.35em;
+    font-size: 0.87em;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+}
+
+.office .liturgical-label::after {
+    content: ':';
+}
+
+.office .liturgical-seal {
+    display: inline-flex;
+    align-items: center;
+}
+
+.office .seal-ornament {
+    display: none;
+}
+
+.office .color-swatch {
+    width: 0.75em;
+    height: 0.75em;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+.office h3 {
+    font-size: 1.13em;
+    font-weight: 600;
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
+    text-align: center;
+    color: var(--rubric);
+    margin: 1.4em 0 0.2em;
+}
+
+.office h4 {
+    font-size: 0.91em;
+    font-weight: 500;
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    color: var(--rubric);
+    margin: 0.6em 0 0;
+}
+
+.office p {
+    margin: 0 0 0.3em;
+}
+
+.office .scripture {
+    font-style: italic;
+}
+
+.office .readings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7.5em, 1fr));
+    column-gap: 1.2em;
+}
+
+.office .remembrance h3 {
+    font-size: 0.96em;
+}
+
+.office .remembrance p {
+    text-align: center;
+    font-style: italic;
+    font-size: 0.96em;
+}
+
+@media print {
+    html,
+    body {
+        background: #ffffff;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .office {
+        font-size: 11.5pt;
+        line-height: 1.28;
+    }
+
+    .office .page-header {
+        padding-bottom: 0.5em;
+        margin-bottom: 0.5em;
+        border-bottom-width: 0.5pt;
+    }
+
+    .office .page-header h1 {
+        font-size: 1.39em;
+    }
+
+    .office .page-header .observance {
+        margin: 0.02in 0;
+    }
+
+    .office .liturgical-seal {
+        display: none;
+    }
+
+    .office h3 {
+        margin: 0.11in 0 0.02in;
+    }
+
+    .office h4 {
+        margin: 0.05in 0 0;
+    }
+
+    .office p {
+        margin: 0 0 0.03in;
+    }
+
+    .office .readings {
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 0.2in;
+    }
+}
