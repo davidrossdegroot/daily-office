@@ -1,43 +1,20 @@
-/* Print styles for the personal Book: one day per Letter page, set in EB Garamond. */
-
-@font-face {
-    font-family: 'EB Garamond';
-    src: url('fonts/EBGaramond-wght.ttf') format('truetype');
-    font-weight: 400 800;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'EB Garamond';
-    src: url('fonts/EBGaramond-Italic-wght.ttf') format('truetype');
-    font-weight: 400 800;
-    font-style: italic;
-}
-
-:root {
-    --ink: #1a1a1a;
-    --rubric: #8b1a1a;
-    --muted: #555555;
-}
-
-/* Wide margins on both sides, so pages can be punched whether printed single- or double-sided. */
-@page {
-    size: letter;
-    margin: 0.85in 1.2in 0.8in 1.2in;
-}
+/* Book-only styles: the title page, one day per page, and an on-screen page view.
+   Fonts, page margins and the Daily Office typography come from office.css. */
 
 html {
-    font-family: 'EB Garamond', Georgia, 'Times New Roman', serif;
-    font-size: 11.5pt;
-    line-height: 1.28;
+    font-family: var(--font-text);
     color: var(--ink);
     background: #ffffff;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
 }
 
 body {
     margin: 0;
+}
+
+/* The Book always uses its print measurements, on screen too. */
+.book .office {
+    font-size: 11.5pt;
+    line-height: 1.28;
 }
 
 .title-page,
@@ -86,86 +63,6 @@ body {
     margin: 0;
 }
 
-/* Day pages */
-
-.page-header {
-    text-align: center;
-    padding-bottom: 0.08in;
-    margin-bottom: 0.08in;
-    border-bottom: 0.5pt solid var(--rubric);
-}
-
-.page-header h1 {
-    font-size: 16pt;
-    font-weight: 500;
-    margin: 0;
-}
-
-.page-header .observance {
-    font-size: 13pt;
-    font-style: italic;
-    font-weight: 400;
-    margin: 0.02in 0;
-}
-
-.liturgical-banner {
-    font-size: 10pt;
-    font-variant: small-caps;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-}
-
-.liturgical-banner .liturgical-seal {
-    display: none;
-}
-
-.liturgical-banner .liturgical-label::after {
-    content: ': ';
-}
-
-h3 {
-    font-size: 13pt;
-    font-weight: 600;
-    font-variant: small-caps;
-    letter-spacing: 0.08em;
-    text-align: center;
-    color: var(--rubric);
-    margin: 0.11in 0 0.02in;
-}
-
-h4 {
-    font-size: 10.5pt;
-    font-weight: 500;
-    font-variant: small-caps;
-    letter-spacing: 0.05em;
-    color: var(--rubric);
-    margin: 0.05in 0 0;
-}
-
-p {
-    margin: 0 0 0.03in;
-}
-
-.scripture {
-    font-style: italic;
-}
-
-.readings {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 0.2in;
-}
-
-.remembrance h3 {
-    font-size: 11pt;
-}
-
-.remembrance p {
-    text-align: center;
-    font-style: italic;
-    font-size: 11pt;
-}
-
 /* On screen, show each page as a Letter sheet with the same margins as the printout. */
 @media screen {
     html {
@@ -189,5 +86,10 @@ p {
 
     .title-page {
         height: 11in;
+    }
+
+    /* Match the printed page, where the color is named but not shown. */
+    .book .liturgical-seal {
+        display: none;
     }
 }
