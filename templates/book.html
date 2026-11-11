@@ -1,0 +1,29 @@
+{% import 'macros.html' as macros %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="static/book.css">
+</head>
+<body class="book">
+    <section class="title-page">
+        <div class="title-block">
+            <h1 class="book-title">{{ title }}</h1>
+            <p class="book-subtitle">{{ subtitle }}</p>
+            <p class="book-span">
+                The First Sunday of Advent, {{ start.strftime('%B') }} {{ start.day }}, {{ start.year }},<br>
+                through {{ end.strftime('%A, %B') }} {{ end.day }}, {{ end.year }}
+            </p>
+            <p class="book-companion">A companion to Morning and Evening Prayer<br>in the Book of Common Prayer (2019)</p>
+        </div>
+        <p class="attribution">Lectionary and collects from The Book of Common Prayer (2019), Anglican Church in North America</p>
+    </section>
+
+    {% for day in days %}
+    <article class="book-day">
+        {{ macros.daily_office_content(day, color_map) }}
+    </article>
+    {% endfor %}
+</body>
+</html>

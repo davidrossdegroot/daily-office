@@ -9,8 +9,9 @@ import csv
 import os
 import re
 import shutil
+import subprocess
 import tempfile
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -350,6 +351,158 @@ def build_site(days_by_year, output_dir, current_year):
     return page_years
 
 
+BOOK_STATIC_DIR = Path(__file__).parent / 'book_static'
+CHROME_CANDIDATES = (
+    'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome',
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+)
+
+
+class BookError(Exception):
+    """The Book cannot be built, for a reason the maintainer must resolve."""
+
+
+def first_sunday_of_advent(year):
+    """Return the First Sunday of Advent: three weeks before the last Sunday before Christmas."""
+    christmas = date(year, 12, 25)
+    advent_four = christmas - timedelta(days=christmas.isoweekday() % 7 or 7)
+    return advent_four - timedelta(weeks=3)
+
+
+def liturgical_year_range(advent_year):
+    """Return the first and last dates of the Liturgical Year beginning at Advent advent_year."""
+    return (first_sunday_of_advent(advent_year),
+            first_sunday_of_advent(advent_year + 1) - timedelta(days=1))
+
+
+def book_name(advent_year):
+    """Name a Book by both calendar years it spans, such as 2026–27."""
+    return f'{advent_year}–{(advent_year + 1) % 100:02d}'
+
+
+def book_slug(advent_year):
+    return f'daily-office-{advent_year}-{(advent_year + 1) % 100:02d}'
+
+
+def _book_finding(label, field, code, message):
+    return {'date': label, 'field': field, 'code': code, 'message': message, 'blocking': True}
+
+
+def _within(label, start, end):
+    """Whether a finding's date label falls in the Book. Labels that are not dates fail closed."""
+    try:
+        return start <= date.fromisoformat(label) <= end
+    except ValueError:
+        return True
+
+
+def collect_book_days(advent_year, data_dir):
+    """Return the Book's days and every finding on exactly those dates.
+
+    Every finding is blocking, including on 2026 dates: the site's 2026 exemption
+    does not extend to the Book.
+    """
+    start, end = liturgical_year_range(advent_year)
+    days, findings = [], []
+    for year in (start.year, end.year):
+        path = Path(data_dir) / f'acna-prayers-{year}.csv'
+        if not path.exists():
+            findings.append(_book_finding(str(year), 'CSV', 'missing_source',
+                                          f'{path.name} is needed for the {book_name(advent_year)} Book.'))
+            continue
+        with path.open(newline='', encoding='utf-8') as stream:
+            rows = list(csv.DictReader(stream))
+        findings.extend({**item, 'blocking': True}
+                        for item in validate_rows(rows, year) if _within(item['date'], start, end))
+        days.extend(day for day in parse_csv(path, year=year) if start <= day['date_obj'].date() <= end)
+    present = {day['date_obj'].date() for day in days}
+    current = start
+    while current <= end:
+        if current not in present:
+            findings.append(_book_finding(current.isoformat(), 'Date', 'missing_date',
+                                          'No Daily Office entry exists for this date.'))
+        current += timedelta(days=1)
+    return sorted(days, key=lambda day: day['date_obj']), findings
+
+
+def find_chrome():
+    """Locate a Chrome or Chromium executable for printing, honoring CHROME_PATH."""
+    configured = os.environ.get('CHROME_PATH')
+    if configured:
+        return configured
+    for candidate in CHROME_CANDIDATES:
+        found = shutil.which(candidate) or (candidate if Path(candidate).is_file() else None)
+        if found:
+            return found
+    return None
+
+
+def count_pdf_pages(pdf_path):
+    return len(re.findall(rb'/Type\s*/Page(?![a-zA-Z])', Path(pdf_path).read_bytes()))
+
+
+def print_book_pdf(html_path, pdf_path, chrome):
+    """Print the Book's HTML to PDF with headless Chrome, without browser headers or footers."""
+    with tempfile.TemporaryDirectory(prefix='daily-office-chrome-') as profile:
+        result = subprocess.run(
+            [chrome, '--headless', '--disable-gpu', '--no-first-run', '--no-pdf-header-footer',
+             f'--user-data-dir={profile}', f'--print-to-pdf={pdf_path}', Path(html_path).resolve().as_uri()],
+            capture_output=True, text=True, timeout=600, check=False,
+        )
+    if result.returncode != 0 or not Path(pdf_path).exists():
+        raise BookError(f'Chrome could not print the Book: {result.stderr.strip()[-500:]}')
+
+
+def build_book(advent_year, data_dir, output_dir, *, pdf=False, chrome=None):
+    """Build the personal Book for the Liturgical Year beginning at Advent advent_year.
+
+    Returns the HTML path, and the PDF path when pdf is requested. Raises BookError
+    if any of the Book's dates has a finding, or if a day does not fit on one page.
+    """
+    start, end = liturgical_year_range(advent_year)
+    output_dir = Path(output_dir)
+    slug = book_slug(advent_year)
+    report_path = output_dir / f'{slug}.review.json'
+    days, findings = collect_book_days(advent_year, data_dir)
+    write_review_report(report_path, findings, None, years=[start.year, end.year])
+    if findings:
+        raise BookError(f'The {book_name(advent_year)} Book has {len(findings)} findings; see {report_path}')
+
+    book_dir = output_dir / slug
+    if book_dir.exists():
+        shutil.rmtree(book_dir)
+    shutil.copytree(BOOK_STATIC_DIR, book_dir / 'static')
+    html = setup_jinja_env().get_template('book.html').render(
+        days=days,
+        title=f'Daily Office {book_name(advent_year)}',
+        subtitle=f'{end.year} Liturgical Year',
+        start=start,
+        end=end,
+        color_map=COLOR_MAP,
+    )
+    html_path = book_dir / f'{slug}.html'
+    html_path.write_text(html, encoding='utf-8')
+
+    findings = [{**item, 'blocking': True} for item in validate_rendered_pages(book_dir)]
+    write_review_report(report_path, findings, None, years=[start.year, end.year])
+    if findings:
+        raise BookError(f'The rendered Book still has placeholders; see {report_path}')
+    if not pdf:
+        return html_path, None
+
+    chrome = chrome or find_chrome()
+    if not chrome:
+        raise BookError('Printing the PDF needs Chrome or Chromium; set CHROME_PATH to its executable.')
+    pdf_path = book_dir / f'{slug}.pdf'
+    print_book_pdf(html_path, pdf_path, chrome)
+    expected = len(days) + 1
+    pages = count_pdf_pages(pdf_path)
+    if pages != expected:
+        raise BookError(f'{pdf_path.name} has {pages} pages, not {expected}: a day does not fit on one page.')
+    return html_path, pdf_path
+
+
 def main():
     """Main build function."""
     print("Daily Office Static Site Generator")
@@ -360,11 +513,30 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--year', type=int, help='Calendar year to generate')
     parser.add_argument('--csv', type=Path, help='Input CSV (defaults to data/acna-prayers-YEAR.csv)')
-    parser.add_argument('--output-dir', type=Path, default=base_dir / 'build')
+    parser.add_argument('--output-dir', type=Path,
+                        help='Output directory (default: build/, or book/ with --book)')
     parser.add_argument('--publish', action='store_true', help='Reject content with unresolved review findings')
     parser.add_argument('--month', type=int, choices=range(1, 13), help='Validate a single complete month')
     parser.add_argument('--review-report', type=Path, help='JSON report path (default: OUTPUT_DIR.review.json)')
+    parser.add_argument('--book', type=int, metavar='ADVENT_YEAR',
+                        help='Build the personal Book for the Liturgical Year beginning at this Advent')
+    parser.add_argument('--pdf', action='store_true', help='With --book, also print the Book to PDF with Chrome')
     args = parser.parse_args()
+    if args.pdf and args.book is None:
+        parser.error('--pdf requires --book')
+    if args.book is not None:
+        if any((args.year, args.csv, args.month, args.publish, args.review_report)):
+            parser.error('--book cannot be combined with --year, --csv, --month, --publish, or --review-report')
+        try:
+            html_path, pdf_path = build_book(args.book, base_dir / 'data',
+                                             args.output_dir or base_dir / 'book', pdf=args.pdf)
+        except BookError as error:
+            parser.error(str(error))
+        print(f"✓ Book {book_name(args.book)}: {html_path}")
+        if pdf_path:
+            print(f"✓ PDF: {pdf_path}")
+        return
+    args.output_dir = args.output_dir or base_dir / 'build'
     if args.year is not None and not 1 <= args.year <= 9999:
         parser.error('--year must be between 1 and 9999')
     if args.csv is not None:

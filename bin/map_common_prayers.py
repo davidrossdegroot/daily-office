@@ -2189,7 +2189,8 @@ def infer_antiphon(observance: str, remembrance: str, current_date: date | None 
 
     if (
         "presentation" in observance_text
-        or "annunciation" in observance_text
+        # "Annunciation Sunday" is Advent 4, which keeps the Advent antiphon.
+        or ("annunciation" in observance_text and "annunciation sunday" not in observance_text)
         or (current_date is not None and current_date == annunciation_transfer_date(current_date.year))
     ):
         return SEASONAL_ANTIPHONS["presentation_annunciation"]

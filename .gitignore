@@ -23,3 +23,6 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+
+# Personal Book output (never committed or deployed)
+/book/

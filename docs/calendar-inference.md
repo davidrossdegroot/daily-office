@@ -213,6 +213,8 @@ proper collects. Unapproved commemorations retain their review findings.
   according to secondary sources.
 - A transferred Annunciation keeps its own antiphon (BCP 2019, p. 29) rather than
   the Easter antiphon, matching the feast on its usual date.
+- "Annunciation Sunday" is the calendar's name for the Fourth Sunday in Advent, not the
+  feast. It keeps the Advent antiphon.
 
 ## Approved May selections and category rules
 
