@@ -313,6 +313,21 @@ When working with this data:
 - Handle empty cells gracefully (displayed as None or hidden in templates)
 - Date parsing supports both abbreviated (Jan, Feb) and full (January, February) month names
 
+## Personal Book
+
+`python generate.py --book 2026 --pdf` builds the maintainer's home-printed Book for
+the Liturgical Year that begins at Advent 2026 (the 2026–27 Book; see `CONTEXT.md`).
+It reads both calendar years' CSVs, keeps exactly the dates from the First Sunday of
+Advent through the Saturday before the next one, and refuses to build if any of those
+dates has a review finding. The 2026 site exemption does not apply to the Book.
+`--pdf` prints with headless Chrome (set `CHROME_PATH` if it isn't found) and fails if
+any day spills past one Letter page.
+
+Output goes to the git-ignored `book/` directory. The Book is a personal copy: never
+commit, deploy, or publish its HTML or PDF. Its template is `templates/book.html`, and
+its stylesheet and bundled EB Garamond fonts (SIL OFL) are in `book_static/`, which the
+website build does not copy.
+
 ## Prayer generation workflow
 
 For monthly/yearly Daily Office generation or editorial review findings, use
